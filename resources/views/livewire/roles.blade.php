@@ -2,15 +2,15 @@
 
     <div class="mb-5">
 
-        <h1 class="titulo-seccion text-3xl font-thin text-gray-500 mb-3">Usuarios</h1>
+        <h1 class="titulo-seccion text-3xl font-thin text-gray-500 mb-3">Roles</h1>
 
         <div>
 
             <input type="text" wire:model="search" placeholder="Buscar" class="bg-white rounded-full text-sm">
 
-            @can('Crear usuario')
+            @can('Crear permiso')
 
-                <button wire:click="openModalCreate" class="bg-gray-500 hover:shadow-lg hover:bg-gray-700 float-right mb-5 text-sm py-2 px-4 text-white rounded-full focus:outline-none hidden md:block">Agregar nuevo Usuario</button>
+                <button wire:click="openModalCreate" class="bg-gray-500 hover:shadow-lg hover:bg-gray-700 float-right mb-5 text-sm py-2 px-4 text-white rounded-full focus:outline-none hidden md:block">Agregar nuevo rol</button>
 
                 <button wire:click="openModalCreate" class="bg-gray-500 hover:shadow-lg hover:bg-gray-700 float-right mb-5 text-sm py-2 px-4 text-white rounded-full focus:outline-none md:hidden">+</button>
 
@@ -20,7 +20,7 @@
 
     </div>
 
-    @if($users->count())
+    @if($roles->count())
 
         <div class="relative overflow-x-auto rounded-lg shadow-xl">
 
@@ -35,96 +35,6 @@
                             Nombre
 
                             @if($sort == 'name')
-
-                                @if($direction == 'asc')
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
-                                    </svg>
-
-                                @else
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
-                                    </svg>
-
-                                @endif
-
-                            @else
-
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                                </svg>
-
-                            @endif
-
-                        </th>
-
-                        <th wire:click="order('email')" class="cursor-pointer px-3 py-3 hidden lg:table-cell">
-
-                            Correo
-
-                            @if($sort == 'email')
-
-                                @if($direction == 'asc')
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
-                                    </svg>
-
-                                @else
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
-                                    </svg>
-
-                                @endif
-
-                            @else
-
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                                </svg>
-
-                            @endif
-
-                        </th>
-
-                        <th wire:click="order('role')" class="cursor-pointer px-3 py-3 hidden lg:table-cell">
-
-                            Rol
-
-                            @if($sort == 'role')
-
-                                @if($direction == 'asc')
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
-                                    </svg>
-
-                                @else
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
-                                    </svg>
-
-                                @endif
-
-                            @else
-
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                                </svg>
-
-                            @endif
-
-                        </th>
-
-                        <th wire:click="order('status')" class="cursor-pointer px-3 py-3 hidden lg:table-cell">
-
-                            Estado
-
-                            @if($sort == 'status')
 
                                 @if($direction == 'asc')
 
@@ -219,7 +129,7 @@
 
                 <tbody class="divide-y divide-gray-200 flex-1 sm:flex-none ">
 
-                    @foreach($users as $user)
+                    @foreach($roles as $role)
 
                         <tr class="text-sm font-medium text-gray-500 bg-white flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
 
@@ -227,67 +137,23 @@
 
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Nombre</span>
 
-                                <div class="flex items-center justify-center lg:justify-start">
-
-                                    <div class="flex-shrink-0 h-10 w-10">
-
-                                        <img class="h-10 w-10 rounded-full" src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}">
-
-                                    </div>
-
-                                    <div class="ml-4">
-
-                                        <div class="text-sm font-medium text-gray-900">{{ $user->name }}</div>
-
-                                    </div>
-
-                                </div>
+                                <p class="text-sm font-medium text-gray-900">{{ $role->name }}</p>
 
                             </td>
 
-                            <td class="px-3 py-3 w-full lg:w-auto p-3 text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
 
-                                <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Email</span>
-
-                                {{ $user->email }}
-
-                            </td>
-
-                            <td class="px-3 py-3 w-full lg:w-auto p-3 text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
-
-                                <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Role</span>
-
-                                {{ $user->getRoleNames()[0] }}
-
-                            </td>
-
-                            <td class="px-3 py-3 w-full lg:w-auto p-3 text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
-
-                                <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Status</span>
-
-                                @if($user->status == 'activo')
-
-                                    <span class="bg-green-400 py-1 px-2 rounded-full text-white">{{ ucfirst($user->status) }}</span>
-
-                                @else
-
-                                    <span class="bg-red-400 py-1 px-2 rounded-full text-white">{{ ucfirst($user->status) }}</span>
-
-                                @endif
-
-                            </td>
 
                             <td class="px-3 py-3 w-full lg:w-auto p-3 text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
 
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Registrado</span>
 
-                                @if($user->created_by != null)
+                                @if($role->created_by != null)
 
-                                    <span class="font-semibold">Registrado por: {{$user->createdBy->name}}</span> <br>
+                                    <span class="font-semibold">Registrado por: {{$role->createdBy->name}}</span> <br>
 
                                 @endif
 
-                                {{ $user->created_at }}
+                                {{ $role->created_at }}
 
                             </td>
 
@@ -295,13 +161,13 @@
 
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Actualizado</span>
 
-                                @if($user->updated_by != null)
+                                @if($role->updated_by != null)
 
-                                    <span class="font-semibold">Actualizado por: {{$user->updatedBy->name}}</span> <br>
+                                    <span class="font-semibold">Actualizado por: {{$role->updatedBy->name}}</span> <br>
 
                                 @endif
 
-                                {{ $user->updated_at }}
+                                {{ $role->updated_at }}
 
                             </td>
 
@@ -311,12 +177,12 @@
 
                                 <div class="flex justify-center lg:justify-start">
 
-                                    @can('Editar usuario')
+                                    @can('Editar rol')
 
                                         <button
-                                            wire:click="openModalEdit({{$user}})"
+                                            wire:click="openModalEdit({{$role}})"
                                             wire:loading.attr="disabled"
-                                            wire:target="openModalEdit({{$user}})"
+                                            wire:target="openModalEdit({{$role}})"
                                             class="bg-blue-400 hover:shadow-lg text-white text-xs md:text-sm px-3 py-2 rounded-full mr-2 hover:bg-blue-700 flex focus:outline-none"
                                         >
 
@@ -331,12 +197,12 @@
 
                                     @endcan
 
-                                    @can('Borrar usuario')
+                                    @can('Borrar rol')
 
                                         <button
-                                            wire:click="openModalDelete({{$user}})"
+                                            wire:click="openModalDelete({{$role}})"
                                             wire:loading.attr="disabled"
-                                            wire:target="openModalDelete({{$user}})"
+                                            wire:target="openModalDelete({{$role}})"
                                             class="bg-red-400 hover:shadow-lg text-white text-xs md:text-sm px-3 py-2 rounded-full hover:bg-red-700 flex focus:outline-none"
                                         >
 
@@ -364,7 +230,7 @@
                     <tr>
 
                         <td colspan="8" class="py-2 px-5">
-                            {{ $users->links()}}
+                            {{ $roles->links()}}
                         </td>
 
                     </tr>
@@ -396,9 +262,9 @@
         <x-slot name="title">
 
             @if($create)
-                Nuevo Usuario
+                Nuevo Rol
             @elseif($edit)
-                Editar Usuario
+                Editar Rol
             @endif
 
         </x-slot>
@@ -428,88 +294,47 @@
 
                 </div>
 
-                <div class="flex-auto ">
-
-                    <div>
-
-                        <Label>Email</Label>
-
-                    </div>
-
-                    <div>
-
-                        <input type="email" class="bg-white rounded text-sm w-full" wire:model.defer="email">
-
-                    </div>
-
-                    <div>
-
-                        @error('email') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
-
-                    </div>
-
-                </div>
-
             </div>
 
             <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
 
-                <div class="flex-auto mr-1 ">
+                <div class="flex-auto ">
 
                     <div>
 
-                        <Label>Status</Label>
+                        <Label class="">Seleccione los permisos</Label>
+
+                    </div>
+
+                    <div class="overflow-y-auto">
+
+                        @foreach($permissions as $nombre => $area)
+
+                            <p class="my-2">Área de {{ $nombre }}:</p>
+
+                            <div class="mb-2 flex flex-wrap">
+
+                                @foreach ($area as $permission)
+
+                                    <label class="mb-2 mr-3 border border-gray-500 px-2 rounded-full py-1 text-sm cursor-pointer flex items-center">
+
+                                        <input class="bg-white rounded" type="checkbox" wire:model.defer="permissionsList" value="{{ $permission->id }}">
+
+                                        <p class="ml-2">{{ $permission->name }}</p>
+
+                                    </label>
+
+                                @endforeach
+
+                            </div>
+
+                        @endforeach
 
                     </div>
 
                     <div>
 
-                        <select class="bg-white rounded text-sm w-full" wire:model.defer="status">
-
-                            <option value="">Seleccione una opción</option>
-                            <option value="activo">Activo</option>
-                            <option value="inactivo">Inactivo</option>
-
-                        </select>
-
-                    </div>
-
-                    <div>
-
-                        @error('status') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
-
-                    </div>
-
-                </div>
-
-                <div class="flex-auto mr-1 ">
-
-                    <div>
-
-                        <Label>Rol</Label>
-
-                    </div>
-
-                    <div>
-
-                        <select class="bg-white rounded text-sm w-full" wire:model.defer="role">
-
-                            <option value="">Seleccione una opción</option>
-
-                            @foreach ($roles as $role)
-
-
-                                <option value="{{ $role->id }}">{{ $role->name }}</option>
-
-                            @endforeach
-
-                        </select>
-
-                    </div>
-
-                    <div>
-
-                        @error('role') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
+                        @error('permissionsList') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
 
                     </div>
 
@@ -562,11 +387,11 @@
     <x-jet-confirmation-modal wire:model="modalDelete">
 
         <x-slot name="title">
-            Eliminar Usuario
+            Eliminar Role
         </x-slot>
 
         <x-slot name="content">
-            ¿Esta seguro que desea eliminar al usuario?, No sera posible recuperar la información.
+            ¿Esta seguro que desea eliminar el rol?, No sera posible recuperar la información.
         </x-slot>
 
         <x-slot name="footer">

@@ -2,12 +2,12 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
-class Users extends Component
+class Permissions extends Component
 {
 
     use WithPagination;
@@ -20,11 +20,9 @@ class Users extends Component
     public $sort = 'id';
     public $direction = 'desc';
 
-    public $user_id;
+    public $permission_id;
     public $name;
-    public $email;
-    public $status;
-    public $role;
+    public $area;
 
     public function updatingSearch(){
         $this->resetPage();
@@ -45,7 +43,7 @@ class Users extends Component
     }
 
     public function resetAll(){
-        $this->reset('user_id','name','email','status','role');
+        $this->reset('permission_id','name','area');
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -53,9 +51,7 @@ class Users extends Component
     protected function rules(){
         return[
             'name' => 'required',
-            'email' => 'required|email|unique:users,email,'. $this->user_id,
-            'status' => 'required|in:activo,inactivo',
-            'role' => 'required|integer|in:2,3,4,5'
+            'area' => 'required'
         ];
     }
 
@@ -64,34 +60,33 @@ class Users extends Component
         $this->resetAll();
 
         $this->edit = false;
-        $this->create = true;
         $this->modal = true;
+        $this->create = true;
     }
 
-    public function openModalEdit($user){
+    public function openModalEdit($permission){
 
-        $this->resetAll();
+        $this->resetErrorBag();
+        $this->resetValidation();
 
         $this->create = false;
 
-        $this->user_id = $user['id'];
-        $this->role = $user['roles'][0]['id'];
-        $this->name = $user['name'];
-        $this->email = $user['email'];
-        $this->status = $user['status'];
+        $this->permission_id = $permission['id'];
+        $this->name = $permission['name'];
+        $this->area = $permission['area'];
 
-        $this->edit = true;
         $this->modal = true;
+        $this->edit = true;
     }
 
-    public function openModalDelete($user){
+    public function openModalDelete($permission){
 
         $this->modalDelete = true;
-        $this->user_id = $user['id'];
+        $this->permission_id = $permission['id'];
     }
 
     public function closeModal(){
-        $this->resetall();
+        $this->resetAll();
         $this->modal = false;
         $this->modalDelete = false;
     }
@@ -102,17 +97,13 @@ class Users extends Component
 
         try {
 
-            $user = User::create([
+            $permission = Permission::create([
                 'name' => $this->name,
-                'email' => $this->email,
-                'status' => $this->status,
-                'password' => 'almacen',
+                'area' => $this->area,
                 'created_by' => auth()->user()->id,
             ]);
 
-            $user->roles()->attach($this->role);
-
-            $this->dispatchBrowserEvent('showMessage',['success', "El usuario ha sido creado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "El permiso ha sido creado con exito."]);
 
             $this->closeModal();
 
@@ -125,22 +116,19 @@ class Users extends Component
 
     public function update(){
 
-        $user = User::findorFail($this->user_id);
-
         $this->validate();
+
+        $permission = Permission::findorFail($this->permission_id);
 
         try {
 
-            $user->update([
+            $permission->update([
                 'name' => $this->name,
-                'email' => $this->email,
-                'status' => $this->status,
+                'area' => $this->area,
                 'updated_by' => auth()->user()->id,
             ]);
 
-            $user->roles()->sync($this->role);
-
-            $this->dispatchBrowserEvent('showMessage',['success', "El usuario ha sido actualizado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "El permiso ha sido actualizado con exito."]);
 
             $this->closeModal();
 
@@ -149,18 +137,17 @@ class Users extends Component
 
             $this->closeModal();
         }
-
     }
 
     public function delete(){
 
-        $user = User::findorFail($this->user_id);
+        $permission = Permission::findorFail($this->permission_id);
 
         try {
 
-            $user->delete();
+            $permission->delete();
 
-            $this->dispatchBrowserEvent('showMessage',['success', "El usuario ha sido eliminado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "El permiso ha sido eliminado con exito."]);
 
             $this->closeModal();
 
@@ -173,22 +160,12 @@ class Users extends Component
 
     public function render()
     {
+        $permissions = Permission::with('createdBy', 'updatedBy')
+                                    ->where('name', 'LIKE', '%' . $this->search . '%')
+                                    ->orWhere('area', 'LIKE', '%' . $this->search . '%')
+                                    ->orderBy($this->sort, $this->direction)
+                                    ->paginate(10);
 
-        $users = User::with('roles','createdBy','updatedBy')
-                        ->where('name', 'LIKE', '%' . $this->search . '%')
-                        ->orWhere('email', 'LIKE', '%' . $this->search . '%')
-                        ->orWhere(function($q){
-                            return $q->whereHas('roles', function($q){
-                                return $q->where('name', 'LIKE', '%' . $this->search . '%');
-                            });
-                        })
-                        ->when($this->sort != 'role', function($q){
-                            $q->orderBy($this->sort, $this->direction);
-                        })
-                        ->paginate(10);
-
-        $roles = Role::where('id', '!=', 1)->orderBy('name')->get();
-
-        return view('livewire.users', compact('users', 'roles'));
+        return view('livewire.permissions', compact('permissions'));
     }
 }

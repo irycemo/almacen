@@ -14,6 +14,16 @@
 
         <p class="text-center font-bold text-2xl mb-3">Sistema de Almacen</p>
 
+        @if(session('message'))
+
+            <div class="mb-4">
+
+                <p class="text-sm text-red-600 ">{{ session('message') }}</p>
+
+            </div>
+
+        @endif
+
         <form method="POST" action="{{ route('login') }}">
             @csrf
 

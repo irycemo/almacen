@@ -1,7 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\SetPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,8 +25,15 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::group(['middleware' => ['auth']], function(){
+Route::get('setpassword/{email}', [SetPasswordController::class, 'create'])->name('setpassword');
+Route::post('setpassword', [SetPasswordController::class, 'store'])->name('setpassword.store');
 
-    Route::resource('users', UserController::class)->only(['index'])->middleware('can:user.index')->names('users');
+Route::group(['middleware' => ['auth','is.active']], function(){
+
+    Route::resource('users', UserController::class)->only(['index'])->middleware('can:Lista de usuarios')->names('users');
+
+    Route::resource('roles', RoleController::class)->only(['index'])->middleware('can:Lista de roles')->names('roles');
+
+    Route::resource('permissions', PermissionController::class)->only(['index'])->middleware('can:Lista de permisos')->names('permissions');
 
 });
