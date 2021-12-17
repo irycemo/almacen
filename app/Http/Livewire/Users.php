@@ -125,11 +125,11 @@ class Users extends Component
 
     public function update(){
 
-        $user = User::findorFail($this->user_id);
-
         $this->validate();
 
         try {
+
+            $user = User::findorFail($this->user_id);
 
             $user->update([
                 'name' => $this->name,
@@ -154,9 +154,9 @@ class Users extends Component
 
     public function delete(){
 
-        $user = User::findorFail($this->user_id);
-
         try {
+
+            $user = User::findorFail($this->user_id);
 
             $user->delete();
 

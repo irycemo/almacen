@@ -2,15 +2,15 @@
 
     <div class="mb-5">
 
-        <h1 class="titulo-seccion text-3xl font-thin text-gray-500 mb-3">Permisos</h1>
+        <h1 class="titulo-seccion text-3xl font-thin text-gray-500 mb-3">Artículos</h1>
 
         <div>
 
             <input type="text" wire:model="search" placeholder="Buscar" class="bg-white rounded-full text-sm">
 
-            @can('Crear permiso')
+            @can('Crear artículo')
 
-                <button wire:click="openModalCreate" class="bg-gray-500 hover:shadow-lg hover:bg-gray-700 float-right mb-5 text-sm py-2 px-4 text-white rounded-full focus:outline-none hidden md:block">Agregar nuevo Permiso</button>
+                <button wire:click="openModalCreate" class="bg-gray-500 hover:shadow-lg hover:bg-gray-700 float-right mb-5 text-sm py-2 px-4 text-white rounded-full focus:outline-none hidden md:block">Agregar nuevo artículo</button>
 
                 <button wire:click="openModalCreate" class="bg-gray-500 hover:shadow-lg hover:bg-gray-700 float-right mb-5 text-sm py-2 px-4 text-white rounded-full focus:outline-none md:hidden">+</button>
 
@@ -20,7 +20,7 @@
 
     </div>
 
-    @if($permissions->count())
+    @if($articles->count())
 
         <div class="relative overflow-x-auto rounded-lg shadow-xl">
 
@@ -60,11 +60,71 @@
 
                         </th>
 
-                        <th wire:click="order('area')" class="cursor-pointer px-3 py-3 hidden lg:table-cell">
+                        <th wire:click="order('stock')" class="cursor-pointer px-3 py-3 hidden lg:table-cell">
 
-                            Área
+                            Stock
 
-                            @if($sort == 'area')
+                            @if($sort == 'stock')
+
+                                @if($direction == 'asc')
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
+                                    </svg>
+
+                                @else
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+                                    </svg>
+
+                                @endif
+
+                            @else
+
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                </svg>
+
+                            @endif
+
+                        </th>
+
+                        <th wire:click="order('description')" class="cursor-pointer px-3 py-3 hidden lg:table-cell">
+
+                            Descripción
+
+                            @if($sort == 'description')
+
+                                @if($direction == 'asc')
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
+                                    </svg>
+
+                                @else
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+                                    </svg>
+
+                                @endif
+
+                            @else
+
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                </svg>
+
+                            @endif
+
+                        </th>
+
+                        <th wire:click="order('category_id')" class="cursor-pointer px-3 py-3 hidden lg:table-cell">
+
+                            Castegoría
+
+                            @if($sort == 'category_id')
 
                                 @if($direction == 'asc')
 
@@ -159,7 +219,7 @@
 
                 <tbody class="divide-y divide-gray-200 flex-1 sm:flex-none ">
 
-                    @foreach($permissions as $permission)
+                    @foreach($articles as $article)
 
                         <tr class="text-sm font-medium text-gray-500 bg-white flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
 
@@ -167,15 +227,37 @@
 
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Nombre</span>
 
-                                <p class="text-sm font-medium text-gray-900">{{ $permission->name }}</p>
+                                <p class="text-sm font-medium text-gray-900">{{ $article->name }}</p>
+
+                            </td>
+
+                            <td class="px-3 py-3 w-full lg:w-auto p-3 text-gray-800 text-center lg:border-0 border border-b block lg:table-cell relative lg:static">
+
+                                <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Stock</span>
+
+                                @if($article->stock >= 20)
+                                    <span class="bg-green-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
+                                @elseif($article->stock <= 20 && $article->stock > 10)
+                                    <span class="bg-yellow-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
+                                @elseif($article->stock <= 10)
+                                    <span class="bg-red-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
+                                @endif
 
                             </td>
 
                             <td class="px-3 py-3 w-full lg:w-auto p-3 text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
 
-                                <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Área</span>
+                                <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">descripción</span>
 
-                                <p class="text-sm font-medium text-gray-900">{{ $permission->area }}</p>
+                                <p class="text-sm font-medium text-gray-900">{{ $article->description }}</p>
+
+                            </td>
+
+                            <td class="px-3 py-3 w-full lg:w-auto p-3 text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+
+                                <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Categoría</span>
+
+                                <p class="text-sm font-medium text-gray-900">{{ $article->category->name }}</p>
 
                             </td>
 
@@ -183,13 +265,13 @@
 
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Registrado</span>
 
-                                @if($permission->created_by != null)
+                                @if($article->created_by != null)
 
-                                    <span class="font-semibold">Registrado por: {{$permission->createdBy->name}}</span> <br>
+                                    <span class="font-semibold">Registrado por: {{$article->createdBy->name}}</span> <br>
 
                                 @endif
 
-                                {{ $permission->created_at }}
+                                {{ $article->created_at }}
 
                             </td>
 
@@ -197,13 +279,13 @@
 
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Actualizado</span>
 
-                                @if($permission->updated_by != null)
+                                @if($article->updated_by != null)
 
-                                    <span class="font-semibold">Actualizado por: {{$permission->updatedBy->name}}</span> <br>
+                                    <span class="font-semibold">Actualizado por: {{$article->updatedBy->name}}</span> <br>
 
                                 @endif
 
-                                {{ $permission->updated_at }}
+                                {{ $article->updated_at }}
 
                             </td>
 
@@ -213,12 +295,12 @@
 
                                 <div class="flex justify-center lg:justify-start">
 
-                                    @can('Editar permiso')
+                                    @can('Editar artículo')
 
                                         <button
-                                            wire:click="openModalEdit({{$permission}})"
+                                            wire:click="openModalEdit({{$article}})"
                                             wire:loading.attr="disabled"
-                                            wire:target="openModalEdit({{$permission}})"
+                                            wire:target="openModalEdit({{$article}})"
                                             class="bg-blue-400 hover:shadow-lg text-white text-xs md:text-sm px-3 py-2 rounded-full mr-2 hover:bg-blue-700 flex focus:outline-none"
                                         >
 
@@ -233,12 +315,12 @@
 
                                     @endcan
 
-                                    @can('Borrar permiso')
+                                    @can('Borrar artículo')
 
                                         <button
-                                            wire:click="openModalDelete({{$permission}})"
+                                            wire:click="openModalDelete({{$article}})"
                                             wire:loading.attr="disabled"
-                                            wire:target="openModalDelete({{$permission}})"
+                                            wire:target="openModalDelete({{$article}})"
                                             class="bg-red-400 hover:shadow-lg text-white text-xs md:text-sm px-3 py-2 rounded-full hover:bg-red-700 flex focus:outline-none"
                                         >
 
@@ -266,7 +348,7 @@
                     <tr>
 
                         <td colspan="8" class="py-2 px-5">
-                            {{ $permissions->links()}}
+                            {{ $articles->links()}}
                         </td>
 
                     </tr>
@@ -298,9 +380,9 @@
         <x-slot name="title">
 
             @if($create)
-                Nuevo Permiso
+                Nueva Artículo
             @elseif($edit)
-                Editar Permiso
+                Editar Artículo
             @endif
 
         </x-slot>
@@ -334,23 +416,45 @@
 
             <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
 
-                <div class="flex-auto mr-1 ">
+                <div class="flex-auto mb-5">
 
                     <div>
 
-                        <Label>Área</Label>
+                        <Label>Stock</Label>
+                    </div>
+
+                    <div>
+
+                        <input type="number" min="1" class="bg-white rounded text-sm w-full" wire:model.defer="stock">
 
                     </div>
 
                     <div>
 
-                        <select class="bg-white rounded text-sm w-full" wire:model.defer="area">
+                        @error('stock') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
 
-                            <option value="">Seleccione una opción</option>
+                    </div>
 
-                            @foreach (Spatie\Permission\Models\Permission::AREAS as $area)
+                </div>
 
-                                <option value="{{ $area }}">{{ $area }}</option>
+                <div class="flex-auto mr-1 ">
+
+                    <div>
+
+                        <Label>Categoría</Label>
+
+                    </div>
+
+                    <div>
+
+                        <select class="bg-white rounded text-sm w-full" wire:model.defer="category_id">
+
+                            <option value="">Seleccione una categoría</option>
+
+                            @foreach ($categories as $catgegory)
+
+
+                                <option value="{{ $catgegory->id }}">{{ $catgegory->name }}</option>
 
                             @endforeach
 
@@ -360,7 +464,32 @@
 
                     <div>
 
-                        @error('status') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
+                        @error('category_id') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
+
+                <div class="flex-auto ">
+
+                    <div>
+
+                        <Label>Descripción</Label>
+                    </div>
+
+                    <div>
+
+                        <textarea rows="4" wire:model.defer="description" class="bg-white rounded text-sm w-full"></textarea>
+
+                    </div>
+
+                    <div>
+
+                        @error('description') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
 
                     </div>
 
@@ -415,11 +544,11 @@
     <x-jet-confirmation-modal wire:model="modalDelete">
 
         <x-slot name="title">
-            Eliminar Permiso
+            Eliminar Categoría
         </x-slot>
 
         <x-slot name="content">
-            ¿Esta seguro que desea eliminar el permiso?, No sera posible recuperar la información.
+            ¿Esta seguro que desea eliminar la categoría?, No sera posible recuperar la información.
         </x-slot>
 
         <x-slot name="footer">

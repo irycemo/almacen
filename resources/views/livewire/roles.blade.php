@@ -8,7 +8,7 @@
 
             <input type="text" wire:model="search" placeholder="Buscar" class="bg-white rounded-full text-sm">
 
-            @can('Crear permiso')
+            @can('Crear rol')
 
                 <button wire:click="openModalCreate" class="bg-gray-500 hover:shadow-lg hover:bg-gray-700 float-right mb-5 text-sm py-2 px-4 text-white rounded-full focus:outline-none hidden md:block">Agregar nuevo rol</button>
 

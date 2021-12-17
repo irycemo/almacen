@@ -2,14 +2,13 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Article;
 use Livewire\Component;
+use App\Models\Category;
 use Livewire\WithPagination;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 
-class Permissions extends Component
+class Articles extends Component
 {
-
     use WithPagination;
 
     public $modal = false;
@@ -20,8 +19,11 @@ class Permissions extends Component
     public $sort = 'id';
     public $direction = 'desc';
 
-    public $permission_id;
+    public $article_id;
     public $name;
+    public $stock;
+    public $description;
+    public $category_id;
     public $area;
 
     public function updatingSearch(){
@@ -43,7 +45,7 @@ class Permissions extends Component
     }
 
     public function resetAll(){
-        $this->reset('permission_id','name','area');
+        $this->reset('article_id','name','stock', 'description','category_id');
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -51,7 +53,9 @@ class Permissions extends Component
     protected function rules(){
         return[
             'name' => 'required',
-            'area' => 'required'
+            'stock' => 'required|numeric',
+            'description' => 'required',
+            'category_id' => 'required'
         ];
     }
 
@@ -64,25 +68,27 @@ class Permissions extends Component
         $this->create = true;
     }
 
-    public function openModalEdit($permission){
+    public function openModalEdit($article){
 
         $this->resetErrorBag();
         $this->resetValidation();
 
         $this->create = false;
 
-        $this->permission_id = $permission['id'];
-        $this->name = $permission['name'];
-        $this->area = $permission['area'];
+        $this->article_id = $article['id'];
+        $this->stock = $article['stock'];
+        $this->description = $article['description'];
+        $this->category_id = $article['category_id'];
+        $this->name = $article['name'];
 
         $this->modal = true;
         $this->edit = true;
     }
 
-    public function openModalDelete($permission){
+    public function openModalDelete($article){
 
         $this->modalDelete = true;
-        $this->permission_id = $permission['id'];
+        $this->article_id = $article['id'];
     }
 
     public function closeModal(){
@@ -97,13 +103,15 @@ class Permissions extends Component
 
         try {
 
-            Permission::create([
+            Article::create([
                 'name' => $this->name,
-                'area' => $this->area,
+                'stock' => $this->stock,
+                'description' => $this->description,
+                'category_id' => $this->category_id,
                 'created_by' => auth()->user()->id,
             ]);
 
-            $this->dispatchBrowserEvent('showMessage',['success', "El permiso ha sido creado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "El artículo ha sido creado con exito."]);
 
             $this->closeModal();
 
@@ -120,15 +128,17 @@ class Permissions extends Component
 
         try {
 
-            $permission = Permission::findorFail($this->permission_id);
+            $article = Article::findorFail($this->article_id);
 
-            $permission->update([
+            $article->update([
                 'name' => $this->name,
-                'area' => $this->area,
+                'stock' => $this->stock,
+                'description' => $this->description,
+                'category_id' => $this->category_id,
                 'updated_by' => auth()->user()->id,
             ]);
 
-            $this->dispatchBrowserEvent('showMessage',['success', "El permiso ha sido actualizado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "El artículo sido actualizado con exito."]);
 
             $this->closeModal();
 
@@ -143,11 +153,11 @@ class Permissions extends Component
 
         try {
 
-            $permission = Permission::findorFail($this->permission_id);
+            $article = Article::findorFail($this->article_id);
 
-            $permission->delete();
+            $article->delete();
 
-            $this->dispatchBrowserEvent('showMessage',['success', "El permiso ha sido eliminado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "El artículo ha sido eliminado con exito."]);
 
             $this->closeModal();
 
@@ -160,12 +170,20 @@ class Permissions extends Component
 
     public function render()
     {
-        $permissions = Permission::with('createdBy', 'updatedBy')
+
+        $categories = Category::all();
+
+        $articles = Article::with('createdBy', 'updatedBy', 'category')
                                     ->where('name', 'LIKE', '%' . $this->search . '%')
-                                    ->orWhere('area', 'LIKE', '%' . $this->search . '%')
+                                    ->orwhere('description', 'LIKE', '%' . $this->search . '%')
+                                    ->orWhere(function($q){
+                                        return $q->whereHas('category', function($q){
+                                            return $q->where('name', 'LIKE', '%' . $this->search . '%');
+                                        });
+                                    })
                                     ->orderBy($this->sort, $this->direction)
                                     ->paginate(10);
 
-        return view('livewire.permissions', compact('permissions'));
+        return view('livewire.articles', compact('articles', 'categories'));
     }
 }

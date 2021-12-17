@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SetPasswordController;
 
@@ -35,5 +37,9 @@ Route::group(['middleware' => ['auth','is.active']], function(){
     Route::resource('roles', RoleController::class)->only(['index'])->middleware('can:Lista de roles')->names('roles');
 
     Route::resource('permissions', PermissionController::class)->only(['index'])->middleware('can:Lista de permisos')->names('permissions');
+
+    Route::resource('categories', CategoryController::class)->only(['index'])->middleware('can:Lista de categorías')->names('categories');
+
+    Route::resource('articles', ArticleController::class)->only(['index'])->middleware('can:Lista de artículos')->names('articles');
 
 });

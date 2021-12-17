@@ -3,11 +3,10 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use App\Models\Category;
 use Livewire\WithPagination;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 
-class Roles extends Component
+class Categories extends Component
 {
     use WithPagination;
 
@@ -19,9 +18,9 @@ class Roles extends Component
     public $sort = 'id';
     public $direction = 'desc';
 
-    public $role_id;
+    public $category_id;
     public $name;
-    public $permissionsList = [];
+    public $area;
 
     public function updatingSearch(){
         $this->resetPage();
@@ -42,14 +41,14 @@ class Roles extends Component
     }
 
     public function resetAll(){
-        $this->reset('name','permissionsList');
+        $this->reset('category_id','name');
         $this->resetErrorBag();
         $this->resetValidation();
     }
 
     protected function rules(){
         return[
-            'name' => 'required'
+            'name' => 'required',
         ];
     }
 
@@ -62,36 +61,29 @@ class Roles extends Component
         $this->create = true;
     }
 
-    public function openModalEdit($role){
+    public function openModalEdit($category){
 
-        $this->resetAll();
+        $this->resetErrorBag();
+        $this->resetValidation();
 
         $this->create = false;
 
-        $this->role_id = $role['id'];
-        $this->name = $role['name'];
+        $this->category_id = $category['id'];
+        $this->name = $category['name'];
 
-        foreach($role['permissions'] as $permission){
-            array_push($this->permissionsList, $permission['id']);
-        }
-
-        $this->edit = true;
         $this->modal = true;
-
+        $this->edit = true;
     }
 
-    public function openModalDelete($role){
+    public function openModalDelete($category){
 
         $this->modalDelete = true;
-        $this->role_id = $role['id'];
+        $this->category_id = $category['id'];
     }
 
     public function closeModal(){
-
         $this->resetAll();
-
         $this->modal = false;
-
         $this->modalDelete = false;
     }
 
@@ -101,14 +93,12 @@ class Roles extends Component
 
         try {
 
-            $role = Role::create([
+            Category::create([
                 'name' => $this->name,
                 'created_by' => auth()->user()->id,
             ]);
 
-            $role->permissions()->sync($this->permissionsList);
-
-            $this->dispatchBrowserEvent('showMessage',['success', "El rol ha sido creado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "La categoría ha sido creado con exito."]);
 
             $this->closeModal();
 
@@ -125,16 +115,14 @@ class Roles extends Component
 
         try {
 
-            $role = Role::findorFail($this->role_id);
+            $category = Category::findorFail($this->category_id);
 
-            $role->update([
+            $category->update([
                 'name' => $this->name,
                 'updated_by' => auth()->user()->id,
             ]);
 
-            $role->permissions()->sync($this->permissionsList);
-
-            $this->dispatchBrowserEvent('showMessage',['success', "El rol ha sido actualizado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "La categoría sido actualizado con exito."]);
 
             $this->closeModal();
 
@@ -143,18 +131,17 @@ class Roles extends Component
 
             $this->closeModal();
         }
-
     }
 
     public function delete(){
 
         try {
 
-            $role = Role::findorFail($this->role_id);
+            $category = Category::findorFail($this->category_id);
 
-            $role->delete();
+            $category->delete();
 
-            $this->dispatchBrowserEvent('showMessage',['success', "El rol ha sido eliminado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "La categoría ha sido eliminado con exito."]);
 
             $this->closeModal();
 
@@ -167,18 +154,11 @@ class Roles extends Component
 
     public function render()
     {
+        $categories = Category::with('createdBy', 'updatedBy')
+                                    ->where('name', 'LIKE', '%' . $this->search . '%')
+                                    ->orderBy($this->sort, $this->direction)
+                                    ->paginate(10);
 
-        $roles = Role::with('createdBy','updatedBy','permissions')
-                        ->where('name', 'LIKE', '%' . $this->search . '%')
-                        ->orderBy($this->sort, $this->direction)
-                        ->paginate(10);
-
-        $permissions = Permission::orderBy('area','desc')->get();
-
-        $permissions = $permissions->groupBy(function($permission) {
-            return $permission->area;
-        })->all();
-
-        return view('livewire.roles', compact('roles', 'permissions'));
+        return view('livewire.categories', compact('categories'));
     }
 }
