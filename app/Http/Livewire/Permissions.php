@@ -24,6 +24,18 @@ class Permissions extends Component
     public $name;
     public $area;
 
+    protected function rules(){
+        return[
+            'name' => 'required',
+            'area' => 'required'
+        ];
+    }
+
+    protected $messages = [
+        'name.required' => 'El campo nombre es obligatorio.',
+        'area.required' => 'El campo área es obligatorio.',
+    ];
+
     public function updatingSearch(){
         $this->resetPage();
     }
@@ -46,13 +58,6 @@ class Permissions extends Component
         $this->reset('permission_id','name','area');
         $this->resetErrorBag();
         $this->resetValidation();
-    }
-
-    protected function rules(){
-        return[
-            'name' => 'required',
-            'area' => 'required'
-        ];
     }
 
     public function openModalCreate(){

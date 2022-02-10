@@ -370,27 +370,4 @@
 
     </x-jet-confirmation-modal>
 
-    <script>
-
-        window.addEventListener('showMessage', event => {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 5000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            })
-
-            Toast.fire({
-                icon: event.detail[0],
-                title: event.detail[1]
-            })
-        })
-
-    </script>
-
 </div>

@@ -11,4 +11,12 @@ class ArticleController extends Controller
         return view('articles.index');
 
     }
+
+    public function catastro(){
+        return view('articles.catastro');
+    }
+
+    public function rpp(){
+        return view('articles.rpp');
+    }
 }

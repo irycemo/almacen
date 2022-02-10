@@ -25,6 +25,23 @@ class Users extends Component
     public $email;
     public $status;
     public $role;
+    public $location;
+
+    protected function rules(){
+        return[
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,'. $this->user_id,
+            'status' => 'required|in:activo,inactivo',
+            'role' => 'required|integer|in:2,3,4,5',
+            'location' => 'required'
+        ];
+    }
+
+    protected $messages = [
+        'name.required' => 'El campo nombre es obligatorio.',
+        'role.required' => 'El campo rol es obligatorio.',
+        'location.required' => 'El campo ubicación es obligatorio.',
+    ];
 
     public function updatingSearch(){
         $this->resetPage();
@@ -50,15 +67,6 @@ class Users extends Component
         $this->resetValidation();
     }
 
-    protected function rules(){
-        return[
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,'. $this->user_id,
-            'status' => 'required|in:activo,inactivo',
-            'role' => 'required|integer|in:2,3,4,5'
-        ];
-    }
-
     public function openModalCreate(){
 
         $this->resetAll();
@@ -79,6 +87,7 @@ class Users extends Component
         $this->name = $user['name'];
         $this->email = $user['email'];
         $this->status = $user['status'];
+        $this->location = $user['location'];
 
         $this->edit = true;
         $this->modal = true;
@@ -106,6 +115,7 @@ class Users extends Component
                 'name' => $this->name,
                 'email' => $this->email,
                 'status' => $this->status,
+                'location' => $this->location,
                 'password' => 'almacen',
                 'created_by' => auth()->user()->id,
             ]);
@@ -135,6 +145,7 @@ class Users extends Component
                 'name' => $this->name,
                 'email' => $this->email,
                 'status' => $this->status,
+                'location' => $this->location,
                 'updated_by' => auth()->user()->id,
             ]);
 

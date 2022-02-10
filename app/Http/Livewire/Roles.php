@@ -23,6 +23,16 @@ class Roles extends Component
     public $name;
     public $permissionsList = [];
 
+    protected function rules(){
+        return[
+            'name' => 'required'
+        ];
+    }
+
+    protected $messages = [
+        'name.required' => 'El campo nombre es obligatorio.',
+    ];
+
     public function updatingSearch(){
         $this->resetPage();
     }
@@ -47,12 +57,6 @@ class Roles extends Component
         $this->resetValidation();
     }
 
-    protected function rules(){
-        return[
-            'name' => 'required'
-        ];
-    }
-
     public function openModalCreate(){
 
         $this->resetAll();
@@ -72,7 +76,7 @@ class Roles extends Component
         $this->name = $role['name'];
 
         foreach($role['permissions'] as $permission){
-            array_push($this->permissionsList, $permission['id']);
+            array_push($this->permissionsList, (string)$permission['id']);
         }
 
         $this->edit = true;
@@ -121,6 +125,8 @@ class Roles extends Component
 
     public function update(){
 
+
+
         $this->validate();
 
         try {
@@ -133,6 +139,8 @@ class Roles extends Component
             ]);
 
             $role->permissions()->sync($this->permissionsList);
+
+
 
             $this->dispatchBrowserEvent('showMessage',['success', "El rol ha sido actualizado con exito."]);
 

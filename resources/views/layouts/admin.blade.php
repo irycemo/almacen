@@ -27,7 +27,7 @@
             </div>
 
             {{-- Nav --}}
-            <nav class="p-4 text-rojo" x-data="{open:true}">
+            <nav class="p-4 text-rojo" x-data="{openRoles:true, openArticles:true}">
 
                 <p class="uppercase text-md text-rojo mb-4 tracking-wider">Administración</p>
 
@@ -43,11 +43,11 @@
                             Roles
 
                         </a>
-                        <svg @click="open = false" x-show="open" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-gray-300 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg @click="openRoles = false" x-show="openRoles" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-gray-300 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
 
-                        <svg @click="open = true" x-show="!open" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-gray-300 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg @click="openRoles = true" x-show="!openRoles" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-gray-300 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
                         </svg>
 
@@ -61,7 +61,7 @@
                     x-transition:leave-end="opacity-0 scale-90"
                     x-transition:enter-start="scale-75"
                     class="flex items-center mb-3 w-full justify-between hover:text-teal-600 transition ease-in-out duration-500 hover:bg-gray-100 rounded-xl text-sm"
-                    x-show="!open">
+                    x-show="!openRoles">
 
                     <a href="{{ route('permissions.index') }}" class=" capitalize font-medium text-md  flex hover w-full   p-2 px-4 ml-5">
 
@@ -103,26 +103,81 @@
 
                 @can('Lista de artículos')
 
-                    <a href="{{ route('articles.index') }}" class="mb-3 capitalize font-medium text-md hover:text-teal-600 transition ease-in-out duration-500 flex hover  hover:bg-gray-100 p-2 px-4 rounded-xl">
+                    <div class="flex items-center mb-3 w-full justify-between hover:text-teal-600 transition ease-in-out duration-500 hover:bg-gray-100 rounded-xl">
+
+                        <a href="{{ route('articles.index') }}" class="capitalize font-medium text-md hover:text-teal-600 transition ease-in-out duration-500 flex hover  hover:bg-gray-100 p-2 px-4 rounded-xl">
+
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-4 " fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                            </svg>
+
+                            Artículos
+                        </a>
+
+                        <svg @click="openArticles = false" x-show="openArticles" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-gray-300 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+
+                        <svg @click="openArticles = true" x-show="!openArticles" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-gray-300 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                        </svg>
+
+                    </div>
+
+                @endcan
+
+                <div
+                    x-transition:enter="transition duration-2000 transform ease-out"
+                    x-transition:leave="transition duration-200 transform ease-in"
+                    x-transition:leave-end="opacity-0 scale-90"
+                    x-transition:enter-start="scale-75"
+                    class="flex flex-col space-y-2 items-center mb-3 w-full justify-between hover:text-teal-600 transition ease-in-out duration-500  rounded-xl text-sm"
+                    x-show="!openArticles">
+
+                    <a href="{{ route('articles.catastro') }}" class=" capitalize font-medium text-md  flex hover w-full  hover:bg-gray-100 p-2 px-4 ml-5">
 
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-4 " fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                         </svg>
 
-                        Artículos
+                        Catastro
+
                     </a>
 
-                @endcan
+                    <a href="{{ route('articles.rpp') }}" class=" capitalize font-medium text-md  flex hover w-full  hover:bg-gray-100 p-2 px-4 ml-5">
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-4 " fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                        </svg>
+
+                        RPP
+
+                    </a>
+
+                </div>
 
                 @can('Lista de solicitudes')
 
-                    <a href="#" class="mb-3 capitalize font-medium text-md hover:text-teal-600 transition ease-in-out duration-500 flex hover  hover:bg-gray-100 p-2 px-4 rounded-xl">
+                    <a href="{{ route('requests.index') }}" class="mb-3 capitalize font-medium text-md hover:text-teal-600 transition ease-in-out duration-500 flex hover  hover:bg-gray-100 p-2 px-4 rounded-xl">
 
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                         </svg>
 
                         Solicitudes
+                    </a>
+
+                @endcan
+
+                @can('Seguimiento')
+
+                    <a href="{{ route('tracking') }}" class="mb-3 capitalize font-medium text-md hover:text-teal-600 transition ease-in-out duration-500 flex hover  hover:bg-gray-100 p-2 px-4 rounded-xl">
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 21h7a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v11m0 5l4.879-4.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242z" />
+                          </svg>
+
+                        Seguimiento
                     </a>
 
                 @endcan

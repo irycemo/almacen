@@ -2,7 +2,7 @@
 
     <div class="mb-5">
 
-        <h1 class="titulo-seccion text-3xl font-thin text-gray-500 mb-3">Artículos</h1>
+        <h1 class="titulo-seccion text-3xl font-thin text-gray-500 mb-3">Artículos Catastro</h1>
 
         <div>
 
@@ -180,36 +180,6 @@
 
                         </th>
 
-                        <th wire:click="order('location')" class="cursor-pointer px-1 py-3 hidden lg:table-cell">
-
-                            Ubicación
-
-                            @if($sort == 'location')
-
-                                @if($direction == 'asc')
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
-                                    </svg>
-
-                                @else
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
-                                    </svg>
-
-                                @endif
-
-                            @else
-
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                                </svg>
-
-                            @endif
-
-                        </th>
-
                         <th class="px-1 py-3 hidden lg:table-cell">
 
                             Origen
@@ -313,19 +283,12 @@
 
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Stock</span>
 
-                                @if ($article->serial)
-                                    <span class="bg-blue-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
-
-                                @else
-
-                                    @if($article->stock >= 20)
-                                        <span class="bg-green-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
-                                    @elseif($article->stock <= 20 && $article->stock > 10)
-                                        <span class="bg-yellow-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
-                                    @elseif($article->stock <= 10)
-                                        <span class="bg-red-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
-                                    @endif
-
+                                @if($article->stock >= 20)
+                                    <span class="bg-green-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
+                                @elseif($article->stock <= 20 && $article->stock > 10)
+                                    <span class="bg-yellow-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
+                                @elseif($article->stock <= 10)
+                                    <span class="bg-red-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
                                 @endif
 
                             </td>
@@ -348,19 +311,11 @@
 
                             <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
 
-                                <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Ubicación</span>
-
-                                <p class="text-sm font-medium text-gray-900 capitalize">{{ $article->location }}</p>
-
-                            </td>
-
-                            <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
-
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Origen</span>
 
                                 <p class="text-sm font-medium text-gray-900 capitalize">{{ $article->origin }}:</p>
 
-                                <p >{{ Str::limit($article->comment, 100) }}</p>
+                                <p>{{ Str::limit($article->comment, 100) }}</p>
 
                             </td>
 
@@ -433,6 +388,8 @@
 
                                             <p>Eliminar</p>
 
+                                        </button>
+
                                     @endcan
 
                                 </div>
@@ -490,30 +447,30 @@
 
         <x-slot name="content">
 
-                <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
+            <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
 
-                    <div class="flex-auto ">
+                <div class="flex-auto ">
 
-                        <div>
+                    <div>
 
-                            <Label>Nombre</Label>
-                        </div>
+                        <Label>Nombre</Label>
+                    </div>
 
-                        <div>
+                    <div>
 
-                            <input type="text" class="bg-white rounded text-sm w-full" wire:model.defer="name">
+                        <input type="text" class="bg-white rounded text-sm w-full" wire:model.defer="name">
 
-                        </div>
+                    </div>
 
-                        <div>
+                    <div>
 
-                            @error('name') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
-
-                        </div>
+                        @error('name') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
 
                     </div>
 
                 </div>
+
+            </div>
 
             <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
 
@@ -651,32 +608,6 @@
 
             <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
 
-                <div class="flex-auto mb-5">
-
-                    <div>
-
-                        <Label>Ubicación</Label>
-                    </div>
-
-                    <div>
-
-                        <select class="bg-white rounded text-sm w-full" wire:model.defer="location">
-                            <option selected>Selecciona una opciópn</option>
-                            <option value="rpp">RPP</option>
-                            <option value="catastro">Catastro</option>
-
-                        </select>
-
-                    </div>
-
-                    <div>
-
-                        @error('location') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
-
-                    </div>
-
-                </div>
-
                 <div class="flex-auto mr-1 ">
 
                     <div>
@@ -779,7 +710,7 @@
     <x-jet-confirmation-modal wire:model="modalDelete">
 
         <x-slot name="title">
-            Eliminar Artículo
+            Eliminar Categoría
         </x-slot>
 
         <x-slot name="content">

@@ -33,6 +33,7 @@ class User extends Authenticatable
         'role_id',
         'password',
         'status',
+        'location',
         'created_by',
         'updated_by'
     ];

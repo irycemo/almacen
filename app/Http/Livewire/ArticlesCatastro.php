@@ -7,8 +7,9 @@ use Livewire\Component;
 use App\Models\Category;
 use Livewire\WithPagination;
 
-class Articles extends Component
+class ArticlesCatastro extends Component
 {
+
     use WithPagination;
 
     public $modal = false;
@@ -26,7 +27,7 @@ class Articles extends Component
     public $stock;
     public $description;
     public $category_id;
-    public $location;
+    public $area;
     public $origin;
     public $comment;
 
@@ -40,7 +41,6 @@ class Articles extends Component
             'category_id' => 'required',
             'comment' => 'required',
             'origin' => 'required',
-            'location' => 'required'
         ];
     }
 
@@ -51,7 +51,6 @@ class Articles extends Component
         'category_id.required' => 'El campo categoría es obligatorio.',
         'comment.required' => 'El campo descripción del origen del artículo es obligatorio.',
         'origin.required' => 'El campo origen es obligatorio.',
-        'location.required' => 'El campo ubicación es obligatorio.',
     ];
 
     public function updatingSearch(){
@@ -73,7 +72,7 @@ class Articles extends Component
     }
 
     public function resetAll(){
-        $this->reset('article_id','name','stock', 'description','category_id','location','origin', 'comment', 'brand', 'serial');
+        $this->reset('article_id','name','stock', 'description','category_id','origin', 'comment', 'brand', 'serial');
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -101,7 +100,6 @@ class Articles extends Component
         $this->description = $article['description'];
         $this->category_id = $article['category_id'];
         $this->name = $article['name'];
-        $this->location = $article['location'];
         $this->origin = $article['origin'];
         $this->comment = $article['comment'];
 
@@ -127,8 +125,8 @@ class Articles extends Component
 
         try {
 
-            if(Article::where('name', $this->name)->where('location', $this->location)->where('serial', $this->serial)->first()){
-                $this->dispatchBrowserEvent('showMessage',['error', "El artículo ya se encuentra en " . $this->location ." actualice su stock"]);
+            if(Article::where('name', $this->name)->where('location', 'catastro')->where('serial', $this->serial)->first()){
+                $this->dispatchBrowserEvent('showMessage',['error', "El artículo ya se encuentra en catastro actualice su stock"]);
                 return;
             }
 
@@ -138,7 +136,7 @@ class Articles extends Component
                 'serial' => $this->serial,
                 'stock' => $this->serial ? 1 : $this->stock,
                 'description' => $this->description,
-                'location' => $this->location,
+                'location' => 'catastro',
                 'origin' => $this->origin,
                 'comment' => $this->comment,
                 'category_id' => $this->category_id,
@@ -170,7 +168,7 @@ class Articles extends Component
                 'serial' => $this->serial,
                 'stock' => $this->serial ? 1 : $this->stock,
                 'description' => $this->description,
-                'location' => $this->location,
+                'location' => 'catastro',
                 'origin' => $this->origin,
                 'comment' => $this->comment,
                 'category_id' => $this->category_id,
@@ -213,21 +211,25 @@ class Articles extends Component
         $categories = Category::all();
 
         $articles = Article::with('createdBy', 'updatedBy', 'category')
-                                    ->where('name', 'LIKE', '%' . $this->search . '%')
-                                    ->orwhere('description', 'LIKE', '%' . $this->search . '%')
-                                    ->orwhere('brand', 'LIKE', '%' . $this->search . '%')
-                                    ->orwhere('serial', 'LIKE', '%' . $this->search . '%')
-                                    ->orwhere('location', 'LIKE', '%' . $this->search . '%')
-                                    ->orwhere('origin', 'LIKE', '%' . $this->search . '%')
-                                    ->orwhere('comment', 'LIKE', '%' . $this->search . '%')
-                                    ->orWhere(function($q){
-                                        return $q->whereHas('category', function($q){
-                                            return $q->where('name', 'LIKE', '%' . $this->search . '%');
-                                        });
+                                    ->where('location', 'catastro')
+                                    ->where(function($q){
+                                        return $q->where('name', 'LIKE', '%' . $this->search . '%')
+                                            ->orwhere('description', 'LIKE', '%' . $this->search . '%')
+                                            ->orwhere('location', 'LIKE', '%' . $this->search . '%')
+                                            ->orwhere('brand', 'LIKE', '%' . $this->search . '%')
+                                            ->orwhere('serial', 'LIKE', '%' . $this->search . '%')
+                                            ->orwhere('stock', 'LIKE', '%' . $this->search . '%')
+                                            ->orwhere('origin', 'LIKE', '%' . $this->search . '%')
+                                            ->orwhere('comment', 'LIKE', '%' . $this->search . '%')
+                                            ->orWhere(function($q){
+                                                return $q->whereHas('category', function($q){
+                                                    return $q->where('name', 'LIKE', '%' . $this->search . '%');
+                                                });
+                                            });
                                     })
                                     ->orderBy($this->sort, $this->direction)
                                     ->paginate(10);
 
-        return view('livewire.articles', compact('articles', 'categories'));
+        return view('livewire.articles-catastro', compact('categories', 'articles'));
     }
 }

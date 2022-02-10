@@ -120,6 +120,36 @@
 
                         </th>
 
+                        <th wire:click="order('location')" class="cursor-pointer px-3 py-3 hidden lg:table-cell">
+
+                            Ubicación
+
+                            @if($sort == 'location')
+
+                                @if($direction == 'asc')
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
+                                    </svg>
+
+                                @else
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+                                    </svg>
+
+                                @endif
+
+                            @else
+
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                </svg>
+
+                            @endif
+
+                        </th>
+
                         <th wire:click="order('status')" class="cursor-pointer px-3 py-3 hidden lg:table-cell">
 
                             Estado
@@ -258,6 +288,14 @@
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Role</span>
 
                                 {{ $user->getRoleNames()[0] }}
+
+                            </td>
+
+                            <td class="px-3 py-3 w-full lg:w-auto capitalize p-3 text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+
+                                <span class="lg:hidden  absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Ubicaión</span>
+
+                                {{ $user->location }}
 
                             </td>
 
@@ -517,6 +555,32 @@
 
             </div>
 
+            <div class="flex-auto mb-5">
+
+                <div>
+
+                    <Label>Ubicación</Label>
+                </div>
+
+                <div>
+
+                    <select class="bg-white rounded text-sm w-full" wire:model.defer="location">
+                        <option selected>Selecciona una opciópn</option>
+                        <option value="rpp">RPP</option>
+                        <option value="catastro">Catastro</option>
+
+                    </select>
+
+                </div>
+
+                <div>
+
+                    @error('location') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
+
+                </div>
+
+            </div>
+
         </x-slot>
 
         <x-slot name="footer">
@@ -590,28 +654,5 @@
         </x-slot>
 
     </x-jet-confirmation-modal>
-
-    <script>
-
-        window.addEventListener('showMessage', event => {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 5000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            })
-
-            Toast.fire({
-                icon: event.detail[0],
-                title: event.detail[1]
-            })
-        })
-
-    </script>
 
 </div>

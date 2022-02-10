@@ -22,6 +22,17 @@ class Categories extends Component
     public $name;
     public $area;
 
+    protected function rules(){
+        return[
+            'name' => 'required',
+        ];
+    }
+
+    protected $messages = [
+        'name.required' => 'El campo nombre es obligatorio.',
+    ];
+
+
     public function updatingSearch(){
         $this->resetPage();
     }
@@ -44,12 +55,6 @@ class Categories extends Component
         $this->reset('category_id','name');
         $this->resetErrorBag();
         $this->resetValidation();
-    }
-
-    protected function rules(){
-        return[
-            'name' => 'required',
-        ];
     }
 
     public function openModalCreate(){
