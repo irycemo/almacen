@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateArticlesTable extends Migration
+class CreateEntriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ class CreateArticlesTable extends Migration
      */
     public function up()
     {
-        Schema::create('articles', function (Blueprint $table) {
+        Schema::create('entries', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('brand');
-            $table->string('serial')->nullable();
-            $table->integer('stock')->nullable();
-            $table->text('description');
+            $table->foreignId('article_id')->nullable()->constrained()->references('id')->on('articles');
+            $table->integer('quantity');
+            $table->unsignedDecimal('price', 8,2);
             $table->enum('location',['catastro','rpp']);
-            $table->foreignId('category_id')->constrained();
+            $table->enum('origin',['compra','donación']);
+            $table->text('description');
             $table->foreignId('created_by')->nullable()->constrained()->references('id')->on('users');
             $table->foreignId('updated_by')->nullable()->constrained()->references('id')->on('users');
             $table->timestamps();
@@ -35,6 +34,6 @@ class CreateArticlesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('articles');
+        Schema::dropIfExists('entries');
     }
 }

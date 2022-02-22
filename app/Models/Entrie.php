@@ -6,18 +6,14 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Article extends Model
+class Entrie extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
 
-    public function category(){
-        return $this->belongsTo(Category::class);
-    }
-
-    public function entries(){
-        return $this->hasMany(Entrie::class);
+    public function article(){
+        return $this->belongsTo(Article::class);
     }
 
     public function createdBy(){

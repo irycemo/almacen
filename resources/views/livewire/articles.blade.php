@@ -210,12 +210,6 @@
 
                         </th>
 
-                        <th class="px-1 py-3 hidden lg:table-cell">
-
-                            Origen
-
-                        </th>
-
                         <th wire:click="order('created_at')" class="cursor-pointer px-1 py-3 hidden lg:table-cell">
 
                             Registro
@@ -356,16 +350,6 @@
 
                             <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
 
-                                <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Origen</span>
-
-                                <p class="text-sm font-medium text-gray-900 capitalize">{{ $article->origin }}:</p>
-
-                                <p >{{ Str::limit($article->comment, 100) }}</p>
-
-                            </td>
-
-                            <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
-
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Registrado</span>
 
                                 @if($article->created_by != null)
@@ -490,30 +474,30 @@
 
         <x-slot name="content">
 
-                <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
+            <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
 
-                    <div class="flex-auto ">
+                <div class="flex-auto ">
 
-                        <div>
+                    <div>
 
-                            <Label>Nombre</Label>
-                        </div>
+                        <Label>Nombre</Label>
+                    </div>
 
-                        <div>
+                    <div>
 
-                            <input type="text" class="bg-white rounded text-sm w-full" wire:model.defer="name">
+                        <input type="text" class="bg-white rounded text-sm w-full" wire:model.defer="name">
 
-                        </div>
+                    </div>
 
-                        <div>
+                    <div>
 
-                            @error('name') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
-
-                        </div>
+                        @error('name') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
 
                     </div>
 
                 </div>
+
+            </div>
 
             <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
 
@@ -589,31 +573,6 @@
 
             <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
 
-                @if ($serial == null)
-
-                    <div class="flex-auto mb-5">
-
-                        <div>
-
-                            <Label>Stock</Label>
-                        </div>
-
-                        <div>
-
-                            <input type="number" min="1" class="bg-white rounded text-sm w-full" wire:model.defer="stock">
-
-                        </div>
-
-                        <div>
-
-                            @error('stock') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
-
-                        </div>
-
-                    </div>
-
-                @endif
-
                 <div class="flex-auto mr-1 ">
 
                     <div>
@@ -647,10 +606,6 @@
 
                 </div>
 
-            </div>
-
-            <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
-
                 <div class="flex-auto mb-5">
 
                     <div>
@@ -661,7 +616,7 @@
                     <div>
 
                         <select class="bg-white rounded text-sm w-full" wire:model.defer="location">
-                            <option selected>Selecciona una opciópn</option>
+                            <option selected>Selecciona una ubicación</option>
                             <option value="rpp">RPP</option>
                             <option value="catastro">Catastro</option>
 
@@ -672,59 +627,6 @@
                     <div>
 
                         @error('location') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
-
-                    </div>
-
-                </div>
-
-                <div class="flex-auto mr-1 ">
-
-                    <div>
-
-                        <Label>Origen</Label>
-
-                    </div>
-
-                    <div>
-
-                        <select class="bg-white rounded text-sm w-full" wire:model.defer="origin">
-
-                            <option selected>Selecciona una opciópn</option>
-                            <option value="compra">Compra</option>
-                            <option value="donación">Donación</option>
-
-                        </select>
-
-                    </div>
-
-                    <div>
-
-                        @error('origin') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
-
-                <div class="flex-auto ">
-
-                    <div>
-
-                        <Label>Descripción del origen del artículo</Label>
-                    </div>
-
-                    <div>
-
-                        <textarea rows="4" wire:model.defer="comment" class="bg-white rounded text-sm w-full"></textarea>
-
-                    </div>
-
-                    <div>
-
-                        @error('comment') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
 
                     </div>
 

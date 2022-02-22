@@ -45,6 +45,7 @@ class RequestCreateEdit extends Component
                 $this->request = Request::create([
                     'number' => $number ? $number + 1 : 1,
                     'content' => json_encode($this->requestedArticles, JSON_FORCE_OBJECT),
+                    'location' => auth()->user()->location,
                     'status' => 'solicitada',
                     'created_by' => auth()->user()->id,
                 ]);
@@ -158,14 +159,26 @@ class RequestCreateEdit extends Component
     public function render()
     {
 
-        $articles = Article::where('stock','!=', 0)
-                                ->where('location', auth()->user()->location)
+        if(auth()->user()->roles[0]['name'] == 'Administrador' || auth()->user()->roles[0]['name'] == 'Delegado(a) Administrativo'){
+            $articles = Article::where('stock','!=', 0)
                                 ->where('stock', '>',  0)
                                 ->where(function($q){
                                     $q->where('name', 'LIKE', '%' . $this->search . '%')
+                                        ->orwhere('brand', 'LIKE', '%' . $this->search . '%')
                                         ->orwhere('description', 'LIKE', '%' . $this->search . '%');
                                 })
                                 ->paginate(10);
+        }else{
+            $articles = Article::where('stock','!=', 0)
+                ->where('location', auth()->user()->location)
+                ->where('stock', '>',  0)
+                ->where(function($q){
+                    $q->where('name', 'LIKE', '%' . $this->search . '%')
+                        ->orwhere('brand', 'LIKE', '%' . $this->search . '%')
+                        ->orwhere('description', 'LIKE', '%' . $this->search . '%');
+                })
+                ->paginate(10);
+        }
 
         return view('livewire.request-create-edit', compact('articles'));
     }

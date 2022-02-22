@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Database\Seeders\EntrieSeeder;
 use Database\Seeders\ArticleSeeder;
 use Database\Seeders\CategorySeeder;
 
@@ -21,5 +22,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CategorySeeder::class);
         $this->call(ArticleSeeder::class);
         $this->call(RequestSeeder::class);
+        $this->call(EntrieSeeder::class);
     }
 }

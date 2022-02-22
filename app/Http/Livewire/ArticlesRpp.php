@@ -28,8 +28,6 @@ class ArticlesRpp extends Component
     public $description;
     public $category_id;
     public $area;
-    public $origin;
-    public $comment;
 
     protected function rules(){
         return[
@@ -39,8 +37,6 @@ class ArticlesRpp extends Component
             'stock' => 'nullable|numeric',
             'description' => 'required',
             'category_id' => 'required',
-            'comment' => 'required',
-            'origin' => 'required',
         ];
     }
 
@@ -49,8 +45,6 @@ class ArticlesRpp extends Component
         'brand.required' => 'El campo marca es obligatorio.',
         'description.required' => 'El campo descripción es obligatorio.',
         'category_id.required' => 'El campo categoría es obligatorio.',
-        'comment.required' => 'El campo descripción del origen del artículo es obligatorio.',
-        'origin.required' => 'El campo origen es obligatorio.',
     ];
 
     public function updatingSearch(){
@@ -72,7 +66,7 @@ class ArticlesRpp extends Component
     }
 
     public function resetAll(){
-        $this->reset('article_id','name','stock', 'description','category_id','origin', 'comment', 'brand', 'serial');
+        $this->reset('article_id','name','stock', 'description','category_id', 'brand', 'serial');
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -100,8 +94,6 @@ class ArticlesRpp extends Component
         $this->description = $article['description'];
         $this->category_id = $article['category_id'];
         $this->name = $article['name'];
-        $this->origin = $article['origin'];
-        $this->comment = $article['comment'];
 
         $this->modal = true;
         $this->edit = true;
@@ -137,8 +129,6 @@ class ArticlesRpp extends Component
                 'stock' => $this->serial ? 1 : $this->stock,
                 'description' => $this->description,
                 'location' => 'rpp',
-                'origin' => $this->origin,
-                'comment' => $this->comment,
                 'category_id' => $this->category_id,
                 'created_by' => auth()->user()->id,
             ]);
@@ -166,11 +156,9 @@ class ArticlesRpp extends Component
                 'name' => $this->name,
                 'brand' => $this->brand,
                 'serial' => $this->serial,
-                'stock' => $this->serial ? 1 : $this->stock,
+                'stock' => $this->stock,
                 'description' => $this->description,
                 'location' => 'rpp',
-                'origin' => $this->origin,
-                'comment' => $this->comment,
                 'category_id' => $this->category_id,
                 'updated_by' => auth()->user()->id,
             ]);
@@ -215,12 +203,9 @@ class ArticlesRpp extends Component
                                     ->where(function($q){
                                         return $q->where('name', 'LIKE', '%' . $this->search . '%')
                                             ->orwhere('description', 'LIKE', '%' . $this->search . '%')
-                                            ->orwhere('location', 'LIKE', '%' . $this->search . '%')
                                             ->orwhere('brand', 'LIKE', '%' . $this->search . '%')
                                             ->orwhere('serial', 'LIKE', '%' . $this->search . '%')
                                             ->orwhere('stock', 'LIKE', '%' . $this->search . '%')
-                                            ->orwhere('origin', 'LIKE', '%' . $this->search . '%')
-                                            ->orwhere('comment', 'LIKE', '%' . $this->search . '%')
                                             ->orWhere(function($q){
                                                 return $q->whereHas('category', function($q){
                                                     return $q->where('name', 'LIKE', '%' . $this->search . '%');

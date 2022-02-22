@@ -66,6 +66,36 @@
 
                         </th>
 
+                        <th wire:click="order('location')" class="cursor-pointer px-3 py-3 hidden lg:table-cell">
+
+                            Ubicaión
+
+                            @if($sort == 'location')
+
+                                @if($direction == 'asc')
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
+                                    </svg>
+
+                                @else
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+                                    </svg>
+
+                                @endif
+
+                            @else
+
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                </svg>
+
+                            @endif
+
+                        </th>
+
                         <th wire:click="order('created_by')" class="cursor-pointer px-3 py-3 hidden lg:table-cell">
 
                             Solicitante
@@ -225,6 +255,14 @@
                                 @endforeach
 
                                 <span class="bg-rojo text-white rounded-full py-1 px-2 mr-2">{{ $total }}</span><span>Artículos</span>
+
+                            </td>
+
+                            <td class="capitalize w-full lg:w-auto p-3 text-gray-800 text-center md:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+
+                                <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Ubicación</span>
+
+                                {{ $request->location }}
 
                             </td>
 
@@ -434,6 +472,14 @@
 
                             </th>
 
+                            @if ($request_status != 'rechazada' && $request_status != 'entregada')
+
+                                @can("Aceptar solicitud")
+                                    <th class="px-3 py-3 hidden lg:table-cell">Disponibilidad</th>
+                                @endcan
+
+                            @endif
+
                         </tr>
 
                     </thead>
@@ -461,11 +507,23 @@
 
                                     @if ($item['serial'])
 
-                                    <p class="text-sm font-medium text-gray-900">#Serie: {{ $item['serial'] }}</p>
+                                        <p class="text-sm font-medium text-gray-900">#Serie: {{ $item['serial'] }}</p>
 
                                     @endif
 
                                 </td>
+                                @if ($request_status != 'rechazada' && $request_status != 'entregada')
+
+                                    @can("Aceptar solicitud")
+
+                                        <td>
+
+                                            @livewire('request-available-article', ['article_id' => $item['id']], key($item['id']))
+
+                                        </td>
+                                    @endcan
+
+                                @endif
 
                             </tr>
 
@@ -479,7 +537,7 @@
 
             <div class="text-sm">
 
-                <p>Comentarios:</p>
+                <p>Comentario:</p>
 
                 <div class=" font-thin text-gray-600 mb-3">
 
@@ -497,15 +555,19 @@
 
                 <div class="float-righ">
 
-                    @if($request_status === 'solicitada' || !$request_status === 'aceptada')
-                        <button
-                            wire:click="process(1)"
-                            wire:loading.attr="disabled"
-                            wire:target="create"
-                            class="bg-green-400 hover:shadow-lg text-white font-bold px-4 py-2 rounded-full text-sm mb-2 hover:bg-green-700 flaot-left mr-1 focus:outline-none">
-                            Aceptar
-                        </button>
-                    @endif
+                    @can("Aceptar solicitud")
+
+                        @if($request_status === 'solicitada' || !$request_status === 'aceptada')
+                            <button
+                                wire:click="process(1)"
+                                wire:loading.attr="disabled"
+                                wire:target="create"
+                                class="bg-green-400 hover:shadow-lg text-white font-bold px-4 py-2 rounded-full text-sm mb-2 hover:bg-green-700 flaot-left mr-1 focus:outline-none">
+                                Aceptar
+                            </button>
+                        @endif
+
+                    @endcan
 
                     <button
                         wire:click="process(2)"

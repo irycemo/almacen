@@ -103,7 +103,7 @@ class Categories extends Component
                 'created_by' => auth()->user()->id,
             ]);
 
-            $this->dispatchBrowserEvent('showMessage',['success', "La categoría ha sido creado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "La categoría ha sido creada con exito."]);
 
             $this->closeModal();
 
@@ -127,7 +127,7 @@ class Categories extends Component
                 'updated_by' => auth()->user()->id,
             ]);
 
-            $this->dispatchBrowserEvent('showMessage',['success', "La categoría sido actualizado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "La categoría sido actualizada con exito."]);
 
             $this->closeModal();
 
@@ -146,7 +146,7 @@ class Categories extends Component
 
             $category->delete();
 
-            $this->dispatchBrowserEvent('showMessage',['success', "La categoría ha sido eliminado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "La categoría ha sido eliminada con exito."]);
 
             $this->closeModal();
 

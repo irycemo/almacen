@@ -188,6 +188,7 @@ class Users extends Component
         $users = User::with('roles','createdBy','updatedBy')
                         ->where('name', 'LIKE', '%' . $this->search . '%')
                         ->orWhere('email', 'LIKE', '%' . $this->search . '%')
+                        ->orWhere('location', 'LIKE', '%' . $this->search . '%')
                         ->orWhere(function($q){
                             return $q->whereHas('roles', function($q){
                                 return $q->where('name', 'LIKE', '%' . $this->search . '%');

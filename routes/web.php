@@ -3,12 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\EntrieController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SetPasswordController;
-use App\Http\Controllers\TrackingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,5 +51,9 @@ Route::group(['middleware' => ['auth','is.active']], function(){
     Route::resource('requests', RequestController::class)->only(['index','edit','create'])->middleware('can:Lista de solicitudes')->names('requests');
 
     Route::get('tracking', TrackingController::class)->middleware('can:Seguimiento')->name('tracking');
+
+    Route::get('entries', EntrieController::class)->middleware('can:Seguimiento')->name('entries');
+
+    Route::get('reports', ReportController::class)->middleware('can:Reportes')->name('reports');
 
 });

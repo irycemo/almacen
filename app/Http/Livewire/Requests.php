@@ -128,6 +128,9 @@ class Requests extends Component
         if($i == 3)
             $this->validate([
                 'comment' => 'required'
+            ],
+            [
+                'comment.required' => 'El campo comentario es obligatorio para rechazar.'
             ]);
 
         try {
@@ -187,7 +190,8 @@ class Requests extends Component
     public function render()
     {
 
-        if(auth()->user()->roles[0]->id == 4){
+        if(auth()->user()->roles[0]->name == 'Jefe(a) de Departamento'){
+
             $requests = Request::with('createdBy', 'updatedBy')
                         ->where('created_by', auth()->user()->id)
                         ->where(function($q){
@@ -196,11 +200,24 @@ class Requests extends Component
                         })
                         ->orderBy($this->sort, $this->direction)
                         ->paginate(10);
+        }else if(auth()->user()->roles[0]->name == 'Almacenista'){
+
+            $requests = Request::with('createdBy', 'updatedBy')
+                ->where('status', '!=', 'solicitada')
+                ->where(function($q){
+                    $q->whereHas('createdBy', function($q){
+                        $q->where('name', 'LIKE', '%' . $this->search . '%');
+                    })
+                        ->orWhere('number', 'LIKE', '%' . $this->search . '%');
+                })
+                ->orderBy($this->sort, $this->direction)
+                ->paginate(10);
         }else{
 
             $requests = Request::with('createdBy', 'updatedBy')
                             ->where('status', 'LIKE', '%' . $this->search . '%')
                             ->orwhere('number', 'LIKE', '%' . $this->search . '%')
+                            ->orwhere('content', 'LIKE', '%' . $this->search . '%')
                             ->orWhere(function($q){
                                 $q->whereHas('createdBy', function($q){
                                     $q->where('name', 'LIKE', '%' . $this->search . '%');

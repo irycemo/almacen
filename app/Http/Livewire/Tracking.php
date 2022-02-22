@@ -103,7 +103,7 @@ class Tracking extends Component
 
     public function viewDetails($article){
 
-        $this->article = Article::find($article['id']);
+        $this->article = Article::query()->with('entries.article', 'entries.createdBy', 'entries.updatedBy')->where('id', $article['id'])->first();
 
         $this->showArticles = false;
         $this->showRequests = true;
@@ -126,7 +126,9 @@ class Tracking extends Component
     public function render()
     {
 
-        $articles = Article::where('name', 'LIKE', '%' . $this->search . '%')->orWhere('serial', 'LIKE', '%' . $this->search . '%');
+        $articles = Article::where('name', 'LIKE', '%' . $this->search . '%')
+                                ->orWhere('serial', 'LIKE', '%' . $this->search . '%')
+                                ->orWhere('brand', 'LIKE', '%' . $this->search . '%');
 
         if($this->search)
             $articles = $articles->paginate(10);

@@ -17,6 +17,7 @@ class CreateRequestsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('number')->unique();
             $table->json('content');
+            $table->enum('location',['catastro','rpp']);
             $table->enum('status',['rechazada','aceptada','entregada','solicitada'])->default('solicitada');
             $table->text('comment')->nullable();
             $table->foreignId('created_by')->nullable()->constrained()->references('id')->on('users');

@@ -180,12 +180,6 @@
 
                         </th>
 
-                        <th class="px-1 py-3 hidden lg:table-cell">
-
-                            Origen
-
-                        </th>
-
                         <th wire:click="order('created_at')" class="cursor-pointer px-1 py-3 hidden lg:table-cell">
 
                             Registro
@@ -283,12 +277,19 @@
 
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Stock</span>
 
-                                @if($article->stock >= 20)
-                                    <span class="bg-green-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
-                                @elseif($article->stock <= 20 && $article->stock > 10)
-                                    <span class="bg-yellow-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
-                                @elseif($article->stock <= 10)
-                                    <span class="bg-red-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
+                                @if ($article->serial)
+                                    <span class="bg-blue-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
+
+                                @else
+
+                                    @if($article->stock >= 20)
+                                        <span class="bg-green-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
+                                    @elseif($article->stock <= 20 && $article->stock > 10)
+                                        <span class="bg-yellow-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
+                                    @elseif($article->stock <= 10)
+                                        <span class="bg-red-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
+                                    @endif
+
                                 @endif
 
                             </td>
@@ -306,16 +307,6 @@
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Categoría</span>
 
                                 <p class="text-sm font-medium text-gray-900">{{ $article->category->name }}</p>
-
-                            </td>
-
-                            <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
-
-                                <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Origen</span>
-
-                                <p class="text-sm font-medium text-gray-900 capitalize">{{ $article->origin }}:</p>
-
-                                <p>{{ Str::limit($article->comment, 100) }}</p>
 
                             </td>
 
@@ -599,63 +590,6 @@
                     <div>
 
                         @error('category_id') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
-
-                <div class="flex-auto mr-1 ">
-
-                    <div>
-
-                        <Label>Origen</Label>
-
-                    </div>
-
-                    <div>
-
-                        <select class="bg-white rounded text-sm w-full" wire:model.defer="origin">
-
-                            <option selected>Selecciona una opciópn</option>
-                            <option value="compra">Compra</option>
-                            <option value="donación">Donación</option>
-
-                        </select>
-
-                    </div>
-
-                    <div>
-
-                        @error('origin') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
-
-                <div class="flex-auto ">
-
-                    <div>
-
-                        <Label>Descripción del origen del artículo</Label>
-                    </div>
-
-                    <div>
-
-                        <textarea rows="4" wire:model.defer="comment" class="bg-white rounded text-sm w-full"></textarea>
-
-                    </div>
-
-                    <div>
-
-                        @error('comment') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
 
                     </div>
 

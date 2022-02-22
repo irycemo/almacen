@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use Carbon\Carbon;
 use App\Models\User;
+use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class RequestFactory extends Factory
@@ -21,6 +23,9 @@ class RequestFactory extends Factory
 
         $array = array();
 
+        $date1 = Carbon::now()->subDays(rand(1, 620));
+        $date2 = $date1->addDays(rand(1, 360));
+
         for($i = 1; $i <= $rand; $i++){
 
             $array[] = array(
@@ -36,9 +41,12 @@ class RequestFactory extends Factory
             'number' => $this->faker->unique()->numberBetween(1,100),
             'content' => json_encode($array, JSON_FORCE_OBJECT),
             'comment' => $this->faker->text(),
+            'location' => Arr::random(['catastro', 'rpp']),
             'status'=> $this->faker->randomElement(['rechazada','aceptada','entregada','solicitada']),
             'created_by' => $this->faker->randomElement($users),
-            'updated_by' => $this->faker->randomElement($users)
+            'updated_by' => $this->faker->randomElement($users),
+            'created_at' => $date1,
+            'updated_at' => $date2
         ];
     }
 }

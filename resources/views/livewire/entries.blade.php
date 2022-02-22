@@ -2,15 +2,15 @@
 
     <div class="mb-5">
 
-        <h1 class="titulo-seccion text-3xl font-thin text-gray-500 mb-3">Artículos RPP</h1>
+        <h1 class="titulo-seccion text-3xl font-thin text-gray-500 mb-3">Entradas</h1>
 
         <div>
 
             <input type="text" wire:model="search" placeholder="Buscar" class="bg-white rounded-full text-sm">
 
-            @can('Crear artículo')
+            @can('Crear entrada')
 
-                <button wire:click="openModalCreate" class="bg-gray-500 hover:shadow-lg hover:bg-gray-700 float-right mb-5 text-sm py-2 px-4 text-white rounded-full focus:outline-none hidden md:block">Agregar nuevo artículo</button>
+                <button wire:click="openModalCreate" class="bg-gray-500 hover:shadow-lg hover:bg-gray-700 float-right mb-5 text-sm py-2 px-4 text-white rounded-full focus:outline-none hidden md:block">Agregar nueva Entrada</button>
 
                 <button wire:click="openModalCreate" class="bg-gray-500 hover:shadow-lg hover:bg-gray-700 float-right mb-5 text-sm py-2 px-4 text-white rounded-full focus:outline-none md:hidden">+</button>
 
@@ -20,7 +20,7 @@
 
     </div>
 
-    @if($articles->count())
+    @if($entries->count())
 
         <div class="relative overflow-x-auto rounded-lg shadow-xl">
 
@@ -30,41 +30,11 @@
 
                     <tr class="text-xs font-medium text-gray-500 uppercase text-left traling-wider">
 
-                        <th wire:click="order('name')" class="cursor-pointer px-1 py-3 hidden lg:table-cell">
+                        <th wire:click="order('article_id')" class="cursor-pointer px-1 py-3 hidden lg:table-cell">
 
-                            Nombre
+                            Artículo / Marca
 
-                            @if($sort == 'name')
-
-                                @if($direction == 'asc')
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
-                                    </svg>
-
-                                @else
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
-                                    </svg>
-
-                                @endif
-
-                            @else
-
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                                </svg>
-
-                            @endif
-
-                        </th>
-
-                        <th wire:click="order('brand')" class="cursor-pointer px-1 py-3 hidden lg:table-cell">
-
-                            Marca / #Serie
-
-                            @if($sort == 'brand')
+                            @if($sort == 'article_id')
 
                                 @if($direction == 'asc')
 
@@ -90,11 +60,101 @@
 
                         </th>
 
-                        <th wire:click="order('stock')" class="cursor-pointer px-1 py-3 hidden lg:table-cell">
+                        <th wire:click="order('quantity')" class="cursor-pointer px-1 py-3 hidden lg:table-cell">
 
-                            Stock
+                            Cantidad
 
-                            @if($sort == 'stock')
+                            @if($sort == 'quantity')
+
+                                @if($direction == 'asc')
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
+                                    </svg>
+
+                                @else
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+                                    </svg>
+
+                                @endif
+
+                            @else
+
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                </svg>
+
+                            @endif
+
+                        </th>
+
+                        <th wire:click="order('price')" class="cursor-pointer px-1 py-3 hidden lg:table-cell">
+
+                            Precio
+
+                            @if($sort == 'price')
+
+                                @if($direction == 'asc')
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
+                                    </svg>
+
+                                @else
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+                                    </svg>
+
+                                @endif
+
+                            @else
+
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                </svg>
+
+                            @endif
+
+                        </th>
+
+                        <th wire:click="order('location')" class="cursor-pointer px-1 py-3 hidden lg:table-cell">
+
+                            Ubicación
+
+                            @if($sort == 'location')
+
+                                @if($direction == 'asc')
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
+                                    </svg>
+
+                                @else
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+                                    </svg>
+
+                                @endif
+
+                            @else
+
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                </svg>
+
+                            @endif
+
+                        </th>
+
+                        <th wire:click="order('origin')" class="cursor-pointer px-1 py-3 hidden lg:table-cell">
+
+                            Origen
+
+                            @if($sort == 'origin')
 
                                 @if($direction == 'asc')
 
@@ -147,42 +207,6 @@
                                 </svg>
 
                             @endif
-
-                        </th>
-
-                        <th wire:click="order('category_id')" class="cursor-pointer px-1 py-3 hidden lg:table-cell">
-
-                            Categoría
-
-                            @if($sort == 'category_id')
-
-                                @if($direction == 'asc')
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
-                                    </svg>
-
-                                @else
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
-                                    </svg>
-
-                                @endif
-
-                            @else
-
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                                </svg>
-
-                            @endif
-
-                        </th>
-
-                        <th class="px-1 py-3 hidden lg:table-cell">
-
-                            Origen
 
                         </th>
 
@@ -255,74 +279,57 @@
 
                 <tbody class="divide-y divide-gray-200 flex-1 sm:flex-none ">
 
-                    @foreach($articles as $article)
+                    @foreach($entries as $entrie)
 
                         <tr class="text-sm font-medium text-gray-500 bg-white flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
 
                             <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
 
-                                <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Nombre</span>
+                                <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Artículo</span>
 
-                                <p class="text-sm font-medium text-gray-900">{{ $article->name }}</p>
-
-                            </td>
-
-                            <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
-
-                                <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Marca / #Serie</span>
-
-                                <p class="text-sm font-medium text-gray-900 capitalize">{{ $article->brand }}</p>
-
-                                @if($article->serial)
-                                    <p>#Serie: {{ $article->serial }}</p>
-                                @endif
-
-                            </td>
-
-                            <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:border-0 border border-b block lg:table-cell relative lg:static">
-
-                                <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Stock</span>
-
-                                @if ($article->serial)
-                                    <span class="bg-blue-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
-
-                                @else
-
-                                    @if($article->stock >= 20)
-                                        <span class="bg-green-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
-                                    @elseif($article->stock <= 20 && $article->stock > 10)
-                                        <span class="bg-yellow-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
-                                    @elseif($article->stock <= 10)
-                                        <span class="bg-red-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
-                                    @endif
-
-                                @endif
+                                <p class="text-sm font-medium text-gray-900">{{ $entrie->article->name }}  / {{ $entrie->article->brand }}</p>
 
                             </td>
 
                             <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
 
-                                <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">descripción</span>
+                                <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Cantidad</span>
 
-                                <p class="text-sm font-medium text-gray-900">{{ Str::limit($article->description, 100) }}</p>
-
-                            </td>
-
-                            <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
-
-                                <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Categoría</span>
-
-                                <p class="text-sm font-medium text-gray-900">{{ $article->category->name }}</p>
+                                <p class="text-sm font-medium text-gray-900 capitalize">{{ $entrie->quantity }}</p>
 
                             </td>
 
                             <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+
+                                <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Precio</span>
+
+                                <p class="text-sm font-medium text-gray-900 capitalize">${{ $entrie->price }}</p>
+
+                            </td>
+
+                            <td class="capitalize px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+
+                                <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Ubicación</span>
+
+                                <p class="text-sm font-medium text-gray-900">{{ $entrie->location }}</p>
+
+                            </td>
+
+                            <td class="capitalize px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
 
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Origen</span>
 
-                                <p class="text-sm font-medium text-gray-900 capitalize">{{ $article->origin }}:</p>
+                                <p class="text-sm font-medium text-gray-900">{{ $entrie->origin }}</p>
 
-                                <p>{{ Str::limit($article->comment, 100) }}</p>
+                            </td>
+
+                            <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+
+                                <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Descripción</span>
+
+                                <p class="text-sm font-medium text-gray-900 capitalize">{{ $entrie->description }}</p>
+
+                            </td>
 
                             </td>
 
@@ -330,13 +337,13 @@
 
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Registrado</span>
 
-                                @if($article->created_by != null)
+                                @if($entrie->created_by != null)
 
-                                    <span class="font-semibold">Registrado por: {{$article->createdBy->name}}</span> <br>
+                                    <span class="font-semibold">Registrado por: {{$entrie->createdBy->name}}</span> <br>
 
                                 @endif
 
-                                {{ $article->created_at }}
+                                {{ $entrie->created_at }}
 
                             </td>
 
@@ -344,13 +351,13 @@
 
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Actualizado</span>
 
-                                @if($article->updated_by != null)
+                                @if($entrie->updated_by != null)
 
-                                    <span class="font-semibold">Actualizado por: {{$article->updatedBy->name}}</span> <br>
+                                    <span class="font-semibold">Actualizado por: {{$entrie->updatedBy->name}}</span> <br>
 
                                 @endif
 
-                                {{ $article->updated_at }}
+                                {{ $entrie->updated_at }}
 
                             </td>
 
@@ -360,12 +367,12 @@
 
                                 <div class="flex justify-center lg:justify-start">
 
-                                    @can('Editar artículo')
+                                    @can('Editar entrada')
 
                                         <button
-                                            wire:click="openModalEdit({{$article}})"
+                                            wire:click="openModalEdit({{$entrie}})"
                                             wire:loading.attr="disabled"
-                                            wire:target="openModalEdit({{$article}})"
+                                            wire:target="openModalEdit({{$entrie}})"
                                             class="bg-blue-400 hover:shadow-lg text-white text-xs md:text-sm px-3 py-2 rounded-full mr-2 hover:bg-blue-700 flex focus:outline-none"
                                         >
 
@@ -380,12 +387,12 @@
 
                                     @endcan
 
-                                    @can('Borrar artículo')
+                                    @can('Borrar entrada')
 
                                         <button
-                                            wire:click="openModalDelete({{$article}})"
+                                            wire:click="openModalDelete({{$entrie}})"
                                             wire:loading.attr="disabled"
-                                            wire:target="openModalDelete({{$article}})"
+                                            wire:target="openModalDelete({{$entrie}})"
                                             class="bg-red-400 hover:shadow-lg text-white text-xs md:text-sm px-3 py-2 rounded-full hover:bg-red-700 flex focus:outline-none"
                                         >
 
@@ -394,8 +401,6 @@
                                             </svg>
 
                                             <p>Eliminar</p>
-
-                                        </button>
 
                                     @endcan
 
@@ -413,7 +418,7 @@
                     <tr>
 
                         <td colspan="10" class="py-2 px-5">
-                            {{ $articles->links()}}
+                            {{ $entries->links()}}
                         </td>
 
                     </tr>
@@ -445,39 +450,242 @@
         <x-slot name="title">
 
             @if($create)
-                Nuevo Artículo
+                Nueva Entrada
             @elseif($edit)
-                Editar Artículo
+                Editar Entrada
             @endif
 
         </x-slot>
 
         <x-slot name="content">
 
-            <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
+                <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
 
-                <div class="flex-auto ">
+                    <div class="flex-auto ">
 
-                    <div>
+                        <div class="flex flex-col mb-3">
 
-                        <Label>Nombre</Label>
-                    </div>
+                            <Label>Artículo</Label>
 
-                    <div>
+                            <input type="text" wire:model="searchArticle" placeholder="Buscar artículo" class="bg-white rounded-full text-sm w-60">
 
-                        <input type="text" class="bg-white rounded text-sm w-full" wire:model.defer="name">
+                        </div>
 
-                    </div>
+                        @if ($showArticles)
 
-                    <div>
+                            @if (count($articles))
 
-                        @error('name') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
+                                <div class="relative overflow-x-auto rounded-lg shadow-xl mb-7">
+
+                                    <table class="rounded-lg w-full">
+
+                                        <thead class="border-b border-gray-300 bg-gray-50">
+
+                                            <tr class="text-xs font-medium text-gray-500 uppercase text-left traling-wider">
+
+                                                <th class="px-3 py-3 hidden lg:table-cell">
+
+                                                    Nombre / Marca / #Serie
+
+                                                </th>
+
+                                                <th class="px-3 py-3 hidden lg:table-cell">
+
+                                                    Ubicación
+
+                                                </th>
+
+                                                <th class="px-3 py-3 hidden lg:table-cell">Acciones</th>
+
+                                            </tr>
+
+                                        </thead>
+
+
+                                        <tbody class="divide-y divide-gray-200 flex-1 sm:flex-none">
+
+                                            @foreach($articles as $article)
+
+                                                <tr class="text-sm font-medium text-gray-500 bg-white flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
+
+                                                    <td class="w-full lg:w-auto p-3 text-gray-800 text-center md:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+
+                                                        <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Nombre</span>
+
+                                                        <p>{{ $article->name }} / {{ $article->brand }}</p>
+
+                                                        @if ($article->serial)
+                                                            <p># Serie: {{ $article->serial }}</p>
+                                                        @endif
+
+                                                    </td>
+
+                                                    <td class="capitalize w-full lg:w-auto p-3  text-gray-800 text-center md:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+
+                                                        <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Ubicación</span>
+
+                                                        {{ $article->location }}
+
+                                                    </td>
+
+                                                    <td class="w-full lg:w-auto p-3 text-gray-800 text-center lg:text-left lg:border-0 border border-b lg:table-cell relative lg:static">
+
+                                                        <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Acciones</span>
+
+                                                        <div class="flex justify-center lg:justify-start">
+
+                                                            <button
+                                                                    wire:click="viewDetails({{ $article }})"
+                                                                    wire:loading.attr="disabled"
+                                                                    wire:target="viewDetails({{ $article }})"
+                                                                    class="bg-green-400 hover:shadow-lg text-white text-xs md:text-sm px-3 py-2 rounded-full mr-2 hover:bg-green-700 flex focus:outline-none"
+                                                                >
+
+
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                                    </svg>
+                                                                    Seleccionar
+                                                            </button>
+
+                                                        </div>
+
+                                                    </td>
+                                                </tr>
+
+                                            @endforeach
+
+                                        </tbody>
+
+                                        <tfoot class="border-gray-300 bg-gray-50">
+
+                                            <tr>
+
+                                                <td colspan="8" class="py-2 px-5">
+                                                    {{ $articles->links()}}
+                                                </td>
+
+                                            </tr>
+
+                                        </tfoot>
+
+                                    </table>
+
+                                    <div class="h-full w-full rounded-lg bg-gray-200 bg-opacity-75 absolute top-0 left-0" wire:loading wire:target="search">
+
+                                        <img class="mx-auto h-16" src="{{ asset('storage/img/loading.svg') }}" alt="">
+
+                                    </div>
+
+                                </div>
+
+                            @else
+
+                                <div class="border-b border-gray-300 bg-white text-gray-500 text-center p-5 rounded-full text-lg">
+
+                                    No hay resultados.
+
+                                </div>
+
+                            @endif
+
+                        @endif
+
+                        @if ($articleDescription)
+
+                            <div class="text-gray-800">
+
+                                <p class="font-light"><span class="font-semibold">Nombre: </span>{{ $article['name'] }}</p>
+                                <p class="font-light"><span class="font-semibold">Marca: </span>{{ $article['brand'] }}</p>
+                                <p class="font-light"><span class="font-semibold">Stock: </span>{{ $article['stock'] }}</p>
+                                <p class="font-light capitalize"><span class="font-semibold">Ubicación: </span>{{ $article['location'] }}</p>
+
+                            </div>
+
+                        @endif
 
                     </div>
 
                 </div>
 
-            </div>
+                <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
+
+                    <div class="flex-auto ">
+
+                        <div>
+
+                            <Label>Cantidad</Label>
+                        </div>
+
+                        <div>
+
+                            <input type="number" min="0" class="bg-white rounded text-sm w-full" wire:model.defer="quantity">
+
+                        </div>
+
+                        <div>
+
+                            @error('quantity') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
+
+                        </div>
+
+                    </div>
+
+                    <div class="flex-auto mr-1 ">
+
+                        <div>
+
+                            <Label>Origen</Label>
+
+                        </div>
+
+                        <div>
+
+                            <select class="bg-white rounded text-sm w-full" wire:model.lazy="origin">
+
+                                <option selected>Selecciona un origen</option>
+                                <option value="compra">Compra</option>
+                                <option value="donación">Donación</option>
+
+                            </select>
+
+                        </div>
+
+                        <div>
+
+                            @error('origin') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
+
+                        </div>
+
+                    </div>
+
+                    @if ($origin === 'compra')
+
+                        <div class="flex-auto mb-5">
+
+                            <div>
+
+                                <Label>Costo</Label>
+                            </div>
+
+                            <div>
+
+                                <input type="number" min="0" class="bg-white rounded text-sm w-full" wire:model.defer="price">
+
+                            </div>
+
+                            <div>
+
+                                @error('price') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
+
+                            </div>
+
+                        </div>
+
+                    @endif
+
+                </div>
 
             <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
 
@@ -485,7 +693,8 @@
 
                     <div>
 
-                        <Label>Descripción del articulo</Label>
+                        <Label>Descripción de la entrada</Label>
+
                     </div>
 
                     <div>
@@ -497,170 +706,6 @@
                     <div>
 
                         @error('description') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
-
-                <div class="flex-auto mb-5">
-
-                    <div>
-
-                        <Label>Marca</Label>
-                    </div>
-
-                    <div>
-
-                        <input type="text" class="bg-white rounded text-sm w-full" wire:model.defer="brand">
-
-                    </div>
-
-                    <div>
-
-                        @error('brand') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
-
-                    </div>
-
-                </div>
-
-                <div class="flex-auto mr-1 ">
-
-                    <div>
-
-                        <Label># de Serie</Label>
-
-                    </div>
-
-                    <div>
-
-                        <input type="text" class="bg-white rounded text-sm w-full" wire:model.lazy="serial">
-
-                    </div>
-
-                    <div>
-
-                        @error('serial') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
-
-                @if ($serial == null)
-                    <div class="flex-auto mb-5">
-
-                        <div>
-
-                            <Label>Stock</Label>
-                        </div>
-
-                        <div>
-
-                            <input type="number" min="1" class="bg-white rounded text-sm w-full" wire:model.defer="stock">
-
-                        </div>
-
-                        <div>
-
-                            @error('stock') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
-
-                        </div>
-
-                    </div>
-                @endif
-
-                <div class="flex-auto mr-1 ">
-
-                    <div>
-
-                        <Label>Categoría</Label>
-
-                    </div>
-
-                    <div>
-
-                        <select class="bg-white rounded text-sm w-full" wire:model.defer="category_id">
-
-                            <option value="">Seleccione una categoría</option>
-
-                            @foreach ($categories as $catgegory)
-
-
-                                <option value="{{ $catgegory->id }}">{{ $catgegory->name }}</option>
-
-                            @endforeach
-
-                        </select>
-
-                    </div>
-
-                    <div>
-
-                        @error('category_id') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
-
-                <div class="flex-auto mr-1 ">
-
-                    <div>
-
-                        <Label>Origen</Label>
-
-                    </div>
-
-                    <div>
-
-                        <select class="bg-white rounded text-sm w-full" wire:model.defer="origin">
-
-                            <option selected>Selecciona una opciópn</option>
-                            <option value="compra">Compra</option>
-                            <option value="donación">Donación</option>
-
-                        </select>
-
-                    </div>
-
-                    <div>
-
-                        @error('origin') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
-
-                <div class="flex-auto ">
-
-                    <div>
-
-                        <Label>Descripción del origen del artículo</Label>
-                    </div>
-
-                    <div>
-
-                        <textarea rows="4" wire:model.defer="comment" class="bg-white rounded text-sm w-full"></textarea>
-
-                    </div>
-
-                    <div>
-
-                        @error('comment') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
 
                     </div>
 
@@ -715,7 +760,7 @@
     <x-jet-confirmation-modal wire:model="modalDelete">
 
         <x-slot name="title">
-            Eliminar Categoría
+            Eliminar Artículo
         </x-slot>
 
         <x-slot name="content">

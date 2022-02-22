@@ -23,23 +23,17 @@ class Articles extends Component
     public $name;
     public $brand;
     public $serial;
-    public $stock;
     public $description;
     public $category_id;
     public $location;
-    public $origin;
-    public $comment;
 
     protected function rules(){
         return[
             'name' => 'required',
             'brand' => 'required',
             'serial' => 'nullable',
-            'stock' => 'nullable|numeric',
             'description' => 'required',
             'category_id' => 'required',
-            'comment' => 'required',
-            'origin' => 'required',
             'location' => 'required'
         ];
     }
@@ -49,8 +43,6 @@ class Articles extends Component
         'brand.required' => 'El campo marca es obligatorio.',
         'description.required' => 'El campo descripción es obligatorio.',
         'category_id.required' => 'El campo categoría es obligatorio.',
-        'comment.required' => 'El campo descripción del origen del artículo es obligatorio.',
-        'origin.required' => 'El campo origen es obligatorio.',
         'location.required' => 'El campo ubicación es obligatorio.',
     ];
 
@@ -73,7 +65,7 @@ class Articles extends Component
     }
 
     public function resetAll(){
-        $this->reset('article_id','name','stock', 'description','category_id','location','origin', 'comment', 'brand', 'serial');
+        $this->reset('article_id','name', 'description','category_id','location', 'brand', 'serial');
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -95,15 +87,12 @@ class Articles extends Component
         $this->create = false;
 
         $this->article_id = $article['id'];
-        $this->stock = $article['stock'];
         $this->brand = $article['brand'];
         $this->serial = $article['serial'];
         $this->description = $article['description'];
         $this->category_id = $article['category_id'];
         $this->name = $article['name'];
         $this->location = $article['location'];
-        $this->origin = $article['origin'];
-        $this->comment = $article['comment'];
 
         $this->modal = true;
         $this->edit = true;
@@ -136,11 +125,9 @@ class Articles extends Component
                 'name' => $this->name,
                 'brand' => $this->brand,
                 'serial' => $this->serial,
-                'stock' => $this->serial ? 1 : $this->stock,
+                'stock' => 0,
                 'description' => $this->description,
                 'location' => $this->location,
-                'origin' => $this->origin,
-                'comment' => $this->comment,
                 'category_id' => $this->category_id,
                 'created_by' => auth()->user()->id,
             ]);
@@ -168,11 +155,8 @@ class Articles extends Component
                 'name' => $this->name,
                 'brand' => $this->brand,
                 'serial' => $this->serial,
-                'stock' => $this->serial ? 1 : $this->stock,
                 'description' => $this->description,
                 'location' => $this->location,
-                'origin' => $this->origin,
-                'comment' => $this->comment,
                 'category_id' => $this->category_id,
                 'updated_by' => auth()->user()->id,
             ]);
@@ -218,8 +202,6 @@ class Articles extends Component
                                     ->orwhere('brand', 'LIKE', '%' . $this->search . '%')
                                     ->orwhere('serial', 'LIKE', '%' . $this->search . '%')
                                     ->orwhere('location', 'LIKE', '%' . $this->search . '%')
-                                    ->orwhere('origin', 'LIKE', '%' . $this->search . '%')
-                                    ->orwhere('comment', 'LIKE', '%' . $this->search . '%')
                                     ->orWhere(function($q){
                                         return $q->whereHas('category', function($q){
                                             return $q->where('name', 'LIKE', '%' . $this->search . '%');
