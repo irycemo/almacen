@@ -209,7 +209,7 @@ class Reports extends Component
         if($type == 1)
             return Excel::download(new EntriesExport($this->entrie_article_id, $this->entrie_location, $this->entrie_origin, $this->entrie_price1, $this->entrie_price2, $this->date1, $this->date2), 'Reporte_de_entradas_' . now()->format('d-m-Y') . '.xlsx');
         elseif ( $type == 2)
-            return Excel::download(new ArticlesExport($this->article_name, $this->article_brand, $this->article_category_id, $this->article_location, $this->date1, $this->date2), 'Reporte_de_articulos_' . now()->format('d-m-Y') . '.xlsx');
+            return Excel::download(new ArticlesExport($this->article_name, $this->article_location, $this->article_brand, $this->article_category_id, $this->date1, $this->date2), 'Reporte_de_articulos_' . now()->format('d-m-Y') . '.xlsx');
         else
             return Excel::download(new RequestsExport($this->request_article_id, $this->request_location, $this->request_status, $this->request_user, $this->date1, $this->date2), 'Reporte_de_solicitudes_' . now()->format('d-m-Y') . '.xlsx');
     }

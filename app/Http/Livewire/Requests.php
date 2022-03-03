@@ -29,6 +29,8 @@ class Requests extends Component
     public $request_comment;
     public $comment;
 
+    protected $queryString = ['search'];
+
     public function updatingSearch(){
         $this->resetPage();
     }
