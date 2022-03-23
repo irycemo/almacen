@@ -8,6 +8,32 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Article extends Model
 {
+
+    const AREAS = [
+        'Roles',
+        'Permisos',
+        'Usuarios',
+        'Categorías',
+        'Entradas',
+        'Artículos',
+        'Solicitudes',
+        'Seguimiento',
+        'Reportes'
+    ];
+
+    const UBICACIONES = [
+        'RPP',
+        'Catastro',
+        'Regional Morelia',
+        'Regional Uruapan',
+        'Regional Patzcuaro',
+        'Regional Zamora',
+        'Regional Zitacuaro',
+        'Regional La Piedad',
+        'Regional Apatzingan',
+        'Regional Lazaro Cardenas'
+    ];
+
     use HasFactory;
 
     protected $guarded = [];

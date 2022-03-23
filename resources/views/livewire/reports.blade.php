@@ -163,8 +163,12 @@
 
                         <select class="bg-white rounded text-sm w-full" wire:model.defer="article_location">
                             <option value="" selected>Selecciona una ubicación</option>
-                            <option value="rpp">RPP</option>
-                            <option value="catastro">Catastro</option>
+
+                            @foreach (App\Models\Article::UBICACIONES as $ubicacion)
+
+                                <option value="{{ $ubicacion }}">{{ $ubicacion }}</option>
+
+                            @endforeach
 
                         </select>
 
@@ -280,8 +284,13 @@
 
                         <select class="bg-white rounded text-sm w-full" wire:model.defer="entrie_location">
                             <option selected>Selecciona una ubicación</option>
-                            <option value="rpp">RPP</option>
-                            <option value="catastro">Catastro</option>
+
+                            @foreach (App\Models\Article::UBICACIONES as $ubicacion)
+
+                                <option value="{{ $ubicacion }}">{{ $ubicacion }}</option>
+
+                            @endforeach
+
 
                         </select>
 
@@ -408,8 +417,12 @@
 
                         <select class="bg-white rounded text-sm w-full" wire:model.defer="request_location">
                             <option value="{{ null }}" selected>Selecciona una ubicación</option>
-                            <option value="rpp">RPP</option>
-                            <option value="catastro">Catastro</option>
+
+                            @foreach (App\Models\Article::UBICACIONES as $ubicacion)
+
+                                <option value="{{ $ubicacion }}">{{ $ubicacion }}</option>
+
+                            @endforeach
 
                         </select>
 

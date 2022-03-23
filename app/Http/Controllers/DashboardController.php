@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Entrie;
+use App\Models\Article;
 use App\Models\Request;
 
 class DashboardController extends Controller
@@ -52,8 +53,10 @@ class DashboardController extends Controller
 
         }
 
+        $articles = Article::where('serial', null)->whereBetween('stock', [1, 20])->orderBy('stock', 'asc')->get();
+
         /* dd($requests); */
 
-        return view('dashboard', compact('data', 'requests'));
+        return view('dashboard', compact('data', 'requests', 'articles'));
     }
 }

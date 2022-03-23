@@ -21,6 +21,7 @@ class Entries extends Component
     public $direction = 'desc';
 
     public $article_id;
+    public $article;
     public $entrie_id;
     public $origin;
     public $description;
@@ -124,13 +125,30 @@ class Entries extends Component
 
     public function create(){
 
-        $this->validate();
+        if($this->article['serial'])
+            $this->validate([
+                'origin' => 'required',
+                'price' => 'nullable|numeric',
+                'description' => 'required'
+            ]);
+        else
+            $this->validate();
+
+        if($this->origin == 'compra')
+            $this->validate(['price' => 'required']);
 
         try {
 
             $article = Article::findorFail($this->article_id);
 
-            $article->update(['stock' => $article->serial ? 1 : $this->quantity]);
+            if(!$article->serial)
+                $stock = $article->stock + $this->quantity;
+            else
+                $stock = 1;
+
+            $article->update([
+                'stock' => $stock
+            ]);
 
             Entrie::create([
                 'article_id' => $this->article_id,
@@ -216,7 +234,8 @@ class Entries extends Component
     public function render()
     {
 
-        $articles = Article::where('name', 'LIKE', '%' . $this->searchArticle . '%');
+        $articles = Article::with('entries')->where('name', 'LIKE', '%' . $this->searchArticle . '%')
+                                        ->orWhere('serial', $this->searchArticle);
 
         if($this->searchArticle)
             $articles = $articles->simplePaginate(5);

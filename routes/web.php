@@ -48,6 +48,7 @@ Route::group(['middleware' => ['auth','is.active']], function(){
     Route::get('articles/rpp', [ArticleController::class, 'rpp'])->middleware('can:Lista de artículos de rpp')->name('articles.rpp');
 
     Route::resource('requests', RequestController::class)->only(['index','edit','create'])->middleware('can:Lista de solicitudes')->names('requests');
+    Route::get('requests/receipt/{request}', [RequestController::class, 'receipt'])->name('requests.receipt');
 
     Route::get('tracking', TrackingController::class)->middleware('can:Seguimiento')->name('tracking');
 

@@ -506,6 +506,12 @@
 
                                             @foreach($articles as $article)
 
+                                                @if ($article->serial && $article->entries->count())
+
+                                                    @continue
+
+                                                @endif
+
                                                 <tr class="text-sm font-medium text-gray-500 bg-white flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
 
                                                     <td class="w-full lg:w-auto p-3 text-gray-800 text-center md:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
@@ -572,7 +578,7 @@
 
                                     </table>
 
-                                    <div class="h-full w-full rounded-lg bg-gray-200 bg-opacity-75 absolute top-0 left-0" wire:loading wire:target="search">
+                                    <div class="h-full w-full rounded-lg bg-gray-200 bg-opacity-75 absolute top-0 left-0" wire:loading wire:target="searchArticle">
 
                                         <img class="mx-auto h-16" src="{{ asset('storage/img/loading.svg') }}" alt="">
 
@@ -611,26 +617,30 @@
 
                 <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
 
-                    <div class="flex-auto ">
+                    @if($article && !$article['serial'])
 
-                        <div>
+                        <div class="flex-auto ">
 
-                            <Label>Cantidad</Label>
+                            <div>
+
+                                <Label>Cantidad</Label>
+                            </div>
+
+                            <div>
+
+                                <input type="number" min="0" class="bg-white rounded text-sm w-full" wire:model.defer="quantity">
+
+                            </div>
+
+                            <div>
+
+                                @error('quantity') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
+
+                            </div>
+
                         </div>
 
-                        <div>
-
-                            <input type="number" min="0" class="bg-white rounded text-sm w-full" wire:model.defer="quantity">
-
-                        </div>
-
-                        <div>
-
-                            @error('quantity') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
-
-                        </div>
-
-                    </div>
+                    @endif
 
                     <div class="flex-auto mr-1 ">
 

@@ -151,6 +151,11 @@ class Requests extends Component
                     'comment' => $request->comment . ' ' . $this->comment,
                     'updated_by' => auth()->user()->id,
                 ]);
+
+                /* return redirect()->route('requests.receipt', $request->id); */
+
+                $this->dispatchBrowserEvent('receipt',route('requests.receipt', $request->id));
+
             }else{
 
                 $content = json_decode($request->content,true);
@@ -220,6 +225,7 @@ class Requests extends Component
                             ->where('status', 'LIKE', '%' . $this->search . '%')
                             ->orwhere('number', 'LIKE', '%' . $this->search . '%')
                             ->orwhere('content', 'LIKE', '%' . $this->search . '%')
+                            ->orwhere('location', 'LIKE', '%' . $this->search . '%')
                             ->orWhere(function($q){
                                 $q->whereHas('createdBy', function($q){
                                     $q->where('name', 'LIKE', '%' . $this->search . '%');

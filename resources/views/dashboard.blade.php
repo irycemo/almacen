@@ -173,9 +173,46 @@
 
         <div class="mb-10">
 
+            <h2 class="text-2xl tracking-widest py-3 px-6 text-gray-600 rounded-xl border-b-2 border-rojo font-semibold mb-6 bg-gradient-to-r from-white">Artículos</h2>
+
+            <div class="bg-white rounded-lg shadow-lg p-3">
+
+                <p class="text-lg font-light text-gray-600 mb-2">Artículos con bajo Stock</p>
+
+                <div class="grid grid-cols-5 gap-3">
+
+                    @foreach ($articles as $article)
+
+                        <div class="flex items-center space-x-2 col-span-1">
+
+                            <div class="">
+                                @if($article->stock >= 20)
+                                    <span class="bg-green-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
+                                @elseif($article->stock <= 20 && $article->stock > 10)
+                                    <span class="bg-yellow-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
+                                @elseif($article->stock <= 10)
+                                    <span class="bg-red-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
+                                @endif
+                            </div>
+
+                            <p class="text-gray-600">{{ $article->name }}</p>
+
+                        </div>
+
+
+                    @endforeach
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="mb-10">
+
             <h2 class="text-2xl tracking-widest py-3 px-6 text-gray-600 rounded-xl border-b-2 border-rojo font-semibold mb-6 bg-gradient-to-r from-white">Gráfica de entradas</h2>
 
-            <div class="bg-white rounded-lg p-2">
+            <div class="bg-white rounded-lg p-2 shadow-lg">
 
                 <canvas id="entriesChart" style="width: 100%; height: 400px;"></canvas>
 

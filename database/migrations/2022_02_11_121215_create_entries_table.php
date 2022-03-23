@@ -18,7 +18,7 @@ class CreateEntriesTable extends Migration
             $table->foreignId('article_id')->nullable()->constrained()->references('id')->on('articles');
             $table->integer('quantity');
             $table->unsignedDecimal('price', 8,2);
-            $table->enum('location',['catastro','rpp']);
+            $table->string('location');
             $table->enum('origin',['compra','donación']);
             $table->text('description');
             $table->foreignId('created_by')->nullable()->constrained()->references('id')->on('users');

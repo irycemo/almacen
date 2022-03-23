@@ -456,7 +456,7 @@
 
             </div>
 
-            <div class="flex flex-col md:flex-row justify-center md:space-x-3 mb-5">
+            <div class="mb-5 w-full">
 
                 <table class="rounded-lg w-full">
 
@@ -561,8 +561,8 @@
                             <button
                                 wire:click="process(1)"
                                 wire:loading.attr="disabled"
-                                wire:target="create"
-                                class="bg-green-400 hover:shadow-lg text-white font-bold px-4 py-2 rounded-full text-sm mb-2 hover:bg-green-700 flaot-left mr-1 focus:outline-none">
+                                wire:target="process(1)"
+                                class="bg-green-400 hover:shadow-lg text-white px-4 py-2 rounded-full text-sm mb-2 hover:bg-green-700 flaot-left mr-1 focus:outline-none">
                                 Aceptar
                             </button>
                         @endif
@@ -572,17 +572,17 @@
                     <button
                         wire:click="process(2)"
                         wire:loading.attr="disabled"
-                        wire:target="update"
-                        class="bg-gray-400 hover:shadow-lg text-white font-bold px-4 py-2 rounded-full text-sm mb-2 hover:bg-gray-700 flaot-left mr-1 focus:outline-none">
+                        wire:target="process(2)"
+                        class="bg-gray-400 hover:shadow-lg text-white px-4 py-2 rounded-full text-sm mb-2 hover:bg-gray-700 flaot-left mr-1 focus:outline-none">
                         Entregar
                     </button>
 
                     <button
                         wire:click="process(3)"
                         wire:loading.attr="disabled"
-                        wire:target="closeModal"
+                        wire:target="process(3)"
                         type="button"
-                        class="bg-red-400 hover:shadow-lg text-white font-bold px-4 py-2 rounded-full text-sm mb-2 hover:bg-red-700 flaot-left focus:outline-none">
+                        class="bg-red-400 hover:shadow-lg text-white px-4 py-2 rounded-full text-sm mb-2 hover:bg-red-700 flaot-left focus:outline-none">
                         Rechazar
                     </button>
 
@@ -601,6 +601,17 @@
                     </div>
 
                 </div>
+
+            @endif
+
+            @if ($request_status == 'entregada')
+
+                <a
+                    href="{{ route('requests.receipt', $request_id) }}"
+                    target="_blank"
+                    class="bg-gray-400 hover:shadow-lg text-white  px-4 py-2 rounded-full text-sm mb-2 hover:bg-gray-700 flaot-left focus:outline-none">
+                    Imprimir Recibo
+                </a>
 
             @endif
 
@@ -639,5 +650,13 @@
         </x-slot>
 
     </x-jet-confirmation-modal>
+
+    <script>
+
+        window.addEventListener('receipt', event => {
+            window.open(event.detail, "_blank");
+        });
+
+    </script>
 
 </div>

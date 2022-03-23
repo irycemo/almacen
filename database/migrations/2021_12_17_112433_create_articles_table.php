@@ -20,7 +20,7 @@ class CreateArticlesTable extends Migration
             $table->string('serial')->nullable();
             $table->integer('stock')->nullable();
             $table->text('description');
-            $table->enum('location',['catastro','rpp']);
+            $table->string('location');
             $table->foreignId('category_id')->constrained();
             $table->foreignId('created_by')->nullable()->constrained()->references('id')->on('users');
             $table->foreignId('updated_by')->nullable()->constrained()->references('id')->on('users');

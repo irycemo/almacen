@@ -616,9 +616,14 @@
                     <div>
 
                         <select class="bg-white rounded text-sm w-full" wire:model.defer="location">
+
                             <option selected>Selecciona una ubicación</option>
-                            <option value="rpp">RPP</option>
-                            <option value="catastro">Catastro</option>
+
+                            @foreach (App\Models\Article::UBICACIONES as $ubicacion)
+
+                                <option value="{{ $ubicacion }}">{{ $ubicacion }}</option>
+
+                            @endforeach
 
                         </select>
 
