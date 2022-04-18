@@ -19,6 +19,7 @@ class Permissions extends Component
     public $search;
     public $sort = 'id';
     public $direction = 'desc';
+    public $pagination=10;
 
     public $permission_id;
     public $name;
@@ -169,7 +170,7 @@ class Permissions extends Component
                                     ->where('name', 'LIKE', '%' . $this->search . '%')
                                     ->orWhere('area', 'LIKE', '%' . $this->search . '%')
                                     ->orderBy($this->sort, $this->direction)
-                                    ->paginate(10);
+                                    ->paginate($this->pagination);
 
         return view('livewire.permissions', compact('permissions'));
     }

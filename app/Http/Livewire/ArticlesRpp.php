@@ -19,6 +19,7 @@ class ArticlesRpp extends Component
     public $search;
     public $sort = 'id';
     public $direction = 'desc';
+    public $pagination=10;
 
     public $article_id;
     public $name;
@@ -213,7 +214,7 @@ class ArticlesRpp extends Component
                                             });
                                     })
                                     ->orderBy($this->sort, $this->direction)
-                                    ->paginate(10);
+                                    ->paginate($this->pagination);
 
         return view('livewire.articles-rpp', compact('categories', 'articles'));
     }

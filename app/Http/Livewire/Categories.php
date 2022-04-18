@@ -17,6 +17,7 @@ class Categories extends Component
     public $search;
     public $sort = 'id';
     public $direction = 'desc';
+    public $pagination=10;
 
     public $category_id;
     public $name;
@@ -162,7 +163,7 @@ class Categories extends Component
         $categories = Category::with('createdBy', 'updatedBy')
                                     ->where('name', 'LIKE', '%' . $this->search . '%')
                                     ->orderBy($this->sort, $this->direction)
-                                    ->paginate(10);
+                                    ->paginate($this->pagination);
 
         return view('livewire.categories', compact('categories'));
     }

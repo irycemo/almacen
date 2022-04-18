@@ -19,6 +19,7 @@ class Entries extends Component
     public $search;
     public $sort = 'id';
     public $direction = 'desc';
+    public $pagination=10;
 
     public $article_id;
     public $article;
@@ -242,7 +243,7 @@ class Entries extends Component
 
         $entries = Entrie::with('article', 'createdBy', 'updatedBy')
                             ->orderBy($this->sort, $this->direction)
-                            ->paginate(10);
+                            ->paginate($this->pagination);
 
         return view('livewire.entries', compact('entries', 'articles'));
     }

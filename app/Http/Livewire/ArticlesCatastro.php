@@ -19,6 +19,7 @@ class ArticlesCatastro extends Component
     public $search;
     public $sort = 'id';
     public $direction = 'desc';
+    public $pagination=10;
 
     public $article_id;
     public $name;
@@ -34,7 +35,6 @@ class ArticlesCatastro extends Component
             'name' => 'required',
             'brand' => 'required',
             'serial' => 'nullable',
-            'stock' => 'nullable|numeric',
             'description' => 'required',
             'category_id' => 'required',
         ];
@@ -213,7 +213,7 @@ class ArticlesCatastro extends Component
                                             });
                                     })
                                     ->orderBy($this->sort, $this->direction)
-                                    ->paginate(10);
+                                    ->paginate($this->pagination);
 
         return view('livewire.articles-catastro', compact('categories', 'articles'));
     }

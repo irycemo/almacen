@@ -4,9 +4,22 @@
 
         <h1 class="titulo-seccion text-3xl font-thin text-gray-500 mb-3">Artículos</h1>
 
-        <div>
+        <div class="flex justify-between">
 
-            <input type="text" wire:model="search" placeholder="Buscar" class="bg-white rounded-full text-sm">
+            <div>
+
+                <input type="text" wire:model.debounce.500ms="search" placeholder="Buscar" class="bg-white rounded-full text-sm">
+
+                <select class="bg-white rounded-full text-sm" wire:model="pagination">
+
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+
+                </select>
+
+            </div>
 
             @can('Crear artículo')
 
@@ -547,27 +560,31 @@
 
                 </div>
 
-                <div class="flex-auto mr-1 ">
+                @if($stock <= 1)
 
-                    <div>
+                    <div class="flex-auto mr-1 ">
 
-                        <Label># de Serie</Label>
+                        <div>
+
+                            <Label># de Serie</Label>
+
+                        </div>
+
+                        <div>
+
+                            <input type="text" class="bg-white rounded text-sm w-full" wire:model.lazy="serial">
+
+                        </div>
+
+                        <div>
+
+                            @error('serial') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
+
+                        </div>
 
                     </div>
 
-                    <div>
-
-                        <input type="text" class="bg-white rounded text-sm w-full" wire:model.lazy="serial">
-
-                    </div>
-
-                    <div>
-
-                        @error('serial') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
-
-                    </div>
-
-                </div>
+                    @endif
 
             </div>
 

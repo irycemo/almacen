@@ -19,6 +19,7 @@ class Requests extends Component
     public $search;
     public $sort = 'number';
     public $direction = 'desc';
+    public $pagination=10;
 
     public $request_id;
     public $request_content = [];
@@ -232,7 +233,7 @@ class Requests extends Component
                                 });
                             })
                             ->orderBy($this->sort, $this->direction)
-                            ->paginate(10);
+                            ->paginate($this->pagination);
         }
 
         return view('livewire.requests', compact('requests'));

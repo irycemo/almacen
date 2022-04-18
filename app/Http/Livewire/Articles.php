@@ -22,6 +22,7 @@ class Articles extends Component
     public $article_id;
     public $name;
     public $brand;
+    public $stock;
     public $serial;
     public $description;
     public $category_id;
@@ -88,6 +89,7 @@ class Articles extends Component
 
         $this->article_id = $article['id'];
         $this->brand = $article['brand'];
+        $this->stock = $article['stock'];
         $this->serial = $article['serial'];
         $this->description = $article['description'];
         $this->category_id = $article['category_id'];

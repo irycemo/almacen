@@ -18,6 +18,7 @@ class Roles extends Component
     public $search;
     public $sort = 'id';
     public $direction = 'desc';
+    public $pagination=10;
 
     public $role_id;
     public $name;
@@ -179,7 +180,7 @@ class Roles extends Component
         $roles = Role::with('createdBy','updatedBy','permissions')
                         ->where('name', 'LIKE', '%' . $this->search . '%')
                         ->orderBy($this->sort, $this->direction)
-                        ->paginate(10);
+                        ->paginate($this->pagination);
 
         $permissions = Permission::orderBy('area','desc')->get();
 

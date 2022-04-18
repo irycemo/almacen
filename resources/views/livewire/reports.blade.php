@@ -487,7 +487,7 @@
 
         @if(count($requests_filtered))
 
-            <div class="rounded-lg shadow-xl mb-5 p-4 font-thin flex justify-between">
+            <div class="rounded-lg shadow-xl mb-5 p-4 font-thin flex justify-between bg-white">
 
                 <p class="text-xl font-extralight">Se encontraron: {{ count($requests_filtered) }} registros con los filtros seleccionados.</p>
 
@@ -696,7 +696,7 @@
 
         @if(count($articles_filtered))
 
-            <div class="rounded-lg shadow-xl mb-5 p-4 font-thin flex justify-between">
+            <div class="rounded-lg shadow-xl mb-5 p-4 font-thin flex justify-between bg-white">
 
                 <p class="text-xl font-extralight">Se encontraron: {{ count($articles_filtered) }} registros con los filtros seleccionados.</p>
 
@@ -915,7 +915,7 @@
 
         @if (count($entries_filtered))
 
-            <div class="rounded-lg shadow-xl mb-5 p-4 font-thin flex justify-between">
+            <div class="rounded-lg shadow-xl mb-5 p-4 font-thin flex justify-between bg-white">
 
                 <p class="text-xl font-extralight">Se encontraron: {{ count($entries_filtered) }} registros con los filtros seleccionados.</p>
 

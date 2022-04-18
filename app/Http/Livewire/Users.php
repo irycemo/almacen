@@ -19,6 +19,7 @@ class Users extends Component
     public $search;
     public $sort = 'id';
     public $direction = 'desc';
+    public $pagination=10;
 
     public $user_id;
     public $name;
@@ -197,7 +198,7 @@ class Users extends Component
                         ->when($this->sort != 'role', function($q){
                             $q->orderBy($this->sort, $this->direction);
                         })
-                        ->paginate(10);
+                        ->paginate($this->pagination);
 
         $roles = Role::where('id', '!=', 1)->orderBy('name')->get();
 
