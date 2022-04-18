@@ -33,7 +33,7 @@ class Users extends Component
             'name' => 'required',
             'email' => 'required|email|unique:users,email,'. $this->user_id,
             'status' => 'required|in:activo,inactivo',
-            'role' => 'required|integer|in:2,3,4,5',
+            'role' => 'required|integer|min:2',
             'location' => 'required'
         ];
     }

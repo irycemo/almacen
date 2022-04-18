@@ -18,6 +18,7 @@ class Articles extends Component
     public $search;
     public $sort = 'id';
     public $direction = 'desc';
+    public $pagination=10;
 
     public $article_id;
     public $name;
@@ -210,7 +211,7 @@ class Articles extends Component
                                         });
                                     })
                                     ->orderBy($this->sort, $this->direction)
-                                    ->paginate(10);
+                                    ->paginate($this->pagination);
 
         return view('livewire.articles', compact('articles', 'categories'));
     }
