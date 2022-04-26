@@ -2,9 +2,9 @@
 
     <div class="grid grid-1 md:grid-cols-3 gap-2 ">
 
-        <div class="col-span-1 md:col-span-2 order-2 md:order-1 rounded-xl border-t-2 border-green-500 shadow-lg">
+        <div class="col-span-1 md:col-span-2 order-2 md:order-1 rounded-xl border-t-2 border-green-500 shadow-lg bg-white">
 
-            <div class="flex justify-between items-center mt-2 mx-2">
+            <div class="flex justify-between items-center mt-2 mx-2 ">
 
                 <p class="text-xl text-gray-500 my-3 ml-4">Artículos Disponibles</p>
 
@@ -115,7 +115,7 @@
 
         </div>
 
-        <div class="col-span-1 w-full order-1 md:order-2 rounded-xl border-t-2 border-blue-500 shadow-lg">
+        <div class="col-span-1 w-full order-1 md:order-2 rounded-xl border-t-2 border-blue-500 shadow-lg bg-white">
 
             <p class="text-xl text-gray-500 my-3 ml-4">Artículos Solicitados</p>
 

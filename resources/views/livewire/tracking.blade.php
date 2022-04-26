@@ -317,182 +317,180 @@
 
                 <h2 class="titulo-seccion text-2xl font-thin text-gray-500 mb-3">Entradas</h2>
 
-                <div class="rounded-lg shadow-xl mb-7 p-3 text-gray-500 bg-white">
 
-                    <div class="relative overflow-x-auto rounded-lg">
+                <div class="relative overflow-x-auto rounded-lg mb-5">
 
-                        <table class="rounded-lg w-full">
+                    <table class="rounded-lg w-full">
 
-                            <thead class="border-b border-gray-300 bg-gray-50">
+                        <thead class="border-b border-gray-300 bg-gray-50">
 
-                                <tr class="text-xs font-medium text-gray-500 uppercase text-left traling-wider">
+                            <tr class="text-xs font-medium text-gray-500 uppercase text-left traling-wider">
 
-                                    <th class="px-1 py-3 hidden lg:table-cell">
+                                <th class="px-1 py-3 hidden lg:table-cell">
 
-                                        Artículo / Marca
+                                    Artículo / Marca
 
-                                    </th>
+                                </th>
 
-                                    <th class="px-1 py-3 hidden lg:table-cell">
+                                <th class="px-1 py-3 hidden lg:table-cell">
 
-                                        Cantidad
+                                    Cantidad
 
-                                    </th>
+                                </th>
 
-                                    <th class="px-1 py-3 hidden lg:table-cell">
+                                <th class="px-1 py-3 hidden lg:table-cell">
 
-                                        Costo
+                                    Costo
 
-                                    </th>
+                                </th>
 
-                                    <th class="px-1 py-3 hidden lg:table-cell">
+                                <th class="px-1 py-3 hidden lg:table-cell">
 
-                                        Ubicación
+                                    Ubicación
 
-                                    </th>
+                                </th>
 
-                                    <th class="px-1 py-3 hidden lg:table-cell">
+                                <th class="px-1 py-3 hidden lg:table-cell">
 
-                                        Origen
+                                    Origen
 
-                                    </th>
+                                </th>
 
-                                    <th class=" px-1 py-3 hidden lg:table-cell">
+                                <th class=" px-1 py-3 hidden lg:table-cell">
 
-                                        Descripción
+                                    Descripción
 
-                                    </th>
+                                </th>
 
-                                    <th class="px-1 py-3 hidden lg:table-cell">
+                                <th class="px-1 py-3 hidden lg:table-cell">
 
-                                        Registro
+                                    Registro
 
-                                    </th>
+                                </th>
 
-                                    <th class="px-1 py-3 hidden lg:table-cell">
+                                <th class="px-1 py-3 hidden lg:table-cell">
 
-                                        Actualizado
+                                    Actualizado
 
-                                    </th>
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody class="divide-y divide-gray-200 flex-1 sm:flex-none ">
+
+                            @foreach($article->entries as $entrie)
+
+                                <tr class="text-sm font-medium text-gray-500 bg-white flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
+
+                                    <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+
+                                        <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Artículo</span>
+
+                                        <p class="text-sm font-medium text-gray-900">{{ $entrie->article->name }}  / {{ $entrie->article->brand }}</p>
+
+                                    </td>
+
+                                    <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+
+                                        <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Cantidad</span>
+
+                                        <p class="text-sm font-medium text-gray-900 capitalize">{{ $entrie->quantity }}</p>
+
+                                    </td>
+
+                                    <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+
+                                        <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Precio</span>
+
+                                        <p class="text-sm font-medium text-gray-900 capitalize">{{ $entrie->price }}</p>
+
+                                    </td>
+
+                                    <td class="capitalize px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+
+                                        <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Ubicación</span>
+
+                                        <p class="text-sm font-medium text-gray-900">{{ $entrie->location }}</p>
+
+                                    </td>
+
+                                    <td class="capitalize px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+
+                                        <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Origen</span>
+
+                                        <p class="text-sm font-medium text-gray-900">{{ $entrie->origin }}</p>
+
+                                    </td>
+
+                                    <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+
+                                        <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Descripción</span>
+
+                                        <p class="text-sm font-medium text-gray-900 capitalize">{{ $entrie->description }}</p>
+
+                                    </td>
+
+                                    </td>
+
+                                    <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+
+                                        <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Registrado</span>
+
+                                        @if($entrie->created_by != null)
+
+                                            <span class="font-semibold">Registrado por: {{$entrie->createdBy->name}}</span> <br>
+
+                                        @endif
+
+                                        {{ $entrie->created_at }}
+
+                                    </td>
+
+                                    <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+
+                                        <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Actualizado</span>
+
+                                        @if($entrie->updated_by != null)
+
+                                            <span class="font-semibold">Actualizado por: {{$entrie->updatedBy->name}}</span> <br>
+
+                                        @endif
+
+                                        {{ $entrie->updated_at }}
+
+                                    </td>
 
                                 </tr>
 
-                            </thead>
+                            @endforeach
 
+                        </tbody>
 
-                            <tbody class="divide-y divide-gray-200 flex-1 sm:flex-none ">
+                        <tfoot class="border-gray-300 bg-gray-50">
 
-                                @foreach($article->entries as $entrie)
+                            {{-- <tr>
 
-                                    <tr class="text-sm font-medium text-gray-500 bg-white flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
+                                <td colspan="10" class="py-2 px-5">
+                                    {{ $entries->links()}}
+                                </td>
 
-                                        <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+                            </tr> --}}
 
-                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Artículo</span>
+                        </tfoot>
 
-                                            <p class="text-sm font-medium text-gray-900">{{ $entrie->article->name }}  / {{ $entrie->article->brand }}</p>
+                    </table>
 
-                                        </td>
+                    <div class="h-full w-full rounded-lg bg-gray-200 bg-opacity-75 absolute top-0 left-0" wire:loading wire:target="search">
 
-                                        <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
-
-                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Cantidad</span>
-
-                                            <p class="text-sm font-medium text-gray-900 capitalize">{{ $entrie->quantity }}</p>
-
-                                        </td>
-
-                                        <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
-
-                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Precio</span>
-
-                                            <p class="text-sm font-medium text-gray-900 capitalize">{{ $entrie->price }}</p>
-
-                                        </td>
-
-                                        <td class="capitalize px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
-
-                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Ubicación</span>
-
-                                            <p class="text-sm font-medium text-gray-900">{{ $entrie->location }}</p>
-
-                                        </td>
-
-                                        <td class="capitalize px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
-
-                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Origen</span>
-
-                                            <p class="text-sm font-medium text-gray-900">{{ $entrie->origin }}</p>
-
-                                        </td>
-
-                                        <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
-
-                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Descripción</span>
-
-                                            <p class="text-sm font-medium text-gray-900 capitalize">{{ $entrie->description }}</p>
-
-                                        </td>
-
-                                        </td>
-
-                                        <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
-
-                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Registrado</span>
-
-                                            @if($entrie->created_by != null)
-
-                                                <span class="font-semibold">Registrado por: {{$entrie->createdBy->name}}</span> <br>
-
-                                            @endif
-
-                                            {{ $entrie->created_at }}
-
-                                        </td>
-
-                                        <td class="px-3 py-3 w-full lg:w-auto text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
-
-                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Actualizado</span>
-
-                                            @if($entrie->updated_by != null)
-
-                                                <span class="font-semibold">Actualizado por: {{$entrie->updatedBy->name}}</span> <br>
-
-                                            @endif
-
-                                            {{ $entrie->updated_at }}
-
-                                        </td>
-
-                                    </tr>
-
-                                @endforeach
-
-                            </tbody>
-
-                            <tfoot class="border-gray-300 bg-gray-50">
-
-                                {{-- <tr>
-
-                                    <td colspan="10" class="py-2 px-5">
-                                        {{ $entries->links()}}
-                                    </td>
-
-                                </tr> --}}
-
-                            </tfoot>
-
-                        </table>
-
-                        <div class="h-full w-full rounded-lg bg-gray-200 bg-opacity-75 absolute top-0 left-0" wire:loading wire:target="search">
-
-                            <img class="mx-auto h-16" src="{{ asset('storage/img/loading.svg') }}" alt="">
-
-                        </div>
+                        <img class="mx-auto h-16" src="{{ asset('storage/img/loading.svg') }}" alt="">
 
                     </div>
 
                 </div>
+
 
             @endif
 

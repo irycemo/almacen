@@ -358,7 +358,7 @@
         </x-slot>
 
         <x-slot name="content">
-            ¿Esta seguro que desea eliminar la categoría?, No sera posible recuperar la información.
+            ¿Esta seguro que desea eliminar la categoría? No sera posible recuperar la información.
         </x-slot>
 
         <x-slot name="footer">

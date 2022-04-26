@@ -636,11 +636,11 @@
     <x-jet-confirmation-modal wire:model="modalDelete">
 
         <x-slot name="title">
-            Eliminar Categoría
+            Eliminar Artículo
         </x-slot>
 
         <x-slot name="content">
-            ¿Esta seguro que desea eliminar el artículo?, No sera posible recuperar la información.
+            ¿Esta seguro que desea eliminar el artículo? No sera posible recuperar la información.
         </x-slot>
 
         <x-slot name="footer">
