@@ -28,12 +28,12 @@ class RequestController extends Controller
 
     public function receipt(Request $request){
 
-
+        $date = Carbon::createFromFormat('Y-m-d H:i:s', now())->format('d-m-Y H:i:s');
 
         $receipt = PDF::loadView('livewire/request_receipt',[
             'request' => $request,
             'request_content' => json_decode($request->content, true),
-            'date' => Carbon::createFromFormat('Y-m-d H:i:s', now())->format('d-m-Y H:i:s'),
+            'date' => $date,
             'user' => auth()->user()->name,
             'solicitante' => $request->createdBy->name
         ]);

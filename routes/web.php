@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EntrieController;
+use App\Http\Controllers\ManualController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\RequestController;
@@ -30,6 +31,8 @@ Route::get('/', function () {
 
 Route::get('setpassword/{email}', [SetPasswordController::class, 'create'])->name('setpassword');
 Route::post('setpassword', [SetPasswordController::class, 'store'])->name('setpassword.store');
+
+Route::get('manual', ManualController::class)->name('manual');
 
 Route::group(['middleware' => ['auth','is.active']], function(){
 

@@ -147,15 +147,14 @@ class Requests extends Component
                     'updated_by' => auth()->user()->id,
                 ]);
             }elseif($i == 2){
+
+                $this->dispatchBrowserEvent('receipt',route('requests.receipt', $request->id));
+
                 $request->update([
                     'status' => 'entregada',
                     'comment' => $request->comment . ' ' . $this->comment,
                     'updated_by' => auth()->user()->id,
                 ]);
-
-                /* return redirect()->route('requests.receipt', $request->id); */
-
-                $this->dispatchBrowserEvent('receipt',route('requests.receipt', $request->id));
 
             }else{
 
@@ -211,7 +210,6 @@ class Requests extends Component
         }else if(auth()->user()->roles[0]->name == 'Almacenista'){
 
             $requests = Request::with('createdBy', 'updatedBy')
-                ->where('status', '!=', 'solicitada')
                 ->where(function($q){
                     $q->whereHas('createdBy', function($q){
                         $q->where('name', 'LIKE', '%' . $this->search . '%');

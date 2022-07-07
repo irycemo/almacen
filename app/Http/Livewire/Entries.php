@@ -242,6 +242,14 @@ class Entries extends Component
             $articles = $articles->simplePaginate(5);
 
         $entries = Entrie::with('article', 'createdBy', 'updatedBy')
+                            ->orWhere('description', 'LIKE', '%' . $this->search . '%')
+                            ->orWhere('origin', 'LIKE', '%' . $this->search . '%')
+                            ->orWhere('location', 'LIKE', '%' . $this->search . '%')
+                            ->orWhere(function($q){
+                                return $q->whereHas('article', function($q){
+                                    return $q->where('name', 'LIKE', '%' . $this->search . '%');
+                                });
+                            })
                             ->orderBy($this->sort, $this->direction)
                             ->paginate($this->pagination);
 

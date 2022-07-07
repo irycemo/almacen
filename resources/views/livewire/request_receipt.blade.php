@@ -105,8 +105,10 @@
                     <th class="data">
 
                         <p>Solicitud número: {{ $request->number }}</p>
-                        <p>Entregado por: {{ $user }}, el </p>
-                        <p><p>{{ $request->updated_at }}</p></p>
+                        <p>
+                            Impreso por: {{ $user }}, el
+                        </p>
+                        <p>{{ $date }}</p>
 
                     </th>
 
@@ -210,8 +212,10 @@
                     <th class="data">
 
                         <p>Solicitud número: {{ $request->number }}</p>
-                        <p>Entregado por: {{ $user }}, el </p>
-                        <p><p>{{ $date }}</p></p>
+                        <p>
+                            Impreso por: {{ $user }}, el
+                        </p>
+                        <p>{{ $date }}</p>
 
                     </th>
 

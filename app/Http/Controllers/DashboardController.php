@@ -55,8 +55,6 @@ class DashboardController extends Controller
 
         $articles = Article::where('serial', null)->whereBetween('stock', [1, 20])->orderBy('stock', 'asc')->get();
 
-        /* dd($requests); */
-
         return view('dashboard', compact('data', 'requests', 'articles'));
     }
 }

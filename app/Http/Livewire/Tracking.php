@@ -111,8 +111,6 @@ class Tracking extends Component
 
         if($article['serial']){
             $this->requests = Request::query()->with('createdBy', 'updatedBy')
-                                ->where('content', 'LIKE', '%' . $article['name'] . '%')
-                                ->where('content', 'LIKE', '%' . $article['brand'] . '%')
                                 ->where('content', 'LIKE', '%' . $article['serial'] . '%')
                                 ->get();
         }else{

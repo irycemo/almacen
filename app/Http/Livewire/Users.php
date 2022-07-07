@@ -177,6 +177,8 @@ class Users extends Component
             $this->closeModal();
 
         } catch (\Throwable $th) {
+
+            dd($th);
             $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
 
             $this->closeModal();
@@ -195,9 +197,7 @@ class Users extends Component
                                 return $q->where('name', 'LIKE', '%' . $this->search . '%');
                             });
                         })
-                        ->when($this->sort != 'role', function($q){
-                            $q->orderBy($this->sort, $this->direction);
-                        })
+                        ->orderBy($this->sort, $this->direction)
                         ->paginate($this->pagination);
 
         $roles = Role::where('id', '!=', 1)->orderBy('name')->get();
