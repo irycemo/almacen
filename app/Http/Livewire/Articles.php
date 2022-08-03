@@ -36,7 +36,6 @@ class Articles extends Component
             'serial' => 'nullable',
             'description' => 'required',
             'category_id' => 'required',
-            'location' => 'required'
         ];
     }
 
@@ -45,7 +44,6 @@ class Articles extends Component
         'brand.required' => 'El campo marca es obligatorio.',
         'description.required' => 'El campo descripción es obligatorio.',
         'category_id.required' => 'El campo categoría es obligatorio.',
-        'location.required' => 'El campo ubicación es obligatorio.',
     ];
 
     public function updatingSearch(){
@@ -130,12 +128,12 @@ class Articles extends Component
                 'serial' => $this->serial,
                 'stock' => 0,
                 'description' => $this->description,
-                'location' => $this->location,
+                'location' => 'general',
                 'category_id' => $this->category_id,
                 'created_by' => auth()->user()->id,
             ]);
 
-            $this->dispatchBrowserEvent('showMessage',['success', "El artículo ha sido creado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "El artículo ha sido creado con éxito."]);
 
             $this->closeModal();
 
@@ -164,7 +162,7 @@ class Articles extends Component
                 'updated_by' => auth()->user()->id,
             ]);
 
-            $this->dispatchBrowserEvent('showMessage',['success', "El artículo sido actualizado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "El artículo sido actualizado con 'exito."]);
 
             $this->closeModal();
 
@@ -183,7 +181,7 @@ class Articles extends Component
 
             $article->delete();
 
-            $this->dispatchBrowserEvent('showMessage',['success', "El artículo ha sido eliminado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "El artículo ha sido eliminado con éxito."]);
 
             $this->closeModal();
 

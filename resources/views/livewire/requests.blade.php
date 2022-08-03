@@ -235,7 +235,6 @@
 
                 </thead>
 
-
                 <tbody class="divide-y divide-gray-200 flex-1 sm:flex-none">
 
                     @foreach($requests as $request)
@@ -564,7 +563,7 @@
 
         <x-slot name="footer">
 
-            @if (auth()->user()->roles[0]->id != 4 && ($request_status === 'solicitada' || $request_status === 'aceptada'))
+            @if ((auth()->user()->roles[0]->id != 4 && auth()->user()->roles[0]->id != 6 ) && ($request_status === 'solicitada' || $request_status === 'aceptada'))
 
                 <div class="float-righ">
 
@@ -617,16 +616,16 @@
 
             @endif
 
-            @if ($request_status == 'entregada')
+            @if ($request_status == 'entregada' && (auth()->user()->roles[0]->id != 4 && auth()->user()->roles[0]->id != 6 ))
 
-                <a
-                    href="{{ route('requests.receipt', $request_id) }}"
-                    target="_blank"
-                    class="bg-gray-400 hover:shadow-lg text-white  px-4 py-2 rounded-full text-sm mb-2 hover:bg-gray-700 flaot-left focus:outline-none">
-                    Imprimir Recibo
-                </a>
+                    <a
+                        href="{{ route('requests.receipt', $request_id) }}"
+                        target="_blank"
+                        class="bg-gray-400 hover:shadow-lg text-white  px-4 py-2 rounded-full text-sm mb-2 hover:bg-gray-700 flaot-left focus:outline-none">
+                        Imprimir Recibo
+                    </a>
 
-            @endif
+                @endif
 
         </x-slot>
 

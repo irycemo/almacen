@@ -5,7 +5,7 @@
 
     <div class=" mb-10">
 
-        <h2 class="text-2xl tracking-widest py-3 px-6 text-gray-600 rounded-xl border-b-2 border-rojo font-semibold mb-6 bg-gradient-to-r from-white">Solicitudes</h2>
+        <h2 class="text-2xl tracking-widest py-3 px-6 text-gray-600 rounded-xl border-b-2 border-gray-500 font-semibold mb-6  bg-white">Solicitudes</h2>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
@@ -173,7 +173,7 @@
 
         <div class="mb-10">
 
-            <h2 class="text-2xl tracking-widest py-3 px-6 text-gray-600 rounded-xl border-b-2 border-rojo font-semibold mb-6 bg-gradient-to-r from-white">Artículos</h2>
+            <h2 class="text-2xl tracking-widest py-3 px-6 text-gray-600 rounded-xl border-b-2 border-gray-500 font-semibold mb-6  bg-white">Artículos</h2>
 
             <div class="bg-white rounded-lg shadow-lg p-3">
 
@@ -210,7 +210,7 @@
 
         <div class="mb-10">
 
-            <h2 class="text-2xl tracking-widest py-3 px-6 text-gray-600 rounded-xl border-b-2 border-rojo font-semibold mb-6 bg-gradient-to-r from-white">Gráfica de entradas</h2>
+            <h2 class="text-2xl tracking-widest py-3 px-6 text-gray-600 rounded-xl border-b-2 border-gray-500 font-semibold mb-6  bg-white">Gráfica de entradas</h2>
 
             <div class="bg-white rounded-lg p-2 shadow-lg">
 
@@ -221,14 +221,6 @@
         </div>
 
     @endif
-
-    <div class=" mb-10">
-
-        <h2 class="text-2xl tracking-widest py-3 px-6 text-gray-600 rounded-xl border-b-2 border-rojo font-semibold mb-6 bg-gradient-to-r from-white">Avisos</h2>
-
-        <iframe class="w-full" height="600" src="{{ asset('storage/img/file.pdf') }}"></iframe>
-
-    </div>
 
 @endsection
 

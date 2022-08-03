@@ -168,16 +168,35 @@ class RequestCreateEdit extends Component
                                         ->orwhere('description', 'LIKE', '%' . $this->search . '%');
                                 })
                                 ->paginate(10);
+        }elseif(auth()->user()->roles[0]['name'] == 'Director'){
+            $articles = Article::where('stock','!=', 0)
+                                ->where('location', 'general')
+                                ->where('stock', '>',  0)
+                                ->where(function($q){
+                                    $q->where('name', 'LIKE', '%' . $this->search . '%')
+                                        ->orwhere('brand', 'LIKE', '%' . $this->search . '%')
+                                        ->orwhere('description', 'LIKE', '%' . $this->search . '%');
+                                })
+                                ->paginate(10);
+        }elseif(auth()->user()->location == 'rpp' || auth()->user()->location == 'catastro'){
+            $articles = Article::where('stock','!=', 0)
+                                ->where('location', auth()->user()->location)
+                                ->where('stock', '>',  0)
+                                ->where(function($q){
+                                    $q->where('name', 'LIKE', '%' . $this->search . '%')
+                                        ->orwhere('brand', 'LIKE', '%' . $this->search . '%')
+                                        ->orwhere('description', 'LIKE', '%' . $this->search . '%');
+                                })
+                                ->paginate(10);
         }else{
             $articles = Article::where('stock','!=', 0)
-                ->where('location', auth()->user()->location)
-                ->where('stock', '>',  0)
-                ->where(function($q){
-                    $q->where('name', 'LIKE', '%' . $this->search . '%')
-                        ->orwhere('brand', 'LIKE', '%' . $this->search . '%')
-                        ->orwhere('description', 'LIKE', '%' . $this->search . '%');
-                })
-                ->paginate(10);
+                                ->where('stock', '>',  0)
+                                ->where(function($q){
+                                    $q->where('name', 'LIKE', '%' . $this->search . '%')
+                                        ->orwhere('brand', 'LIKE', '%' . $this->search . '%')
+                                        ->orwhere('description', 'LIKE', '%' . $this->search . '%');
+                                })
+                                ->paginate(10);
         }
 
         return view('livewire.request-create-edit', compact('articles'));

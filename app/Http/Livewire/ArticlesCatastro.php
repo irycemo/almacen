@@ -110,7 +110,7 @@ class ArticlesCatastro extends Component
         $this->modal = false;
         $this->modalDelete = false;
     }
-
+/*
     public function create(){
 
         $this->validate();
@@ -143,7 +143,7 @@ class ArticlesCatastro extends Component
             $this->closeModal();
         }
     }
-
+ */
     public function update(){
 
         $this->validate();

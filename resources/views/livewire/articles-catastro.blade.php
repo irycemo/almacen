@@ -21,13 +21,13 @@
 
             </div>
 
-            @can('Crear artículo')
+{{--             @can('Crear artículo')
 
                 <button wire:click="openModalCreate" class="bg-gray-500 hover:shadow-lg hover:bg-gray-700 float-right mb-5 text-sm py-2 px-4 text-white rounded-full focus:outline-none hidden md:block">Agregar nuevo artículo</button>
 
                 <button wire:click="openModalCreate" class="bg-gray-500 hover:shadow-lg hover:bg-gray-700 float-right mb-5 text-sm py-2 px-4 text-white rounded-full focus:outline-none md:hidden">+</button>
 
-            @endcan
+            @endcan --}}
 
         </div>
 

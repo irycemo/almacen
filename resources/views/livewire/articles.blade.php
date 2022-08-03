@@ -623,37 +623,6 @@
 
                 </div>
 
-                <div class="flex-auto mb-5">
-
-                    <div>
-
-                        <Label>Ubicación</Label>
-                    </div>
-
-                    <div>
-
-                        <select class="bg-white rounded text-sm w-full" wire:model.defer="location">
-
-                            <option selected>Selecciona una ubicación</option>
-
-                            @foreach (App\Models\Article::UBICACIONES as $ubicacion)
-
-                                <option value="{{ $ubicacion }}">{{ $ubicacion }}</option>
-
-                            @endforeach
-
-                        </select>
-
-                    </div>
-
-                    <div>
-
-                        @error('location') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
-
-                    </div>
-
-                </div>
-
             </div>
 
         </x-slot>

@@ -112,7 +112,7 @@ class ArticlesRpp extends Component
         $this->modalDelete = false;
     }
 
-    public function create(){
+    /* public function create(){
 
         $this->validate();
 
@@ -143,7 +143,7 @@ class ArticlesRpp extends Component
 
             $this->closeModal();
         }
-    }
+    } */
 
     public function update(){
 

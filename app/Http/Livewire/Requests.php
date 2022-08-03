@@ -150,6 +150,10 @@ class Requests extends Component
 
                 $this->dispatchBrowserEvent('receipt',route('requests.receipt', $request->id));
 
+                if($request->createdBy->roles[0]['name'] == 'Director'){
+                    $this->createArticles($request);
+                }
+
                 $request->update([
                     'status' => 'entregada',
                     'comment' => $request->comment . ' ' . $this->comment,
@@ -194,10 +198,40 @@ class Requests extends Component
         }
     }
 
+    public function createArticles($request){
+
+
+        $content = json_decode($request->content,true);
+
+        foreach ($content as $article) {
+
+            try {
+
+                $aux = Article::find($article['id']);
+
+                Article::create([
+                    'name' => $aux->name,
+                    'brand' =>$aux->brand,
+                    'serial' => $aux->serial,
+                    'stock' => $article['quantity'],
+                    'location' => $request->createdBy->location,
+                    'category_id' => $aux->category_id,
+                    'created_by' => auth()->user()->id,
+                    'description' => $aux->description
+                ]);
+
+            } catch (\Throwable $th) {
+
+                $this->dispatchBrowserEvent('showMessage',['warning', "No se pudo procesar la solicitud."]);
+            }
+
+        }
+    }
+
     public function render()
     {
 
-        if(auth()->user()->roles[0]->name == 'Jefe(a) de Departamento'){
+        if(auth()->user()->roles[0]->name == 'Jefe(a) de Departamento' || auth()->user()->roles[0]->name == 'Director'){
 
             $requests = Request::with('createdBy', 'updatedBy')
                         ->where('created_by', auth()->user()->id)
