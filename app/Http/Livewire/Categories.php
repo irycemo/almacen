@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Http\Traits\ComponentsTrait;
 use Livewire\Component;
 use App\Models\Category;
 use Livewire\WithPagination;
@@ -9,17 +10,8 @@ use Livewire\WithPagination;
 class Categories extends Component
 {
     use WithPagination;
+    use ComponentsTrait;
 
-    public $modal = false;
-    public $modalDelete = false;
-    public $create = false;
-    public $edit = false;
-    public $search;
-    public $sort = 'id';
-    public $direction = 'desc';
-    public $pagination=10;
-
-    public $category_id;
     public $name;
     public $area;
 
@@ -33,38 +25,10 @@ class Categories extends Component
         'name.required' => 'El campo nombre es obligatorio.',
     ];
 
-
-    public function updatingSearch(){
-        $this->resetPage();
-    }
-
-    public function order($sort){
-
-        if($this->sort == $sort){
-            if($this->direction == 'desc'){
-                $this->direction = 'asc';
-            }else{
-                $this->direction = 'desc';
-            }
-        }else{
-            $this->sort = $sort;
-            $this->direction = 'asc';
-        }
-    }
-
     public function resetAll(){
-        $this->reset('category_id','name');
+        $this->reset('selected_id','name');
         $this->resetErrorBag();
         $this->resetValidation();
-    }
-
-    public function openModalCreate(){
-
-        $this->resetAll();
-
-        $this->edit = false;
-        $this->modal = true;
-        $this->create = true;
     }
 
     public function openModalEdit($category){
@@ -74,23 +38,11 @@ class Categories extends Component
 
         $this->create = false;
 
-        $this->category_id = $category['id'];
+        $this->selected_id = $category['id'];
         $this->name = $category['name'];
 
         $this->modal = true;
         $this->edit = true;
-    }
-
-    public function openModalDelete($category){
-
-        $this->modalDelete = true;
-        $this->category_id = $category['id'];
-    }
-
-    public function closeModal(){
-        $this->resetAll();
-        $this->modal = false;
-        $this->modalDelete = false;
     }
 
     public function create(){
@@ -104,12 +56,12 @@ class Categories extends Component
                 'created_by' => auth()->user()->id,
             ]);
 
-            $this->dispatchBrowserEvent('showMessage',['success', "La categoría ha sido creada con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "La categoría ha sido creada con éxito."]);
 
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
             $this->closeModal();
         }
@@ -121,19 +73,19 @@ class Categories extends Component
 
         try {
 
-            $category = Category::findorFail($this->category_id);
+            $category = Category::findorFail($this->selected_id);
 
             $category->update([
                 'name' => $this->name,
                 'updated_by' => auth()->user()->id,
             ]);
 
-            $this->dispatchBrowserEvent('showMessage',['success', "La categoría sido actualizada con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "La categoría sido actualizada con éxito."]);
 
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
             $this->closeModal();
         }
@@ -143,16 +95,16 @@ class Categories extends Component
 
         try {
 
-            $category = Category::findorFail($this->category_id);
+            $category = Category::findorFail($this->selected_id);
 
             $category->delete();
 
-            $this->dispatchBrowserEvent('showMessage',['success', "La categoría ha sido eliminada con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "La categoría ha sido eliminada con éxito."]);
 
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
             $this->closeModal();
         }

@@ -2,7 +2,7 @@
 
     <div class="mb-5">
 
-        <h1 class="titulo-seccion text-3xl font-thin text-gray-500 mb-3">Solicitudes</h1>
+        <h1 class="text-3xl tracking-widest py-3 px-6 text-gray-600 rounded-xl border-b-2 border-gray-500 font-thin mb-6  bg-white">Solicitudes</h1>
 
         <div class="flex justify-between">
 
@@ -241,7 +241,7 @@
 
                         <tr class="text-sm font-medium text-gray-500 bg-white flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
 
-                            <td class="w-full lg:w-auto p-3 font-bold text-gray-800 text-center md:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+                            <td class="w-full lg:w-auto p-3  text-gray-800 text-center md:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
 
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">#</span>
 
@@ -266,7 +266,7 @@
 
                                 @endforeach
 
-                                <span class="bg-rojo text-white rounded-full py-1 px-2 mr-2">{{ $total }}</span><span>Artículos</span>
+                                {{ $total }} Artículos
 
                             </td>
 
@@ -547,17 +547,21 @@
 
             </div>
 
-            <div class="text-sm">
+            @if (strlen($request_comment) > 1)
 
-                <p>Comentario:</p>
+                <div class="text-sm">
 
-                <div class=" font-thin text-gray-600 mb-3">
+                    <p>Comentario:</p>
 
-                    {{ $request_comment }}
+                    <div class=" font-thin text-gray-600 mb-3">
+
+                        {{ $request_comment }}
+
+                    </div>
 
                 </div>
 
-            </div>
+            @endif
 
         </x-slot>
 
@@ -575,6 +579,7 @@
                                 wire:loading.attr="disabled"
                                 wire:target="process(1)"
                                 class="bg-green-400 hover:shadow-lg text-white px-4 py-2 rounded-full text-sm mb-2 hover:bg-green-700 flaot-left mr-1 focus:outline-none">
+                                <img wire:loading wire:target="process(1)" class="mx-auto h-4 mr-1" src="{{ asset('storage/img/loading3.svg') }}" alt="Loading">
                                 Aceptar
                             </button>
                         @endif
@@ -586,6 +591,7 @@
                         wire:loading.attr="disabled"
                         wire:target="process(2)"
                         class="bg-gray-400 hover:shadow-lg text-white px-4 py-2 rounded-full text-sm mb-2 hover:bg-gray-700 flaot-left mr-1 focus:outline-none">
+                        <img wire:loading wire:target="process(2)" class="mx-auto h-4 mr-1" src="{{ asset('storage/img/loading3.svg') }}" alt="Loading">
                         Entregar
                     </button>
 
@@ -595,6 +601,8 @@
                         wire:target="process(3)"
                         type="button"
                         class="bg-red-400 hover:shadow-lg text-white px-4 py-2 rounded-full text-sm mb-2 hover:bg-red-700 flaot-left focus:outline-none">
+
+                        <img wire:loading wire:target="process(3)" class="mx-auto h-4 mr-1" src="{{ asset('storage/img/loading3.svg') }}" alt="Loading">
                         Rechazar
                     </button>
 
@@ -619,7 +627,7 @@
             @if ($request_status == 'entregada' && (auth()->user()->roles[0]->id != 4 && auth()->user()->roles[0]->id != 6 ))
 
                     <a
-                        href="{{ route('requests.receipt', $request_id) }}"
+                        href="{{ route('requests.receipt', $selected_id) }}"
                         target="_blank"
                         class="bg-gray-400 hover:shadow-lg text-white  px-4 py-2 rounded-full text-sm mb-2 hover:bg-gray-700 flaot-left focus:outline-none">
                         Imprimir Recibo

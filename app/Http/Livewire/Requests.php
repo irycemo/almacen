@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Http\Traits\ComponentsTrait;
 use App\Models\Article;
 use App\Models\Request;
 use Livewire\Component;
@@ -11,17 +12,8 @@ class Requests extends Component
 {
 
     use WithPagination;
+    use ComponentsTrait;
 
-    public $modal = false;
-    public $modalDelete = false;
-    public $create = false;
-    public $edit = false;
-    public $search;
-    public $sort = 'number';
-    public $direction = 'desc';
-    public $pagination=10;
-
-    public $request_id;
     public $request_content = [];
     public $request_status;
     public $request_number;
@@ -32,26 +24,8 @@ class Requests extends Component
 
     protected $queryString = ['search'];
 
-    public function updatingSearch(){
-        $this->resetPage();
-    }
-
-    public function order($sort){
-
-        if($this->sort == $sort){
-            if($this->direction == 'desc'){
-                $this->direction = 'asc';
-            }else{
-                $this->direction = 'desc';
-            }
-        }else{
-            $this->sort = $sort;
-            $this->direction = 'asc';
-        }
-    }
-
     public function resetAll(){
-        $this->reset('request_id','request_status', 'request_content', 'request_number', 'request_author', 'request_created_at','request_comment', 'comment');
+        $this->reset('selected_id','request_status', 'request_content', 'request_number', 'request_author', 'request_created_at','request_comment', 'comment');
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -63,7 +37,7 @@ class Requests extends Component
 
         $this->create = false;
 
-        $this->request_id = $request['id'];
+        $this->selected_id = $request['id'];
         $this->request_status = $request['status'];
         $this->request_content = json_decode($request['content'],true);
         $this->request_author = $request['created_by']['name'];
@@ -76,23 +50,11 @@ class Requests extends Component
 
     }
 
-    public function openModalDelete($request){
-
-        $this->modalDelete = true;
-        $this->request_id = $request['id'];
-    }
-
-    public function closeModal(){
-        $this->resetAll();
-        $this->modal = false;
-        $this->modalDelete = false;
-    }
-
     public function delete(){
 
         try {
 
-            $request = Request::findorFail($this->request_id);
+            $request = Request::findorFail($this->selected_id);
 
             if($request->status != 'rechazada'){
 
@@ -115,12 +77,12 @@ class Requests extends Component
 
             $request->delete();
 
-            $this->dispatchBrowserEvent('showMessage',['success', "La solicitud ha sido eliminada con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "La solicitud ha sido eliminada con éxito."]);
 
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
             $this->closeModal();
         }
@@ -138,20 +100,24 @@ class Requests extends Component
 
         try {
 
-            $request = Request::findorFail($this->request_id);
+            $request = Request::findorFail($this->selected_id);
 
             if($i == 1){
+
                 $request->update([
                     'status' => 'aceptada',
                     'comment' => $request->comment . ' ' . $this->comment,
                     'updated_by' => auth()->user()->id,
                 ]);
+
             }elseif($i == 2){
 
                 $this->dispatchBrowserEvent('receipt',route('requests.receipt', $request->id));
 
                 if($request->createdBy->roles[0]['name'] == 'Director'){
+
                     $this->createArticles($request);
+
                 }
 
                 $request->update([
@@ -187,12 +153,12 @@ class Requests extends Component
 
             $this->resetAll();
 
-            $this->dispatchBrowserEvent('showMessage',['success', "La solicitud sido actualizada con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "La solicitud sido actualizada con éxito."]);
 
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
             $this->closeModal();
         }
@@ -231,41 +197,32 @@ class Requests extends Component
     public function render()
     {
 
-        if(auth()->user()->roles[0]->name == 'Jefe(a) de Departamento' || auth()->user()->roles[0]->name == 'Director'){
+        if(auth()->user()->roles[0]->name == 'Solicitante' || auth()->user()->roles[0]->name == 'Director'){
 
             $requests = Request::with('createdBy', 'updatedBy')
-                        ->where('created_by', auth()->user()->id)
-                        ->where(function($q){
-                            $q->where('status', 'LIKE', '%' . $this->search . '%')
-                                ->orwhere('number', 'LIKE', '%' . $this->search . '%');
-                        })
-                        ->orderBy($this->sort, $this->direction)
-                        ->paginate(10);
-        }else if(auth()->user()->roles[0]->name == 'Almacenista'){
+                                    ->where('created_by', auth()->user()->id)
+                                    ->where(function($q){
+                                        $q->where('status', 'LIKE', '%' . $this->search . '%')
+                                            ->orwhere('number', 'LIKE', '%' . $this->search . '%');
+                                    })
+                                    ->orderBy($this->sort, $this->direction)
+                                    ->paginate(10);
 
-            $requests = Request::with('createdBy', 'updatedBy')
-                ->where(function($q){
-                    $q->whereHas('createdBy', function($q){
-                        $q->where('name', 'LIKE', '%' . $this->search . '%');
-                    })
-                        ->orWhere('number', 'LIKE', '%' . $this->search . '%');
-                })
-                ->orderBy($this->sort, $this->direction)
-                ->paginate(10);
         }else{
 
             $requests = Request::with('createdBy', 'updatedBy')
-                            ->where('status', 'LIKE', '%' . $this->search . '%')
-                            ->orwhere('number', 'LIKE', '%' . $this->search . '%')
-                            ->orwhere('content', 'LIKE', '%' . $this->search . '%')
-                            ->orwhere('location', 'LIKE', '%' . $this->search . '%')
-                            ->orWhere(function($q){
-                                $q->whereHas('createdBy', function($q){
-                                    $q->where('name', 'LIKE', '%' . $this->search . '%');
-                                });
-                            })
-                            ->orderBy($this->sort, $this->direction)
-                            ->paginate($this->pagination);
+                                    ->where('status', 'LIKE', '%' . $this->search . '%')
+                                    ->orwhere('number', 'LIKE', '%' . $this->search . '%')
+                                    ->orwhere('content', 'LIKE', '%' . $this->search . '%')
+                                    ->orwhere('location', 'LIKE', '%' . $this->search . '%')
+                                    ->orWhere(function($q){
+                                        $q->whereHas('createdBy', function($q){
+                                            $q->where('name', 'LIKE', '%' . $this->search . '%');
+                                        })
+                                            ->orWhere('number', 'LIKE', '%' . $this->search . '%');
+                                    })
+                                    ->orderBy($this->sort, $this->direction)
+                                    ->paginate(10);
         }
 
         return view('livewire.requests', compact('requests'));

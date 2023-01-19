@@ -2,11 +2,11 @@
 
     <div class="mb-5">
 
-        <h1 class="titulo-seccion text-3xl font-thin text-gray-500 mb-3">Seguimiento de artículos</h1>
+        <h1 class="text-3xl tracking-widest py-3 px-6 text-gray-600 rounded-xl border-b-2 border-gray-500 font-thin mb-6  bg-white">Seguimiento de artículos</h1>
 
     </div>
 
-    <div class="mb-5">
+    <div class="mb-5 bg-white rounded-xl p-4">
 
         <h2 class="titulo-seccion text-2xl font-thin text-gray-500 mb-3">Artícluos</h2>
 
@@ -137,7 +137,7 @@
 
     @if ($articleDescription)
 
-            <div class="rounded-lg shadow-xl mb-7 p-3 text-gray-500 bg-white">
+            <div class="rounded-lg  mb-7 p-3 text-gray-500 bg-white">
 
                 <div class="flex flex-col md:flex-row justify-between md:space-x-3 mb-5">
 
@@ -378,7 +378,6 @@
 
                         </thead>
 
-
                         <tbody class="divide-y divide-gray-200 flex-1 sm:flex-none ">
 
                             @foreach($article->entries as $entrie)
@@ -498,7 +497,7 @@
 
     @if($showRequests)
 
-        <h2 class="titulo-seccion text-2xl font-thin text-gray-500 mb-3">Solicitudes</h2>
+        <h2 class="titulo-seccion text-2xl font-thin text-gray-500 mb-3 bg-white rounded-xl p-4">Solicitudes</h2>
 
         @if(count($requests))
 
@@ -702,14 +701,13 @@
 
                     </thead>
 
-
                     <tbody class="divide-y divide-gray-200 flex-1 sm:flex-none">
 
                         @foreach($requests as $request)
 
                             <tr class="text-sm font-medium text-gray-500 bg-white flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
 
-                                <td class="w-full lg:w-auto p-3 font-bold text-gray-800 text-center md:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+                                <td class="w-full lg:w-auto p-3  text-gray-800 text-center md:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
 
                                     <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">#</span>
 
@@ -734,7 +732,7 @@
 
                                     @endforeach
 
-                                    <span class="bg-rojo text-white rounded-full py-1 px-2 mr-2">{{ $total }}</span><span>Artículos</span>
+                                    {{ $total }} Artículos
 
                                 </td>
 

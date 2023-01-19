@@ -14,94 +14,94 @@
 
             @if($articles->count())
 
-            <div class="relative overflow-x-auto rounded-lg">
+                <div class="relative overflow-x-auto rounded-lg p-2">
 
-                <table class="rounded-lg w-full">
+                    <table class="rounded-lg w-full">
 
-                    <thead class="border-b border-gray-300 bg-gray-50">
+                        <thead class="border-b border-gray-300 bg-gray-50">
 
-                        <tr class="text-xs font-medium text-gray-500 uppercase text-left traling-wider">
+                            <tr class="text-xs font-medium text-gray-500 uppercase text-left traling-wider">
 
-                            <th class="px-3 py-3 hidden lg:table-cell">Acciones</th>
+                                <th class="px-3 py-3 hidden lg:table-cell">Acciones</th>
 
-                            <th class="px-3 py-3 hidden lg:table-cell">
+                                <th class="px-3 py-3 hidden lg:table-cell">
 
-                                Nombre
+                                    Nombre
 
-                            </th>
+                                </th>
 
-                            <th class=" px-3 py-3 hidden lg:table-cell">
+                                <th class=" px-3 py-3 hidden lg:table-cell">
 
-                                Descripción
+                                    Descripción
 
-                            </th>
+                                </th>
 
-                        </tr>
+                            </tr>
 
-                    </thead>
+                        </thead>
 
 
-                    <tbody class="divide-y divide-gray-200 flex-1 sm:flex-none ">
+                        <tbody class="divide-y divide-gray-200 flex-1 sm:flex-none ">
 
-                        @foreach($articles as $article)
+                            @foreach($articles as $article)
 
-                            <tr class="text-sm font-medium text-gray-500 bg-white flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
+                                <tr class="text-sm font-medium text-gray-500 bg-white flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
 
-                                <td class="px-3 py-3 w-full lg:w-auto p-3 text-gray-800 text-center lg:text-left lg:border-0 border border-b lg:table-cell relative lg:static">
+                                    <td class="px-3 py-3 w-full lg:w-auto p-3 text-gray-800 text-center lg:text-left lg:border-0 border border-b lg:table-cell relative lg:static">
 
-                                    <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Acciones</span>
+                                        <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Acciones</span>
 
-                                        @livewire('request-add-article', ['article' => $article], key($article->id))
+                                            @livewire('request-add-article', ['article' => $article], key($article->id))
 
-                                </td>
+                                    </td>
 
-                                <td class="px-3 py-3 w-full lg:w-auto p-3 text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+                                    <td class="px-3 py-3 w-full lg:w-auto p-3 text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
 
-                                    <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Nombre</span>
+                                        <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Nombre</span>
 
-                                    <p class="text-sm font-medium text-gray-900">{{ $article->name }} / {{ $article->brand }}</p>
+                                        <p class="text-sm font-medium text-gray-900">{{ $article->name }} / {{ $article->brand }}</p>
 
-                                    @if ($article->serial)
-                                        <p># Serie: {{ $article->serial }}</p>
-                                    @endif
+                                        @if ($article->serial)
+                                            <p># Serie: {{ $article->serial }}</p>
+                                        @endif
 
-                                </td>
+                                    </td>
 
-                                <td class="px-3 py-3 w-full lg:w-auto p-3 text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+                                    <td class="px-3 py-3 w-full lg:w-auto p-3 text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
 
-                                    <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">descripción</span>
+                                        <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">descripción</span>
 
-                                    <p class="text-sm font-medium text-gray-900">{{ $article->description }}</p>
+                                        <p class="text-sm font-medium text-gray-900">{{ $article->description }}</p>
 
+                                    </td>
+
+                                </tr>
+
+                            @endforeach
+
+                        </tbody>
+
+                        <tfoot class="border-gray-300 bg-gray-50">
+
+                            <tr>
+
+                                <td colspan="8" class="py-2 px-5">
+                                    {{ $articles->links()}}
                                 </td>
 
                             </tr>
 
-                        @endforeach
+                        </tfoot>
 
-                    </tbody>
+                    </table>
 
-                    <tfoot class="border-gray-300 bg-gray-50">
+                    <div class="h-full w-full rounded-lg bg-gray-200 bg-opacity-75 absolute top-0 left-0" wire:loading wire:target="search">
 
-                        <tr>
+                        <img class="mx-auto h-16" src="{{ asset('storage/img/loading.svg') }}" alt="">
 
-                            <td colspan="8" class="py-2 px-5">
-                                {{ $articles->links()}}
-                            </td>
-
-                        </tr>
-
-                    </tfoot>
-
-                </table>
-
-                <div class="h-full w-full rounded-lg bg-gray-200 bg-opacity-75 absolute top-0 left-0" wire:loading wire:target="search">
-
-                    <img class="mx-auto h-16" src="{{ asset('storage/img/loading.svg') }}" alt="">
+                    </div>
 
                 </div>
-
-            </div>
 
             @else
 
@@ -115,7 +115,7 @@
 
         </div>
 
-        <div class="col-span-1 w-full order-1 md:order-2 rounded-xl border-t-2 border-blue-500 shadow-lg bg-white">
+        <div class="col-span-1 w-full order-1 md:order-2 rounded-xl border-t-2 border-blue-500 shadow-lg bg-white p-2">
 
             <p class="text-xl text-gray-500 my-3 ml-4">Artículos Solicitados</p>
 
@@ -218,7 +218,9 @@
                                 wire:loading.attr="disabled"
                                 wire:target="updateRequest({{ $request_id }})"
                                 class="rounded-full  text-white bg-green-500 my-2 py-2 px-4 float-right hover:bg-green-700"
-                            > Actualizar Solicitud
+                            >
+                                <img wire:loading wire:target="updateRequest({{ $request_id }})" class="mx-auto h-4 mr-1" src="{{ asset('storage/img/loading3.svg') }}" alt="Loading">
+                                Actualizar Solicitud
                             </button>
 
                         @else

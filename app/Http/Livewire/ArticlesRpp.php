@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Http\Traits\ComponentsTrait;
 use App\Models\Article;
 use Livewire\Component;
 use App\Models\Category;
@@ -11,17 +12,8 @@ class ArticlesRpp extends Component
 {
 
     use WithPagination;
+    use ComponentsTrait;
 
-    public $modal = false;
-    public $modalDelete = false;
-    public $create = false;
-    public $edit = false;
-    public $search;
-    public $sort = 'id';
-    public $direction = 'desc';
-    public $pagination=10;
-
-    public $article_id;
     public $name;
     public $brand;
     public $serial;
@@ -48,37 +40,10 @@ class ArticlesRpp extends Component
         'category_id.required' => 'El campo categoría es obligatorio.',
     ];
 
-    public function updatingSearch(){
-        $this->resetPage();
-    }
-
-    public function order($sort){
-
-        if($this->sort == $sort){
-            if($this->direction == 'desc'){
-                $this->direction = 'asc';
-            }else{
-                $this->direction = 'desc';
-            }
-        }else{
-            $this->sort = $sort;
-            $this->direction = 'asc';
-        }
-    }
-
     public function resetAll(){
-        $this->reset('article_id','name','stock', 'description','category_id', 'brand', 'serial');
+        $this->reset('selected_id','name','stock', 'description','category_id', 'brand', 'serial');
         $this->resetErrorBag();
         $this->resetValidation();
-    }
-
-    public function openModalCreate(){
-
-        $this->resetAll();
-
-        $this->edit = false;
-        $this->modal = true;
-        $this->create = true;
     }
 
     public function openModalEdit($article){
@@ -88,7 +53,7 @@ class ArticlesRpp extends Component
 
         $this->create = false;
 
-        $this->article_id = $article['id'];
+        $this->selected_id = $article['id'];
         $this->stock = $article['stock'];
         $this->brand = $article['brand'];
         $this->serial = $article['serial'];
@@ -98,18 +63,6 @@ class ArticlesRpp extends Component
 
         $this->modal = true;
         $this->edit = true;
-    }
-
-    public function openModalDelete($article){
-
-        $this->modalDelete = true;
-        $this->article_id = $article['id'];
-    }
-
-    public function closeModal(){
-        $this->resetAll();
-        $this->modal = false;
-        $this->modalDelete = false;
     }
 
     /* public function create(){
@@ -151,7 +104,7 @@ class ArticlesRpp extends Component
 
         try {
 
-            $article = Article::findorFail($this->article_id);
+            $article = Article::findorFail($this->selected_id);
 
             $article->update([
                 'name' => $this->name,
@@ -164,12 +117,12 @@ class ArticlesRpp extends Component
                 'updated_by' => auth()->user()->id,
             ]);
 
-            $this->dispatchBrowserEvent('showMessage',['success', "El artículo sido actualizado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "El artículo sido actualizado con éxito."]);
 
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
             $this->closeModal();
         }
@@ -179,16 +132,16 @@ class ArticlesRpp extends Component
 
         try {
 
-            $article = Article::findorFail($this->article_id);
+            $article = Article::findorFail($this->selected_id);
 
             $article->delete();
 
-            $this->dispatchBrowserEvent('showMessage',['success', "El artículo ha sido eliminado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "El artículo ha sido eliminado con éxito."]);
 
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
             $this->closeModal();
         }

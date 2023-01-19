@@ -18,6 +18,7 @@ class CreateRequestsTable extends Migration
             $table->unsignedBigInteger('number')->unique();
             $table->json('content');
             $table->string('location');
+            $table->unsignedDecimal('price', 18,2);
             $table->enum('status',['rechazada','aceptada','entregada','solicitada'])->default('solicitada');
             $table->text('comment')->nullable();
             $table->foreignId('created_by')->nullable()->constrained()->references('id')->on('users');

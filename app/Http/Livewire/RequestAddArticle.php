@@ -16,9 +16,11 @@ class RequestAddArticle extends Component
         $aux = Article::find($article['id']);
 
         if($aux->stock < $this->quantity){
+
             $this->dispatchBrowserEvent('showMessage',['error', "Solo puedes solicitar hasta " . $aux->stock . " unidades de este artículo"]);
             $this->quantity = 1;
             return;
+
         }
 
         if($this->quantity <= 0){
@@ -34,6 +36,7 @@ class RequestAddArticle extends Component
         $content->serial = $article['serial'];
         $content->brand = $article['brand'];
         $content->id = $article['id'];
+        $content->price = (float)$article['precio'] * $this->quantity;
 
         $this->emit('addOrCreateArticle', $content);
 

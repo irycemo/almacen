@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Http\Traits\ComponentsTrait;
 use App\Models\Entrie;
 use App\Models\Article;
 use Livewire\Component;
@@ -11,22 +12,13 @@ class Entries extends Component
 {
 
     use WithPagination;
-
-    public $modal = false;
-    public $modalDelete = false;
-    public $create = false;
-    public $edit = false;
-    public $search;
-    public $sort = 'id';
-    public $direction = 'desc';
-    public $pagination=10;
+    use ComponentsTrait;
 
     public $article_id;
     public $article;
-    public $entrie_id;
     public $origin;
     public $description;
-    public $quantity;
+    public $quantity = 1;
     public $showArticles;
     public $searchArticle;
     public $price;
@@ -35,9 +27,10 @@ class Entries extends Component
     protected function rules(){
         return[
             'origin' => 'required',
-            'quantity' => 'required',
+            'quantity' => 'required|min:1',
             'price' => 'nullable|numeric',
-            'description' => 'required'
+            'description' => 'required',
+            'article' => 'required'
         ];
     }
 
@@ -45,6 +38,7 @@ class Entries extends Component
         'origin.required' => 'El campo origen es obligatorio.',
         'description.required' => 'El campo comentario es obligatorio.',
         'quantity.required' => 'El campo cantidad es obligatorio.',
+        'article.required' => 'El campo artículo es obligatorio.',
     ];
 
     public function updatingSearchArticle(){
@@ -58,37 +52,10 @@ class Entries extends Component
             $this->showArticles = false;
     }
 
-    public function updatingSearch(){
-        $this->resetPage();
-    }
-
-    public function order($sort){
-
-        if($this->sort == $sort){
-            if($this->direction == 'desc'){
-                $this->direction = 'asc';
-            }else{
-                $this->direction = 'desc';
-            }
-        }else{
-            $this->sort = $sort;
-            $this->direction = 'asc';
-        }
-    }
-
     public function resetAll(){
-        $this->reset('article_id','entrie_id','origin', 'price', 'articleDescription', 'searchArticle','showArticles', 'quantity', 'description');
+        $this->reset('article_id','selected_id','origin', 'price', 'articleDescription', 'searchArticle','showArticles', 'quantity', 'description');
         $this->resetErrorBag();
         $this->resetValidation();
-    }
-
-    public function openModalCreate(){
-
-        $this->resetAll();
-
-        $this->edit = false;
-        $this->modal = true;
-        $this->create = true;
     }
 
     public function openModalEdit($entrie){
@@ -101,8 +68,7 @@ class Entries extends Component
         $this->article = Article::findorFail($entrie['article_id']);
         $this->article_id = $this->article->id;
         $this->articleDescription = true;
-        $this->entrie_id = $entrie['id'];
-        $this->location = $entrie['location'];
+        $this->selected_id = $entrie['id'];
         $this->origin = $entrie['origin'];
         $this->price = $entrie['price'];
         $this->description = $entrie['description'];
@@ -112,28 +78,9 @@ class Entries extends Component
         $this->edit = true;
     }
 
-    public function openModalDelete($entrie){
-
-        $this->modalDelete = true;
-        $this->entrie_id = $entrie['id'];
-    }
-
-    public function closeModal(){
-        $this->resetAll();
-        $this->modal = false;
-        $this->modalDelete = false;
-    }
-
     public function create(){
 
-        if($this->article['serial'])
-            $this->validate([
-                'origin' => 'required',
-                'price' => 'nullable|numeric',
-                'description' => 'required'
-            ]);
-        else
-            $this->validate();
+        $this->validate();
 
         if($this->origin == 'compra')
             $this->validate(['price' => 'required']);
@@ -147,25 +94,27 @@ class Entries extends Component
             else
                 $stock = 1;
 
-            $article->update([
-                'stock' => $stock
-            ]);
-
             Entrie::create([
                 'article_id' => $this->article_id,
                 'location' => $article->location,
                 'origin' => $this->origin,
                 'description' => $this->description,
-                'price' => $this->origin === 'donación' ? 0 : $this->price,
+                'price' => $this->origin === 'donación' ? 0 : ($this->price * $this->quantity),
                 'quantity' => $article->serial ? 1 : $this->quantity,
                 'created_by' => auth()->user()->id,
             ]);
 
-            $this->dispatchBrowserEvent('showMessage',['success', "La entrada ha sido creada con exito."]);
+            $article->update([
+                'stock' => $stock,
+                'precio' => $this->quantity != 1 ? ($this->price / $this->quantity) : $this->price
+            ]);
+
+            $this->dispatchBrowserEvent('showMessage',['success', "La entrada ha sido creada con éxito."]);
 
             $this->closeModal();
 
         } catch (\Throwable $th) {
+
             $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
             $this->closeModal();
@@ -178,7 +127,7 @@ class Entries extends Component
 
         try {
 
-            $entrie = Entrie::findorFail($this->entrie_id);
+            $entrie = Entrie::findorFail($this->selected_id);
 
             $article = Article::findorFail($this->article_id);
 
@@ -194,7 +143,7 @@ class Entries extends Component
                 'created_by' => auth()->user()->id,
             ]);
 
-            $this->dispatchBrowserEvent('showMessage',['success', "La entrada ha sido actualizada con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "La entrada ha sido actualizada con éxito."]);
 
             $this->closeModal();
 
@@ -209,11 +158,11 @@ class Entries extends Component
 
         try {
 
-            $entrie = Entrie::findorFail($this->entrie_id);
+            $entrie = Entrie::findorFail($this->selected_id);
 
             $entrie->delete();
 
-            $this->dispatchBrowserEvent('showMessage',['success', "La entrada ha sido eliminada con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "La entrada ha sido eliminada con éxito."]);
 
             $this->closeModal();
 

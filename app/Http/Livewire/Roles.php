@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Http\Traits\ComponentsTrait;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Role;
@@ -10,17 +11,9 @@ use Spatie\Permission\Models\Permission;
 class Roles extends Component
 {
     use WithPagination;
+    use ComponentsTrait;
 
-    public $modal = false;
-    public $modalDelete = false;
-    public $create = false;
-    public $edit = false;
-    public $search;
-    public $sort = 'id';
-    public $direction = 'desc';
-    public $pagination=10;
-
-    public $role_id;
+    public $selected_id;
     public $name;
     public $permissionsList = [];
 
@@ -34,37 +27,10 @@ class Roles extends Component
         'name.required' => 'El campo nombre es obligatorio.',
     ];
 
-    public function updatingSearch(){
-        $this->resetPage();
-    }
-
-    public function order($sort){
-
-        if($this->sort == $sort){
-            if($this->direction == 'desc'){
-                $this->direction = 'asc';
-            }else{
-                $this->direction = 'desc';
-            }
-        }else{
-            $this->sort = $sort;
-            $this->direction = 'asc';
-        }
-    }
-
     public function resetAll(){
         $this->reset('name','permissionsList');
         $this->resetErrorBag();
         $this->resetValidation();
-    }
-
-    public function openModalCreate(){
-
-        $this->resetAll();
-
-        $this->edit = false;
-        $this->modal = true;
-        $this->create = true;
     }
 
     public function openModalEdit($role){
@@ -73,7 +39,7 @@ class Roles extends Component
 
         $this->create = false;
 
-        $this->role_id = $role['id'];
+        $this->selected_id = $role['id'];
         $this->name = $role['name'];
 
         foreach($role['permissions'] as $permission){
@@ -83,21 +49,6 @@ class Roles extends Component
         $this->edit = true;
         $this->modal = true;
 
-    }
-
-    public function openModalDelete($role){
-
-        $this->modalDelete = true;
-        $this->role_id = $role['id'];
-    }
-
-    public function closeModal(){
-
-        $this->resetAll();
-
-        $this->modal = false;
-
-        $this->modalDelete = false;
     }
 
     public function create(){
@@ -113,12 +64,12 @@ class Roles extends Component
 
             $role->permissions()->sync($this->permissionsList);
 
-            $this->dispatchBrowserEvent('showMessage',['success', "El rol ha sido creado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "El rol ha sido creado con éxito."]);
 
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
             $this->closeModal();
         }
@@ -132,7 +83,7 @@ class Roles extends Component
 
         try {
 
-            $role = Role::findorFail($this->role_id);
+            $role = Role::findorFail($this->selected_id);
 
             $role->update([
                 'name' => $this->name,
@@ -143,12 +94,12 @@ class Roles extends Component
 
 
 
-            $this->dispatchBrowserEvent('showMessage',['success', "El rol ha sido actualizado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "El rol ha sido actualizado con éxito."]);
 
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
             $this->closeModal();
         }
@@ -159,16 +110,16 @@ class Roles extends Component
 
         try {
 
-            $role = Role::findorFail($this->role_id);
+            $role = Role::findorFail($this->selected_id);
 
             $role->delete();
 
-            $this->dispatchBrowserEvent('showMessage',['success', "El rol ha sido eliminado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "El rol ha sido eliminado con éxito."]);
 
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
             $this->closeModal();
         }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire;
 
+use App\Http\Constantes;
+use App\Http\Traits\ComponentsTrait;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -11,17 +13,8 @@ class Users extends Component
 {
 
     use WithPagination;
+    use ComponentsTrait;
 
-    public $modal = false;
-    public $modalDelete = false;
-    public $create = false;
-    public $edit = false;
-    public $search;
-    public $sort = 'id';
-    public $direction = 'desc';
-    public $pagination=10;
-
-    public $user_id;
     public $name;
     public $email;
     public $status;
@@ -31,7 +24,7 @@ class Users extends Component
     protected function rules(){
         return[
             'name' => 'required',
-            'email' => 'required|email|unique:users,email,'. $this->user_id,
+            'email' => 'required|email|unique:users,email,'. $this->selected_id,
             'status' => 'required|in:activo,inactivo',
             'role' => 'required|integer|min:2',
             'location' => 'required'
@@ -44,37 +37,10 @@ class Users extends Component
         'location.required' => 'El campo ubicación es obligatorio.',
     ];
 
-    public function updatingSearch(){
-        $this->resetPage();
-    }
-
-    public function order($sort){
-
-        if($this->sort == $sort){
-            if($this->direction == 'desc'){
-                $this->direction = 'asc';
-            }else{
-                $this->direction = 'desc';
-            }
-        }else{
-            $this->sort = $sort;
-            $this->direction = 'asc';
-        }
-    }
-
     public function resetAll(){
-        $this->reset('user_id','name','email','status','role');
+        $this->reset('selected_id','name','email','status','role');
         $this->resetErrorBag();
         $this->resetValidation();
-    }
-
-    public function openModalCreate(){
-
-        $this->resetAll();
-
-        $this->edit = false;
-        $this->create = true;
-        $this->modal = true;
     }
 
     public function openModalEdit($user){
@@ -83,7 +49,7 @@ class Users extends Component
 
         $this->create = false;
 
-        $this->user_id = $user['id'];
+        $this->selected_id = $user['id'];
         $this->role = $user['roles'][0]['id'];
         $this->name = $user['name'];
         $this->email = $user['email'];
@@ -92,18 +58,6 @@ class Users extends Component
 
         $this->edit = true;
         $this->modal = true;
-    }
-
-    public function openModalDelete($user){
-
-        $this->modalDelete = true;
-        $this->user_id = $user['id'];
-    }
-
-    public function closeModal(){
-        $this->resetall();
-        $this->modal = false;
-        $this->modalDelete = false;
     }
 
     public function create(){
@@ -123,12 +77,12 @@ class Users extends Component
 
             $user->roles()->attach($this->role);
 
-            $this->dispatchBrowserEvent('showMessage',['success', "El usuario ha sido creado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "El usuario ha sido creado con éxito."]);
 
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
             $this->closeModal();
         }
@@ -140,7 +94,7 @@ class Users extends Component
 
         try {
 
-            $user = User::findorFail($this->user_id);
+            $user = User::findorFail($this->selected_id);
 
             $user->update([
                 'name' => $this->name,
@@ -152,12 +106,12 @@ class Users extends Component
 
             $user->roles()->sync($this->role);
 
-            $this->dispatchBrowserEvent('showMessage',['success', "El usuario ha sido actualizado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "El usuario ha sido actualizado con éxito."]);
 
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
             $this->closeModal();
         }
@@ -168,18 +122,16 @@ class Users extends Component
 
         try {
 
-            $user = User::findorFail($this->user_id);
+            $user = User::findorFail($this->selected_id);
 
             $user->delete();
 
-            $this->dispatchBrowserEvent('showMessage',['success', "El usuario ha sido eliminado con exito."]);
+            $this->dispatchBrowserEvent('showMessage',['success', "El usuario ha sido eliminado con éxito."]);
 
             $this->closeModal();
 
         } catch (\Throwable $th) {
-
-            dd($th);
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
             $this->closeModal();
         }
@@ -187,6 +139,8 @@ class Users extends Component
 
     public function render()
     {
+
+        $ubicaciones = collect(Constantes::UBICACIONES)->sort();
 
         $users = User::with('roles','createdBy','updatedBy')
                         ->where('name', 'LIKE', '%' . $this->search . '%')
@@ -202,6 +156,6 @@ class Users extends Component
 
         $roles = Role::where('id', '!=', 1)->orderBy('name')->get();
 
-        return view('livewire.users', compact('users', 'roles'));
+        return view('livewire.users', compact('users', 'roles', 'ubicaciones'));
     }
 }

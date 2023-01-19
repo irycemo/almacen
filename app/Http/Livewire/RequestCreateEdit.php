@@ -34,6 +34,10 @@ class RequestCreateEdit extends Component
 
             $this->addArticle($object);
 
+            $this->request->price = $this->request->price + (float)$object['price'];
+
+            $this->request->save();
+
         }else{
 
             try {
@@ -47,13 +51,14 @@ class RequestCreateEdit extends Component
                     'content' => json_encode($this->requestedArticles, JSON_FORCE_OBJECT),
                     'location' => auth()->user()->location,
                     'status' => 'solicitada',
+                    'price' => (float)$object['price'],
                     'created_by' => auth()->user()->id,
                 ]);
 
                 $this->dispatchBrowserEvent('showMessage',['success', "Artículo agregado con exito."]);
 
             } catch (\Throwable $th) {
-
+                /* dd($th); */
                 $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
             }
 
@@ -63,16 +68,22 @@ class RequestCreateEdit extends Component
     public function addArticle($object){
 
         if($object['serial']){
+
             $this->requestedArticles[] = (array)$object;
             return;
+
         }
 
         $i = $this->searchForId($object['id'], $this->requestedArticles);
 
         if($i === null){
+
             $this->requestedArticles[] = (array)$object;
+
         }elseif($i >= 0){
+
             $this->requestedArticles[$i]['quantity'] = (int)$object['quantity'] + (int)$this->requestedArticles[$i]['quantity'];
+
         }
 
     }
@@ -98,20 +109,25 @@ class RequestCreateEdit extends Component
 
     }
 
-    function searchForId($id, $array) {
+    public function searchForId($id, $array) {
+
         foreach ($array as $key => $val) {
             if ($val['id'] === $id) {
                 return $key;
             }
         }
+
         return null;
-     }
+
+    }
 
     public function deleteArticle($article){
 
         $article = json_decode($article,true);
 
         $i = $this->searchForId($article['id'], $this->requestedArticles);
+
+        $articleQuantity = $this->requestedArticles[$i]['quantity'];
 
 
         unset($this->requestedArticles[$i]);
@@ -121,7 +137,13 @@ class RequestCreateEdit extends Component
         try {
 
             $aux = Article::find($article['id']);
+
             $aux->stock = $aux->stock + (int)$article['quantity'];
+
+            $this->request->price = $this->request->price - ($aux->precio * (float)$articleQuantity);
+
+            $this->request->save();
+
             $aux->save();
 
             $this->request->update([
@@ -133,6 +155,7 @@ class RequestCreateEdit extends Component
             $this->dispatchBrowserEvent('showMessage',['success', "Artículo eliminado con exito."]);
 
         } catch (\Throwable $th) {
+            /* dd($th); */
             $this->dispatchBrowserEvent('showMessage',['warning', "No se pudo reestablecer el stock para " .  $article['article'] . "."]);
         }
 
@@ -149,17 +172,17 @@ class RequestCreateEdit extends Component
             for ($i=0; $i < count($items); $i++) {
                 $this->requestedArticles [] = (array)$items[$i];
             }
-        }
 
-        if($this->request)
             $this->comment = $this->request->comment;
+        }
 
     }
 
     public function render()
     {
 
-        if(auth()->user()->roles[0]['name'] == 'Administrador' || auth()->user()->roles[0]['name'] == 'Delegado(a) Administrativo'){
+        if(auth()->user()->roles[0]['name'] == 'Administrador'){
+
             $articles = Article::where('stock','!=', 0)
                                 ->where('stock', '>',  0)
                                 ->where(function($q){
@@ -168,7 +191,9 @@ class RequestCreateEdit extends Component
                                         ->orwhere('description', 'LIKE', '%' . $this->search . '%');
                                 })
                                 ->paginate(10);
-        }elseif(auth()->user()->roles[0]['name'] == 'Director'){
+
+        }elseif(auth()->user()->location == 'Dirección General'){
+
             $articles = Article::where('stock','!=', 0)
                                 ->where('location', 'general')
                                 ->where('stock', '>',  0)
@@ -178,7 +203,9 @@ class RequestCreateEdit extends Component
                                         ->orwhere('description', 'LIKE', '%' . $this->search . '%');
                                 })
                                 ->paginate(10);
+
         }elseif(auth()->user()->location == 'rpp' || auth()->user()->location == 'catastro'){
+
             $articles = Article::where('stock','!=', 0)
                                 ->where('location', auth()->user()->location)
                                 ->where('stock', '>',  0)
@@ -188,7 +215,9 @@ class RequestCreateEdit extends Component
                                         ->orwhere('description', 'LIKE', '%' . $this->search . '%');
                                 })
                                 ->paginate(10);
+
         }else{
+
             $articles = Article::where('stock','!=', 0)
                                 ->where('stock', '>',  0)
                                 ->where(function($q){
@@ -197,6 +226,7 @@ class RequestCreateEdit extends Component
                                         ->orwhere('description', 'LIKE', '%' . $this->search . '%');
                                 })
                                 ->paginate(10);
+
         }
 
         return view('livewire.request-create-edit', compact('articles'));

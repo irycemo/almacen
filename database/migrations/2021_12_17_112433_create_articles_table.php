@@ -19,6 +19,7 @@ class CreateArticlesTable extends Migration
             $table->string('brand');
             $table->string('serial')->nullable();
             $table->integer('stock')->nullable();
+            $table->decimal('precio',15,2)->nullable();
             $table->text('description');
             $table->string('location');
             $table->foreignId('category_id')->constrained();

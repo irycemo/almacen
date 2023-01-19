@@ -42,6 +42,7 @@ class RequestFactory extends Factory
             'number' => $this->faker->unique()->numberBetween(1,100),
             'content' => json_encode($array, JSON_FORCE_OBJECT),
             'comment' => $this->faker->text(),
+            'price' => $this->faker->randomDigit(10,10000),
             'location' => Arr::random(Article::UBICACIONES),
             'status'=> $this->faker->randomElement(['rechazada','aceptada','entregada','solicitada']),
             'created_by' => $this->faker->randomElement($users),
