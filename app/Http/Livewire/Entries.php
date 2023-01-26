@@ -2,11 +2,13 @@
 
 namespace App\Http\Livewire;
 
-use App\Http\Traits\ComponentsTrait;
 use App\Models\Entrie;
 use App\Models\Article;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Http\Traits\ComponentsTrait;
 
 class Entries extends Component
 {
@@ -94,29 +96,33 @@ class Entries extends Component
             else
                 $stock = 1;
 
-            Entrie::create([
-                'article_id' => $this->article_id,
-                'location' => $article->location,
-                'origin' => $this->origin,
-                'description' => $this->description,
-                'price' => $this->origin === 'donación' ? 0 : ($this->price * $this->quantity),
-                'quantity' => $article->serial ? 1 : $this->quantity,
-                'created_by' => auth()->user()->id,
-            ]);
+            DB::transaction(function () use($article, $stock) {
 
-            $article->update([
-                'stock' => $stock,
-                'precio' => $this->quantity != 1 ? ($this->price / $this->quantity) : $this->price
-            ]);
+                Entrie::create([
+                    'article_id' => $this->article_id,
+                    'location' => auth()->user()->location,
+                    'origin' => $this->origin,
+                    'description' => $this->description,
+                    'price' => $this->origin === 'donación' ? 0 : ($this->price * $this->quantity),
+                    'quantity' => $article->serial ? 1 : $this->quantity,
+                    'created_by' => auth()->user()->id,
+                ]);
 
-            $this->dispatchBrowserEvent('showMessage',['success', "La entrada ha sido creada con éxito."]);
+                $article->update([
+                    'stock' => $stock,
+                    'precio' => $this->quantity != 1 ? ($this->price / $this->quantity) : $this->price
+                ]);
 
-            $this->closeModal();
+                $this->dispatchBrowserEvent('showMessage',['success', "La entrada ha sido creada con éxito."]);
+
+                $this->closeModal();
+
+            });
 
         } catch (\Throwable $th) {
 
+            Log::error("Error al crear entrada por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
             $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
-
             $this->closeModal();
         }
     }
@@ -127,29 +133,42 @@ class Entries extends Component
 
         try {
 
-            $entrie = Entrie::findorFail($this->selected_id);
+            DB::transaction(function () {
 
-            $article = Article::findorFail($this->article_id);
+                $entrie = Entrie::findorFail($this->selected_id);
 
-            $article->update(['stock' => $this->article->serial ? 1 : $this->quantity]);
+                if($this->article_id != $entrie->article->id)
+                    $entrie->article->update(['stock' => ($entrie->article->stock - $entrie->quantity)]);
 
-            $entrie->update([
-                'article_id' => $this->article_id,
-                'location' => $article->location,
-                'origin' => $this->origin,
-                'price' => $this->origin === 'donación' ? 0 : $this->price,
-                'description' => $this->description,
-                'quantity' => $article->serial ? 1 : $this->quantity,
-                'created_by' => auth()->user()->id,
-            ]);
+                $article = Article::findorFail($this->article_id);
 
-            $this->dispatchBrowserEvent('showMessage',['success', "La entrada ha sido actualizada con éxito."]);
+                $entrie->update([
+                    'article_id' => $this->article_id,
+                    'location' => auth()->user()->location,
+                    'origin' => $this->origin,
+                    'price' => $this->origin === 'donación' ? 0 : $this->price,
+                    'description' => $this->description,
+                    'quantity' => $article->serial ? 1 : $this->quantity,
+                    'updated_by' => auth()->user()->id,
+                ]);
 
-            $this->closeModal();
+                $article->update(
+                    [
+                        'stock' => $this->article['serial'] ? 1 : $this->quantity,
+                        'updated_by' => auth()->user()->id
+                    ]
+                );
+
+                $this->dispatchBrowserEvent('showMessage',['success', "La entrada ha sido actualizada con éxito."]);
+
+                $this->closeModal();
+
+            });
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
+            Log::error("Error al actualizar entrada por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
             $this->closeModal();
         }
     }
@@ -158,17 +177,24 @@ class Entries extends Component
 
         try {
 
-            $entrie = Entrie::findorFail($this->selected_id);
+            DB::transaction(function () {
 
-            $entrie->delete();
+                $entrie = Entrie::findorFail($this->selected_id);
+
+                $entrie->article->update(['stock' => ($entrie->article->stock - $entrie->quantity)]);
+
+                $entrie->delete();
+
+            });
 
             $this->dispatchBrowserEvent('showMessage',['success', "La entrada ha sido eliminada con éxito."]);
 
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
 
+            Log::error("Error al borrar entrada por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
             $this->closeModal();
         }
     }
@@ -184,8 +210,12 @@ class Entries extends Component
     public function render()
     {
 
-        $articles = Article::with('entries')->where('name', 'LIKE', '%' . $this->searchArticle . '%')
-                                        ->orWhere('serial', $this->searchArticle);
+        $articles = Article::with('entries')
+                                ->where(function($q){
+                                    return $q->where('location', 'general')
+                                                ->where('name', 'LIKE', '%' . $this->searchArticle . '%');
+                                })
+                                ->orWhere('serial', $this->searchArticle);
 
         if($this->searchArticle)
             $articles = $articles->simplePaginate(5);

@@ -2,10 +2,11 @@
 
 namespace App\Http\Livewire;
 
-use App\Http\Traits\ComponentsTrait;
 use Livewire\Component;
 use App\Models\Category;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Log;
+use App\Http\Traits\ComponentsTrait;
 
 class Categories extends Component
 {
@@ -61,8 +62,9 @@ class Categories extends Component
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
+            Log::error("Error al crear categoría por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
             $this->closeModal();
         }
     }
@@ -85,8 +87,9 @@ class Categories extends Component
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
+            Log::error("Error al actualizar categoría por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
             $this->closeModal();
         }
     }
@@ -104,8 +107,9 @@ class Categories extends Component
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
+            Log::error("Error al borrar categoría por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
             $this->closeModal();
         }
     }

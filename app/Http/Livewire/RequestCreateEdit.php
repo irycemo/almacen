@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\Request;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Log;
 
 class RequestCreateEdit extends Component
 {
@@ -58,7 +59,7 @@ class RequestCreateEdit extends Component
                 $this->dispatchBrowserEvent('showMessage',['success', "Artículo agregado con exito."]);
 
             } catch (\Throwable $th) {
-                /* dd($th); */
+                Log::error("Error al agregar articulos a la solicitud id:" .$this->request->id . " por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
                 $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
             }
 
@@ -104,6 +105,7 @@ class RequestCreateEdit extends Component
             redirect()->route('requests.index');
 
         } catch (\Throwable $th) {
+            Log::error("Error al actualizar solicitud id:" .$this->request->id . " por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
             $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
         }
 
@@ -155,7 +157,7 @@ class RequestCreateEdit extends Component
             $this->dispatchBrowserEvent('showMessage',['success', "Artículo eliminado con exito."]);
 
         } catch (\Throwable $th) {
-            /* dd($th); */
+            Log::error("Error al borrar artículo de solicitud id:" .$this->request->id . " por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
             $this->dispatchBrowserEvent('showMessage',['warning', "No se pudo reestablecer el stock para " .  $article['article'] . "."]);
         }
 

@@ -2,11 +2,13 @@
 
 namespace App\Http\Livewire;
 
-use App\Http\Traits\ComponentsTrait;
 use App\Models\Article;
 use App\Models\Request;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Http\Traits\ComponentsTrait;
 
 class Requests extends Component
 {
@@ -69,6 +71,7 @@ class Requests extends Component
                         $aux->save();
 
                     } catch (\Throwable $th) {
+                        Log::error("Error al reestablecer el stock de artículos de la solicitud id:" . $this->selected_id . " por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
                         $this->dispatchBrowserEvent('showMessage',['warning', "No se pudo reestablecer el stock para " .  $article['article'] . "."]);
                     }
 
@@ -82,8 +85,9 @@ class Requests extends Component
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
+            Log::error("Error al borrar solicitud por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
             $this->closeModal();
         }
     }
@@ -128,27 +132,31 @@ class Requests extends Component
 
             }else{
 
-                $content = json_decode($request->content,true);
+                DB::transaction(function () use($request){
 
-                foreach ($content as $article) {
+                    $content = json_decode($request->content,true);
 
-                    try {
+                    foreach ($content as $article) {
 
-                        $aux = Article::find($article['id']);
-                        $aux->stock = $aux->stock + $article['quantity'];
-                        $aux->save();
+                        try {
 
-                    } catch (\Throwable $th) {
-                        $this->dispatchBrowserEvent('showMessage',['warning', "No se pudo reestablecer el stock para " .  $article['article'] . "."]);
+                            $aux = Article::find($article['id']);
+                            $aux->stock = $aux->stock + $article['quantity'];
+                            $aux->save();
+
+                        } catch (\Throwable $th) {
+                            $this->dispatchBrowserEvent('showMessage',['warning', "No se pudo reestablecer el stock para " .  $article['article'] . "."]);
+                        }
+
                     }
 
-                }
+                    $request->update([
+                        'status' => 'rechazada',
+                        'comment' => $request->comment . ' ' . $this->comment,
+                        'updated_by' => auth()->user()->id,
+                    ]);
 
-                $request->update([
-                    'status' => 'rechazada',
-                    'comment' => $request->comment . ' ' . $this->comment,
-                    'updated_by' => auth()->user()->id,
-                ]);
+                });
             }
 
             $this->resetAll();
@@ -158,8 +166,9 @@ class Requests extends Component
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
+            Log::error("Error al procesar solicitud por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
             $this->closeModal();
         }
     }
@@ -187,7 +196,7 @@ class Requests extends Component
                 ]);
 
             } catch (\Throwable $th) {
-
+                Log::error("Error al crear articulo procesando la solicitud id:" . $this->selected_id . " por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
                 $this->dispatchBrowserEvent('showMessage',['warning', "No se pudo procesar la solicitud."]);
             }
 

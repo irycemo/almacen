@@ -2,11 +2,12 @@
 
 namespace App\Http\Livewire;
 
-use App\Http\Traits\ComponentsTrait;
 use App\Models\Article;
 use Livewire\Component;
 use App\Models\Category;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Log;
+use App\Http\Traits\ComponentsTrait;
 
 class ArticlesCatastro extends Component
 {
@@ -63,40 +64,7 @@ class ArticlesCatastro extends Component
         $this->modal = true;
         $this->edit = true;
     }
-/*
-    public function create(){
 
-        $this->validate();
-
-        try {
-
-            if(Article::where('name', $this->name)->where('location', 'catastro')->where('serial', $this->serial)->first()){
-                $this->dispatchBrowserEvent('showMessage',['error', "El artículo ya se encuentra en catastro actualice su stock"]);
-                return;
-            }
-
-            Article::create([
-                'name' => $this->name,
-                'brand' => $this->brand,
-                'serial' => $this->serial,
-                'stock' => $this->serial ? 1 : $this->stock,
-                'description' => $this->description,
-                'location' => 'catastro',
-                'category_id' => $this->category_id,
-                'created_by' => auth()->user()->id,
-            ]);
-
-            $this->dispatchBrowserEvent('showMessage',['success', "El artículo ha sido creado con exito."]);
-
-            $this->closeModal();
-
-        } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
-
-            $this->closeModal();
-        }
-    }
- */
     public function update(){
 
         $this->validate();
@@ -121,8 +89,9 @@ class ArticlesCatastro extends Component
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
+            Log::error("Error al actualizar artículo por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
             $this->closeModal();
         }
     }
@@ -140,8 +109,9 @@ class ArticlesCatastro extends Component
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
+            Log::error("Error al borrar artículo por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error. Asegurese de que el artículo no esta realcionado con una entrada o solicitud"]);
             $this->closeModal();
         }
     }

@@ -2,10 +2,11 @@
 
 namespace App\Http\Livewire;
 
-use App\Http\Traits\ComponentsTrait;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Log;
+use App\Http\Traits\ComponentsTrait;
 use Spatie\Permission\Models\Permission;
 
 class Roles extends Component
@@ -69,8 +70,9 @@ class Roles extends Component
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
+            Log::error("Error al borrar rol por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
             $this->closeModal();
         }
     }
@@ -99,8 +101,9 @@ class Roles extends Component
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
+            Log::error("Error al actualizar rol por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
             $this->closeModal();
         }
 
@@ -119,8 +122,9 @@ class Roles extends Component
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
+            Log::error("Error al borrar rol por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
             $this->closeModal();
         }
     }
@@ -133,11 +137,9 @@ class Roles extends Component
                         ->orderBy($this->sort, $this->direction)
                         ->paginate($this->pagination);
 
-        $permissions = Permission::orderBy('area','desc')->get();
-
-        $permissions = $permissions->groupBy(function($permission) {
-            return $permission->area;
-        })->all();
+        $permissions = Permission::orderBy('area','desc')->get()->groupBy(function($permission) {
+                                                                        return $permission->area;
+                                                                    })->all();
 
         return view('livewire.roles', compact('roles', 'permissions'));
     }

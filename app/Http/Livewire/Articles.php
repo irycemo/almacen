@@ -2,11 +2,12 @@
 
 namespace App\Http\Livewire;
 
-use App\Http\Traits\ComponentsTrait;
 use App\Models\Article;
 use Livewire\Component;
 use App\Models\Category;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Log;
+use App\Http\Traits\ComponentsTrait;
 
 class Articles extends Component
 {
@@ -70,8 +71,8 @@ class Articles extends Component
 
         try {
 
-            if(Article::where('name', $this->name)->where('location', $this->location)->where('serial', $this->serial)->first()){
-                $this->dispatchBrowserEvent('showMessage',['error', "El artículo ya se encuentra en " . $this->location ." actualice su stock"]);
+            if(Article::where('serial', $this->serial)->orWhere(function($q) {return $q->where('name', $this->name)->where('location', 'general');})->first()){
+                $this->dispatchBrowserEvent('showMessage',['error', "El artículo ya se encuentra en el almacen general"]);
                 return;
             }
 
@@ -91,8 +92,9 @@ class Articles extends Component
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
+            Log::error("Error al crear artículo por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
             $this->closeModal();
         }
     }
@@ -120,8 +122,9 @@ class Articles extends Component
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
+            Log::error("Error al actualizar artículo por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
             $this->closeModal();
         }
     }
@@ -139,8 +142,9 @@ class Articles extends Component
             $this->closeModal();
 
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
 
+            Log::error("Error al borrar artículo por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error. Asegurese de que el artículo no esta realcionado con una entrada o solicitud"]);
             $this->closeModal();
         }
     }
