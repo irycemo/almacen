@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Livewire\Admin\Auditoria;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EntrieController;
@@ -58,5 +59,7 @@ Route::group(['middleware' => ['auth','is.active']], function(){
     Route::get('entries', EntrieController::class)->middleware('can:Seguimiento')->name('entries');
 
     Route::get('reports', ReportController::class)->middleware('can:Reportes')->name('reports');
+
+    Route::get('auditoria', Auditoria::class)->middleware('permission:Auditoria')->name('auditoria');
 
 });

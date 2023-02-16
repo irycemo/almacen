@@ -11,7 +11,7 @@ class DashboardController extends Controller
     public function __invoke()
     {
 
-        if(auth()->user()->roles[0]->name == "Jefe(a) de Departamento" || auth()->user()->roles[0]->name == "Director"){
+        if(auth()->user()->roles[0]->name == "Solicitante" || auth()->user()->roles[0]->name == "Director"){
 
             $requests = Request::selectRaw('status, count(status) count')
                                     ->where('created_by', auth()->user()->id)

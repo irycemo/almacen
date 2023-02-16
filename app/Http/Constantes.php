@@ -13,7 +13,8 @@ class Constantes{
         'Artículos',
         'Solicitudes',
         'Seguimiento',
-        'Reportes'
+        'Reportes',
+        'Auditoria'
     ];
 
     const UBICACIONES = [

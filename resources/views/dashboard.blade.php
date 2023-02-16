@@ -169,7 +169,7 @@
 
     </div>
 
-    @if (auth()->user()->roles[0]->name == "Administrador" || auth()->user()->roles[0]->name == "Delegado(a) Administrativo" || auth()->user()->roles[0]->name == "Contador(a)")
+    @if (auth()->user()->roles[0]->name == "Administrador" || auth()->user()->roles[0]->name == "Delegado(a) Administrativo" || auth()->user()->roles[0]->name == "Contador(a)" || auth()->user()->roles[0]->name == "Director")
 
         <div class="mb-10">
 
