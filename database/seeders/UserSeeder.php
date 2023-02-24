@@ -28,16 +28,6 @@ class UserSeeder extends Seeder
             'updated_at' => Carbon::now()
         ])->assignRole('Administrador');
 
-        User::create([
-            'name' => 'Enrique',
-            'email' => 'correo@correo.com',
-            'location' => 'Dirección General',
-            'email_verified_at' => Carbon::now(),
-            'password' => 'sistema',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ])->assignRole('Administrador');
-
     }
 
 }

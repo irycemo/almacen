@@ -72,7 +72,7 @@ class Users extends Component
                 'email' => $this->email,
                 'status' => $this->status,
                 'location' => $this->location,
-                'password' => 'almacen',
+                'password' => 'sistema',
                 'created_by' => auth()->user()->id,
             ]);
 
