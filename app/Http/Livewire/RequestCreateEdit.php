@@ -59,7 +59,7 @@ class RequestCreateEdit extends Component
                 $this->dispatchBrowserEvent('showMessage',['success', "Artículo agregado con exito."]);
 
             } catch (\Throwable $th) {
-                Log::error("Error al agregar articulos a la solicitud id:" .$this->request->id . " por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+                Log::error("Error al agregar articulos a la solicitud por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
                 $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
             }
 
