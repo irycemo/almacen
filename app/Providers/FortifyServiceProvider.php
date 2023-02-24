@@ -40,9 +40,20 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
         RateLimiter::for('login', function (Request $request) {
-            if($request->password == 'almacen')
-                return redirect()->route('setpassword', $request->email )->with('message', 'Ingresa tu nueva contraseña.');
+
+            if($request->password == 'sistema'){
+
+                $user = User::where('email', $request->email)->first();
+
+                if($user && $user->password == 'sistema')
+                    return redirect()->route('setpassword', $request->email )->with('mensaje', 'Ingresa tu nueva contraseña.');
+                else
+                    return redirect()->back()->with('mensaje', 'Datos incorrectos.');
+
+            }
+
             return Limit::perMinute(5)->by($request->email.$request->ip());
+
         });
 
         RateLimiter::for('two-factor', function (Request $request) {

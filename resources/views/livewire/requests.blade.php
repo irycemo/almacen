@@ -1,6 +1,6 @@
 <div class="">
 
-    <div class="mb-5">
+    <div class="mb-6">
 
         <h1 class="text-3xl tracking-widest py-3 px-6 text-gray-600 rounded-xl border-b-2 border-gray-500 font-thin mb-6  bg-white">Solicitudes</h1>
 
@@ -23,9 +23,9 @@
 
             @can('Crear solicitud')
 
-                <a href="{{ route('requests.create') }}" class="bg-gray-500 hover:shadow-lg hover:bg-gray-700 float-right mb-5 text-sm py-2 px-4 text-white rounded-full focus:outline-none hidden md:block">Agregar nueva solicitud</a>
+                <a href="{{ route('requests.create') }}" class="bg-gray-500 hover:shadow-lg hover:bg-gray-700 float-right text-sm py-2 px-4 text-white rounded-full focus:outline-none hidden md:block">Agregar nueva solicitud</a>
 
-                <a href="{{ route('requests.create') }}" class="bg-gray-500 hover:shadow-lg hover:bg-gray-700 float-right mb-5 text-sm py-2 px-4 text-white rounded-full focus:outline-none md:hidden">+</a>
+                <a href="{{ route('requests.create') }}" class="bg-gray-500 hover:shadow-lg hover:bg-gray-700 float-right text-sm py-2 px-4 text-white rounded-full focus:outline-none md:hidden">+</a>
 
             @endcan
 
@@ -35,7 +35,7 @@
 
     @if($requests->count())
 
-        <div class="relative overflow-x-auto rounded-lg shadow-xl">
+        <div class="relative overflow-x-auto rounded-lg shadow-xl border-t-2 border-t-gray-500">
 
             <table class="rounded-lg w-full">
 
@@ -340,7 +340,7 @@
                                             wire:click="openModalDetail({{$request}})"
                                             wire:loading.attr="disabled"
                                             wire:target="openModalDetail({{$request}})"
-                                            class="bg-green-400 hover:shadow-lg text-white text-xs md:text-sm px-3 py-2 rounded-full mr-2 hover:bg-green-700 flex focus:outline-none"
+                                            class="bg-green-400 hover:shadow-lg text-white text-xs md:text-sm px-3 py-1 items-center rounded-full mr-2 hover:bg-green-700 flex focus:outline-none"
                                         >
 
 
@@ -359,7 +359,7 @@
                                                 wire:click="openModalDelete({{$request}})"
                                                 wire:loading.attr="disabled"
                                                 wire:target="openModalDelete({{$request}})"
-                                                class="bg-red-400 hover:shadow-lg text-white text-xs md:text-sm px-3 py-2 rounded-full hover:bg-red-700 flex focus:outline-none mr-2"
+                                                class="bg-red-400 hover:shadow-lg text-white text-xs md:text-sm px-3 py-1 items-center rounded-full hover:bg-red-700 flex focus:outline-none mr-2"
                                             >
 
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4 mr-2">
@@ -380,7 +380,7 @@
 
                                             <a
                                                 href="{{ route('requests.edit', $request) }}"
-                                                    class="bg-blue-400 hover:shadow-lg text-white text-xs md:text-sm px-3 py-2 rounded-full hover:bg-blue-700 flex focus:outline-none"
+                                                    class="bg-blue-400 hover:shadow-lg text-white text-xs md:text-sm px-3 py-1 items-center rounded-full hover:bg-blue-700 flex focus:outline-none"
                                                 >
 
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4 mr-2">
@@ -418,7 +418,7 @@
 
             </table>
 
-            <div class="h-full w-full rounded-lg bg-gray-200 bg-opacity-75 absolute top-0 left-0" wire:loading wire:target="search">
+            <div class="h-full w-full rounded-lg bg-gray-200 bg-opacity-75 absolute top-0 left-0" wire:loading>
 
                 <img class="mx-auto h-16" src="{{ asset('storage/img/loading.svg') }}" alt="">
 

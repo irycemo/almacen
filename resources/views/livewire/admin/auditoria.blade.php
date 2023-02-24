@@ -262,7 +262,7 @@
 
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Usuario</span>
 
-                                {{ $audit->user->name }}
+                                {{ $audit->user->name ?? 'N/A' }}
 
                             </td>
 
@@ -274,8 +274,10 @@
                                     Actualización
                                 @elseif($audit->event  == 'created' )
                                     Creado
-                                @else
+                                @elseif($audit->event  == 'deleted')
                                     Borrado
+                                @elseif($audit->event  == 'sync')
+                                    Actualización
                                 @endif
 
                             </td>
@@ -393,12 +395,14 @@
                     <p>Actualización</p>
                 @elseif($selecetedAudit['event'] == 'created')
                    <p>Creado</p>
+                @elseif($selecetedAudit['event'] == 'sync')
+                    <p>Sync</p>
                 @else
-                    <p>Borrado</p>
+                    Borrado
                 @endif
 
                 <strong>Usuario:</strong>
-                <p>{{ $selecetedAudit['user']['name'] }}</p>
+                <p>{{ $selecetedAudit['user']['name'] ?? 'N/A' }}</p>
 
                 <strong>Modelo:</strong>
                 <p>{{ Str::substr($selecetedAudit['auditable_type'], 11) }}, id: {{ $selecetedAudit['auditable_id'] }}</p>
@@ -415,33 +419,61 @@
                 <strong>Registrado:</strong>
                 <p>{{ $selecetedAudit['created_at'] }}</p>
 
-                <div class="grid grid-cols-2 gap-3 my-4">
+                @if($selecetedAudit['event'] == 'sync')
 
-                    <div class="break-words">
+                    <p class="mt-4 capitalize"><strong>Relacion:</strong> {{ key(json_decode($selecetedAudit['old_values'])) }}</p>
 
-                        <strong>Valores anteriores</strong>
+                    <div class="grid grid-cols-2 gap-3 my-4">
 
-                        @foreach (json_decode($selecetedAudit['old_values']) as $key => $value)
+                        <div class="break-words">
 
-                            <p>{{ $key }} = {{ $value ?? 'null' }}</p>
+                            <strong>Valores anteriores</strong>
 
-                        @endforeach
+                            <p>Role => {{ $oldRole }}</p>
 
-                    </div>
+                        </div>
 
-                    <div class="break-words">
+                        <div class="break-words">
 
-                        <strong>Valores nuevos</strong>
+                            <strong>Valores nuevos</strong>
 
-                        @foreach (json_decode($selecetedAudit['new_values']) as $key => $value)
+                            <p>Role => {{ $newRole }}</p>
 
-                            <p>{{ $key }} = {{ $value ?? 'null' }}</p>
-
-                        @endforeach
+                        </div>
 
                     </div>
 
-                </div>
+                @else
+
+                    <div class="grid grid-cols-2 gap-3 my-4">
+
+                        <div class="break-words">
+
+                            <strong>Valores anteriores</strong>
+
+                            @foreach (json_decode($selecetedAudit['old_values']) as $key => $value)
+
+                                <p>{{ $key }} = {{ $value ?? 'null' }}</p>
+
+                            @endforeach
+
+                        </div>
+
+                        <div class="break-words">
+
+                            <strong>Valores nuevos</strong>
+
+                            @foreach (json_decode($selecetedAudit['new_values']) as $key => $value)
+
+                                <p>{{ $key }} = {{ $value ?? 'null' }}</p>
+
+                            @endforeach
+
+                        </div>
+
+                    </div>
+
+                @endif
 
             </x-slot>
 

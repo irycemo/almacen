@@ -1,14 +1,16 @@
 <x-guest-layout>
+
     <x-jet-authentication-card>
+
         <x-slot name="logo">
             <x-jet-authentication-card-logo />
         </x-slot>
 
-        @if(session('message'))
+        @if(session('mensaje'))
 
             <div class="mb-4">
 
-                <p>{{ session('message') }}</p>
+                <p>{{ session('mensaje') }}</p>
 
             </div>
 
@@ -36,6 +38,9 @@
                     {{ __('Guardar Contraseña') }}
                 </x-jet-button>
             </div>
+
         </form>
+
     </x-jet-authentication-card>
+
 </x-guest-layout>

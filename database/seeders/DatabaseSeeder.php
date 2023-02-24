@@ -20,8 +20,8 @@ class DatabaseSeeder extends Seeder
         $this->call(RoleSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(CategorySeeder::class);
-        $this->call(ArticleSeeder::class);
+        /* $this->call(ArticleSeeder::class);
         $this->call(RequestSeeder::class);
-        $this->call(EntrieSeeder::class);
+        $this->call(EntrieSeeder::class); */
     }
 }

@@ -181,9 +181,9 @@
 
     @if (count($entries))
 
-            <div class="rounded-lg mb-5 p-4 font-thin flex justify-between bg-white items-center">
+            <div class="rounded-lg shadow-xl mb-5 p-4 font-thin md:flex items-center justify-between bg-white">
 
-                <p class="text-xl font-extralight">Se encontraron: {{ $entries->total() }} registros con los filtros seleccionados.</p>
+                <p class="text-xl font-extralight">Se encontraron: {{ number_format($entries->total()) }} registros con los filtros seleccionados.</p>
 
                 <button wire:click="downloadExcel" class="text-white flex items-center border rounded-full px-4 py-2 bg-green-500 hover:bg-green-700 mt-2 md:mt-0 w-full md:w-auto justify-center">
 
@@ -363,7 +363,7 @@
 
                 </table>
 
-                <div class="h-full w-full rounded-lg bg-gray-200 bg-opacity-75 absolute top-0 left-0" wire:loading wire:target="search">
+                <div class="h-full w-full rounded-lg bg-gray-200 bg-opacity-75 absolute top-0 left-0" wire:loading>
 
                     <img class="mx-auto h-16" src="{{ asset('storage/img/loading.svg') }}" alt="">
 

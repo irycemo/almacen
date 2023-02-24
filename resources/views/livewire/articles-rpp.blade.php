@@ -1,6 +1,6 @@
 <div class="">
 
-    <div class="mb-5">
+    <div class="mb-6">
 
         <h1 class="text-3xl tracking-widest py-3 px-6 text-gray-600 rounded-xl border-b-2 border-gray-500 font-thin mb-6  bg-white">Artículos RPP</h1>
 
@@ -21,21 +21,13 @@
 
             </div>
 
-            {{-- @can('Crear artículo')
-
-                <button wire:click="openModalCreate" class="bg-gray-500 hover:shadow-lg hover:bg-gray-700 float-right mb-5 text-sm py-2 px-4 text-white rounded-full focus:outline-none hidden md:block">Agregar nuevo artículo</button>
-
-                <button wire:click="openModalCreate" class="bg-gray-500 hover:shadow-lg hover:bg-gray-700 float-right mb-5 text-sm py-2 px-4 text-white rounded-full focus:outline-none md:hidden">+</button>
-
-            @endcan --}}
-
         </div>
 
     </div>
 
     @if($articles->count())
 
-        <div class="relative overflow-x-auto rounded-lg shadow-xl">
+        <div class="relative overflow-x-auto rounded-lg shadow-xl border-t-2 border-t-gray-500">
 
             <table class="rounded-lg w-full">
 
@@ -363,7 +355,7 @@
                                             wire:click="openModalEdit({{$article}})"
                                             wire:loading.attr="disabled"
                                             wire:target="openModalEdit({{$article}})"
-                                            class="bg-blue-400 hover:shadow-lg text-white text-xs md:text-sm px-3 py-2 rounded-full mr-2 hover:bg-blue-700 flex focus:outline-none"
+                                            class="bg-blue-400 hover:shadow-lg text-white text-xs md:text-sm px-3 py-1 items-center rounded-full mr-2 hover:bg-blue-700 flex focus:outline-none"
                                         >
 
 
@@ -383,7 +375,7 @@
                                             wire:click="openModalDelete({{$article}})"
                                             wire:loading.attr="disabled"
                                             wire:target="openModalDelete({{$article}})"
-                                            class="bg-red-400 hover:shadow-lg text-white text-xs md:text-sm px-3 py-2 rounded-full hover:bg-red-700 flex focus:outline-none"
+                                            class="bg-red-400 hover:shadow-lg text-white text-xs md:text-sm px-3 py-1 items-center rounded-full hover:bg-red-700 flex focus:outline-none"
                                         >
 
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4 mr-3">
@@ -419,7 +411,7 @@
 
             </table>
 
-            <div class="h-full w-full rounded-lg bg-gray-200 bg-opacity-75 absolute top-0 left-0" wire:loading wire:target="search">
+            <div class="h-full w-full rounded-lg bg-gray-200 bg-opacity-75 absolute top-0 left-0" wire:loading>
 
                 <img class="mx-auto h-16" src="{{ asset('storage/img/loading.svg') }}" alt="">
 

@@ -38,5 +38,11 @@ class CategorySeeder extends Seeder
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
+
+        Category::create([
+            'name' => 'Material De Limpeza',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
     }
 }
