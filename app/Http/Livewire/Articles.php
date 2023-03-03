@@ -71,7 +71,7 @@ class Articles extends Component
 
         try {
 
-            if(Article::where('serial', $this->serial)->orWhere(function($q) {return $q->where('name', $this->name)->where('location', 'general');})->first()){
+            if(Article::where('name', $this->name)->where('location', 'general')->first()){
                 $this->dispatchBrowserEvent('showMessage',['error', "El artículo ya se encuentra en el almacen general"]);
                 return;
             }
