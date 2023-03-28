@@ -319,7 +319,7 @@
 
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Precio</span>
 
-                                <p class="text-sm font-medium text-gray-900 capitalize">${{ $entrie->price }}</p>
+                                <p class="text-sm font-medium text-gray-900 capitalize">${{ number_format($entrie->price, 2) }}</p>
 
                             </td>
 

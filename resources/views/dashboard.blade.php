@@ -183,15 +183,15 @@
 
                     @foreach ($articles as $article)
 
-                        <div class="flex items-center space-x-2 col-span-1">
+                        <div class="flex items-center space-x-2 col-span-1 text-sm">
 
                             <div class="">
                                 @if($article->stock >= 20)
-                                    <span class="bg-green-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
+                                    <span class="bg-green-400 text-white rounded-full py-1 px-2">{{ $article->stock }}</span>
                                 @elseif($article->stock <= 20 && $article->stock > 10)
-                                    <span class="bg-yellow-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
+                                    <span class="bg-yellow-400 text-white rounded-full py-1 px-2">{{ $article->stock }}</span>
                                 @elseif($article->stock <= 10)
-                                    <span class="bg-red-400 text-white rounded-full py-1 px-4">{{ $article->stock }}</span>
+                                    <span class="bg-red-400 text-white rounded-full py-1 px-2">{{ $article->stock }}</span>
                                 @endif
                             </div>
 

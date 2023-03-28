@@ -69,12 +69,12 @@ class Articles extends Component
 
         $this->validate();
 
-        try {
+        if(Article::where('name', $this->name)->where('location', 'general')->first()){
+            $this->dispatchBrowserEvent('showMessage',['error', "El artículo ya se encuentra en el almacen general"]);
+            return;
+        }
 
-            if(Article::where('name', $this->name)->where('location', 'general')->first()){
-                $this->dispatchBrowserEvent('showMessage',['error', "El artículo ya se encuentra en el almacen general"]);
-                return;
-            }
+        try {
 
             Article::create([
                 'name' => $this->name,
