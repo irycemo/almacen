@@ -14,7 +14,7 @@ trait ComponentsTrait{
     public $pagination=10;
     public $selected_id;
 
-    public function updatingSearch(){
+    public function updatedPagination(){
         $this->resetPage();
     }
 
