@@ -122,7 +122,7 @@ class ArticlesCatastro extends Component
         $categories = Category::all();
 
         $articles = Article::with('createdBy', 'updatedBy', 'category')
-                                    ->where('location', 'catastro')
+                                    ->where('location', 'Dirección Catastro')
                                     ->where(function($q){
                                         return $q->where('name', 'LIKE', '%' . $this->search . '%')
                                             ->orwhere('description', 'LIKE', '%' . $this->search . '%')

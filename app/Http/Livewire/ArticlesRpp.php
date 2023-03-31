@@ -123,7 +123,7 @@ class ArticlesRpp extends Component
         $categories = Category::all();
 
         $articles = Article::with('createdBy', 'updatedBy', 'category')
-                                    ->where('location', 'rpp')
+                                    ->where('location', 'Dirección RPP')
                                     ->where(function($q){
                                         return $q->where('name', 'LIKE', '%' . $this->search . '%')
                                             ->orwhere('description', 'LIKE', '%' . $this->search . '%')

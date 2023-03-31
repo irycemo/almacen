@@ -14,11 +14,11 @@
 
         <p class="text-center font-bold text-2xl mb-3">Sistema de Almacen</p>
 
-        @if(session('message'))
+        @if(session('mensaje'))
 
             <div class="mb-4">
 
-                <p class="text-sm text-red-600 ">{{ session('message') }}</p>
+                <p class="text-sm text-red-600 ">{{ session('mensaje') }}</p>
 
             </div>
 
