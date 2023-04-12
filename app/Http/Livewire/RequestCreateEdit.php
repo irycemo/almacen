@@ -194,7 +194,7 @@ class RequestCreateEdit extends Component
                                 })
                                 ->paginate(10);
 
-        }elseif(auth()->user()->location == 'Dirección General'){
+        }elseif(auth()->user()->roles[0]['name'] == 'Director'){
 
             $articles = Article::where('stock','!=', 0)
                                 ->where('location', 'general')
