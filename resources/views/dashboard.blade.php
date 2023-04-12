@@ -179,7 +179,7 @@
 
                 <p class="text-lg font-light text-gray-600 mb-2">Artículos con bajo Stock</p>
 
-                <div class="grid grid-cols-5 gap-3">
+                <div class="grid grid-cols-5 gap-3 h-44 overflow-y-auto">
 
                     @foreach ($articles as $article)
 

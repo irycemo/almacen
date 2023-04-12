@@ -186,6 +186,7 @@ class RequestCreateEdit extends Component
         if(auth()->user()->roles[0]['name'] == 'Administrador'){
 
             $articles = Article::where('stock','!=', 0)
+                                ->where('location', auth()->user()->location)
                                 ->where('stock', '>',  0)
                                 ->where(function($q){
                                     $q->where('name', 'LIKE', '%' . $this->search . '%')

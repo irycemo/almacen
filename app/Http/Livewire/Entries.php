@@ -146,7 +146,7 @@ class Entries extends Component
                     'article_id' => $this->article_id,
                     'location' => auth()->user()->location,
                     'origin' => $this->origin,
-                    'price' => $this->origin === 'donación' ? 0 : $this->price,
+                    'price' => $this->origin === 'donación' ? 0 : ($this->price * $this->quantity),
                     'description' => $this->description,
                     'quantity' => $article->serial ? 1 : $this->quantity,
                     'updated_by' => auth()->user()->id,
