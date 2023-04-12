@@ -645,7 +645,7 @@
 
                             <div>
 
-                                <Label>Cantidad</Label>
+                                <Label>Unidades</Label>
                             </div>
 
                             <div>
@@ -698,7 +698,7 @@
 
                             <div>
 
-                                <Label>Costo</Label>
+                                <Label>Precio por unidad</Label>
                             </div>
 
                             <div>

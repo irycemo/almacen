@@ -110,7 +110,8 @@ class Entries extends Component
 
                 $article->update([
                     'stock' => $stock,
-                    'precio' => $this->quantity != 1 ? ($this->price / $this->quantity) : $this->price
+                    'precio' => $this->quantity != 1 ? ($this->price / $this->quantity) : $this->price,
+                    'updated_by' => auth()->user()->id
                 ]);
 
                 $this->dispatchBrowserEvent('showMessage',['success', "La entrada ha sido creada con éxito."]);
@@ -155,6 +156,7 @@ class Entries extends Component
                 $article->update(
                     [
                         'stock' => $this->article['serial'] ? 1 : $this->quantity,
+                        'precio' => $this->quantity != 1 ? ($this->price / $this->quantity) : $this->price,
                         'updated_by' => auth()->user()->id
                     ]
                 );
