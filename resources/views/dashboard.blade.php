@@ -93,7 +93,7 @@
 
                     <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
 
-                        <h5 class="text-blueGray-400 uppercase font-semibold text-lg  tracking-widest ">Entrtegadas</h5>
+                        <h5 class="text-blueGray-400 uppercase font-semibold text-lg  tracking-widest ">Entregadas</h5>
 
                         <span class="font-bold text-2xl text-blueGray-600">
                             <span>

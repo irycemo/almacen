@@ -219,9 +219,10 @@ class RequestCreateEdit extends Component
                                 })
                                 ->paginate(10);
 
-        }else{
+        }elseif(auth()->user()->location != 'rpp' || auth()->user()->location != 'catastro'){
 
             $articles = Article::where('stock','!=', 0)
+                                ->where('location', 'general')
                                 ->where('stock', '>',  0)
                                 ->where(function($q){
                                     $q->where('name', 'LIKE', '%' . $this->search . '%')

@@ -62,6 +62,8 @@ class Entries extends Component
 
     public function openModalEdit($entrie){
 
+        $this->dispatchBrowserEvent('showMessage',['warning', "Al editar la entrada solo se afectara el precio del artículo no la cantidad de stock del artículo, para afectar el stock del artículo es necesario hacer una nueva entrada."]);
+
         $this->resetErrorBag();
         $this->resetValidation();
 
@@ -155,7 +157,6 @@ class Entries extends Component
 
                 $article->update(
                     [
-                        'stock' => $this->article['serial'] ? 1 : $this->quantity,
                         'precio' => $this->quantity != 1 ? ($this->price / $this->quantity) : $this->price,
                         'updated_by' => auth()->user()->id
                     ]
