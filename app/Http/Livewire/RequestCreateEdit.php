@@ -207,7 +207,7 @@ class RequestCreateEdit extends Component
                                 })
                                 ->paginate(10);
 
-        }elseif(auth()->user()->location == 'rpp' || auth()->user()->location == 'catastro'){
+        }elseif(auth()->user()->location == 'Dirección rpp' || auth()->user()->location == 'Dirección catastro'){
 
             $articles = Article::where('stock','!=', 0)
                                 ->where('location', auth()->user()->location)
@@ -219,7 +219,7 @@ class RequestCreateEdit extends Component
                                 })
                                 ->paginate(10);
 
-        }elseif(auth()->user()->location != 'rpp' || auth()->user()->location != 'catastro'){
+        }elseif(auth()->user()->location != 'Dirección rpp' || auth()->user()->location != 'Dirección catastro'){
 
             $articles = Article::where('stock','!=', 0)
                                 ->where('location', 'general')
