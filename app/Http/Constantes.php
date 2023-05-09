@@ -23,7 +23,7 @@ class Constantes{
         'Dirección RPP',
         'Dirección Catastro',
         'Delegación Administrativa',
-        'Regional Morelia',
+        'Regional Huetamo',
         'Regional Uruapan',
         'Regional Patzcuaro',
         'Regional Zamora',
