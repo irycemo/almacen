@@ -117,9 +117,10 @@ class Tracking extends Component
             $this->requests = Request::query()->with('createdBy', 'updatedBy')
                                 ->where(function($q) use ($article){
                                     $q->where('content', 'LIKE', '%' . $article['name'] . '%')
-                                        ->orWhere('content', 'LIKE', '%' . $article['brand'] . '%');
+                                        ->where('content', 'LIKE', '%' . $article['brand'] . '%');
                                 })
-                                ->orWhere('content', 'LIKE', '%' . $article['brand'] . '%')
+                                ->orWhere('content', 'LIKE', '%"id":' . $article['id'] . '%')
+                                ->orWhere('content', 'LIKE', '%"id": ' . $article['id'] . '%')
                                 ->get();
         }
     }
