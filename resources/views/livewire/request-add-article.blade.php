@@ -7,7 +7,6 @@
         <button
             wire:click="addRequest({{$article}})"
             wire:loading.attr="disabled"
-            wire:target="addRequest({{$article}})"
             class="bg-blue-400 hover:shadow-lg text-white text-xs md:text-sm px-2 py-2 rounded-full hover:bg-blue-700 flex items-center focus:outline-none"
         >
 
