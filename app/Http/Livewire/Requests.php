@@ -147,7 +147,7 @@ class Requests extends Component
                     $request->requestDetails()->detach();
 
                     $request->update([
-                        'content' => json_encode($array, JSON_FORCE_OBJECT),
+                        'content' => !empty($array) ? json_encode($array, JSON_FORCE_OBJECT) : $request->content,
                         'status' => 'entregada',
                         'comment' => $request->comment . ' ' . $this->comment,
                         'updated_by' => auth()->user()->id,
