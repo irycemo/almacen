@@ -514,7 +514,7 @@
 
                         <tbody class="divide-y divide-gray-200 flex-1 sm:flex-none ">
 
-                            @if(isset($request['content']) && empty($request['content']))
+                            @if(isset($request['content']))
 
                                 @foreach($request_content as $detail)
 
