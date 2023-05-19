@@ -253,7 +253,33 @@
 
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Contenido</span>
 
-                                {{ $item->requestDetails->count() }}
+                                @if($item->requestDetails->count())
+
+                                    {{ $item->requestDetails->count() }}
+
+                                @elseif(isset($item->content))
+
+                                    @php
+
+                                        $content = json_decode($item->content, true);
+
+                                        $total=0;
+
+                                    @endphp
+
+                                    @foreach ($content as $article)
+
+                                        @php
+
+                                            $total = $total + $article['quantity']
+
+                                        @endphp
+
+                                    @endforeach
+
+                                    {{ $total }}
+
+                                @endif
 
                             </td>
 

@@ -142,14 +142,20 @@ class Requests extends Component
 
                 }
 
-                $request->update([
-                    'content' => json_encode($array, JSON_FORCE_OBJECT),
-                    'status' => 'entregada',
-                    'comment' => $request->comment . ' ' . $this->comment,
-                    'updated_by' => auth()->user()->id,
-                ]);
+                DB::transaction(function () use($request, $array){
 
-                $this->dispatchBrowserEvent('receipt',route('requests.receipt', $request->id));
+                    $request->requestDetails()->detach();
+
+                    $request->update([
+                        'content' => json_encode($array, JSON_FORCE_OBJECT),
+                        'status' => 'entregada',
+                        'comment' => $request->comment . ' ' . $this->comment,
+                        'updated_by' => auth()->user()->id,
+                    ]);
+
+                    $this->dispatchBrowserEvent('receipt',route('requests.receipt', $request->id));
+
+                });
 
             }else{
 

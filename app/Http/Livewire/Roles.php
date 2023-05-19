@@ -2,12 +2,12 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Role;
 use Livewire\Component;
+use App\Models\Permission;
 use Livewire\WithPagination;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Log;
 use App\Http\Traits\ComponentsTrait;
-use Spatie\Permission\Models\Permission;
 
 class Roles extends Component
 {
