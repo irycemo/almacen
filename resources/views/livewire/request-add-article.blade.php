@@ -5,7 +5,7 @@
         <input type="number" min="1" wire:model.defer="quantity" class="bg-white rounded-full w-20 ">
 
         <button
-            wire:click="addRequest({{$article}})"
+            wire:click="addRequest"
             wire:loading.attr="disabled"
             class="bg-blue-400 hover:shadow-lg text-white text-xs md:text-sm px-2 py-2 rounded-full hover:bg-blue-700 flex items-center focus:outline-none"
         >

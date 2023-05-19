@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Request;
 use App\Http\Traits\ModelsTrait;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -22,5 +23,9 @@ class Article extends Model implements Auditable
 
     public function entries(){
         return $this->hasMany(Entrie::class);
+    }
+
+    public function requests(){
+        return $this->belongsToMany(Request::class);
     }
 }

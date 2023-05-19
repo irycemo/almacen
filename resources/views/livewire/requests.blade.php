@@ -237,7 +237,7 @@
 
                 <tbody class="divide-y divide-gray-200 flex-1 sm:flex-none">
 
-                    @foreach($requests as $request)
+                    @foreach($requests as $item)
 
                         <tr class="text-sm font-medium text-gray-500 bg-white flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
 
@@ -245,7 +245,7 @@
 
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">#</span>
 
-                                {{ $request->number }}
+                                {{ $item->number }}
 
                             </td>
 
@@ -253,20 +253,7 @@
 
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Contenido</span>
 
-                                @php
-                                    $content = json_decode($request->content, true);
-                                    $total=0;
-                                @endphp
-
-                                @foreach ($content as $article)
-
-                                    @php
-                                        $total = $total + $article['quantity']
-                                    @endphp
-
-                                @endforeach
-
-                                {{ $total }} Artículos
+                                {{ $item->requestDetails->count() }}
 
                             </td>
 
@@ -274,7 +261,7 @@
 
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Ubicación</span>
 
-                                {{ $request->location }}
+                                {{ $item->location }}
 
                             </td>
 
@@ -282,7 +269,7 @@
 
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Solicitante</span>
 
-                                {{ $request->createdBy->name }}
+                                {{ $item->createdBy->name }}
 
                             </td>
 
@@ -290,14 +277,14 @@
 
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Stock</span>
 
-                                @if($request->status == 'solicitada')
-                                    <span class="bg-blue-400 text-white rounded-full py-1 px-4">{{ $request->status }}</span>
-                                @elseif($request->status == 'aceptada')
-                                    <span class="bg-green-400 text-white rounded-full py-1 px-4">{{ $request->status }}</span>
-                                @elseif($request->status == 'rechazada')
-                                    <span class="bg-red-400 text-white rounded-full py-1 px-4">{{ $request->status }}</span>
-                                @elseif($request->status == 'entregada')
-                                    <span class="bg-gray-400 text-white rounded-full py-1 px-4">{{ $request->status }}</span>
+                                @if($item->status == 'solicitada')
+                                    <span class="bg-blue-400 text-white rounded-full py-1 px-4">{{ $item->status }}</span>
+                                @elseif($item->status == 'aceptada')
+                                    <span class="bg-green-400 text-white rounded-full py-1 px-4">{{ $item->status }}</span>
+                                @elseif($item->status == 'rechazada')
+                                    <span class="bg-red-400 text-white rounded-full py-1 px-4">{{ $item->status }}</span>
+                                @elseif($item->status == 'entregada')
+                                    <span class="bg-gray-400 text-white rounded-full py-1 px-4">{{ $item->status }}</span>
                                 @endif
 
                             </td>
@@ -306,13 +293,13 @@
 
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Registrado</span>
 
-                                @if($request->created_by != null)
+                                @if($item->created_by != null)
 
-                                    <span class="font-semibold">Registrado por: {{$request->createdBy->name}}</span> <br>
+                                    <span class="font-semibold">Registrado por: {{$item->createdBy->name}}</span> <br>
 
                                 @endif
 
-                                {{ $request->created_at }}
+                                {{ $item->created_at }}
 
                             </td>
 
@@ -320,13 +307,13 @@
 
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Actualizado</span>
 
-                                @if($request->updated_by != null)
+                                @if($item->updated_by != null)
 
-                                    <span class="font-semibold">Actualizado por: {{$request->updatedBy->name}}</span> <br>
+                                    <span class="font-semibold">Actualizado por: {{$item->updatedBy->name}}</span> <br>
 
                                 @endif
 
-                                {{ $request->updated_at }}
+                                {{ $item->updated_at }}
 
                             </td>
 
@@ -337,9 +324,9 @@
                                 <div class="flex justify-center lg:justify-start">
 
                                     <button
-                                            wire:click="openModalDetail({{$request}})"
+                                            wire:click="openModalDetail({{$item->id}})"
                                             wire:loading.attr="disabled"
-                                            wire:target="openModalDetail({{$request}})"
+                                            wire:target="openModalDetail({{$item->id}})"
                                             class="bg-green-400 hover:shadow-lg text-white text-xs md:text-sm px-3 py-1 items-center rounded-full mr-2 hover:bg-green-700 flex focus:outline-none"
                                         >
 
@@ -353,12 +340,12 @@
 
                                     @can('Borrar solicitud')
 
-                                        @if ($request->status != 'entregada')
+                                        @if ($item->status != 'entregada')
 
                                             <button
-                                                wire:click="openModalDelete({{$request}})"
+                                                wire:click="openModalDelete({{$item}})"
                                                 wire:loading.attr="disabled"
-                                                wire:target="openModalDelete({{$request}})"
+                                                wire:target="openModalDelete({{$item}})"
                                                 class="bg-red-400 hover:shadow-lg text-white text-xs md:text-sm px-3 py-1 items-center rounded-full hover:bg-red-700 flex focus:outline-none mr-2"
                                             >
 
@@ -376,10 +363,10 @@
 
                                     @can('Editar solicitud')
 
-                                        @if ($request->status == 'aceptada' || $request->status == 'solicitada')
+                                        @if ($item->status == 'aceptada' || $item->status == 'solicitada')
 
                                             <a
-                                                href="{{ route('requests.edit', $request) }}"
+                                                href="{{ route('requests.edit', $item) }}"
                                                     class="bg-blue-400 hover:shadow-lg text-white text-xs md:text-sm px-3 py-1 items-center rounded-full hover:bg-blue-700 flex focus:outline-none"
                                                 >
 
@@ -436,195 +423,247 @@
 
     @endif
 
-    <x-jet-dialog-modal wire:model="modal" maxWidth="sm">
+    @if($request)
 
-        <x-slot name="title">
+        <x-jet-dialog-modal wire:model="modal" maxWidth="sm">
 
-            <div class="flex justify-between items-center">
+            <x-slot name="title">
 
-                <p>Detalles de la solicitud</p>
+                <div class="flex justify-between items-center">
 
-                <button
-                    wire:click="closeModal"
-                    wire:loading.attr="disabled"
-                    wire:target="closeModal"
-                    type="button"
-                    class="bg-gray-400 hover:shadow-lg text-white px-2 py-1 rounded-full text-xs hover:bg-gray-500 flaot-left focus:outline-none">
-                    X
-                </button>
-            </div>
+                    <p>Detalles de la solicitud</p>
 
-        </x-slot>
+                    <button
+                        wire:click="closeModal"
+                        wire:loading.attr="disabled"
+                        wire:target="closeModal"
+                        type="button"
+                        class="bg-gray-400 hover:shadow-lg text-white px-2 py-1 rounded-full text-xs hover:bg-gray-500 flaot-left focus:outline-none">
+                        X
+                    </button>
+                </div>
 
-        <x-slot name="content">
+            </x-slot>
 
-            <div class=" font-thin text-gray-600 mb-3">
+            <x-slot name="content">
 
-                <p>Número de solicitud: {{ $request_number }}</p>
+                <div class=" font-thin text-gray-600 mb-3">
 
-                <p>Solicitante: {{ $request_author }}</p>
+                    <p>Número de solicitud: {{ $request->number }}</p>
 
-                <p>Fecha de solicitud: {{ $request_created_at }}</p>
+                    <p>Solicitante: {{ $request->createdBy->name }}</p>
 
-            </div>
+                    <p>Fecha de solicitud: {{ $request->created_at }}</p>
 
-            <div class="mb-5 w-full">
+                </div>
 
-                <table class="rounded-lg w-full">
+                <div class="mb-5 w-full">
 
-                    <thead class="border-b border-gray-300 bg-gray-50">
+                    <table class="rounded-lg w-full">
 
-                        <tr class="text-xs font-medium text-gray-500 uppercase text-left traling-wider">
+                        <thead class="border-b border-gray-300 bg-gray-50">
 
-                            <th class="px-3 py-3 hidden lg:table-cell">Cantidad</th>
+                            <tr class="text-xs font-medium text-gray-500 uppercase text-left traling-wider">
 
-                            <th wire:click="order('name')" class="cursor-pointer px-3 py-3 hidden lg:table-cell">
+                                <th class="px-3 py-3 hidden lg:table-cell">Cantidad</th>
 
-                                Nombre
+                                <th wire:click="order('name')" class="cursor-pointer px-3 py-3 hidden lg:table-cell">
 
-                            </th>
+                                    Nombre
 
-                            @if ($request_status != 'rechazada' && $request_status != 'entregada')
+                                </th>
 
-                                @can("Aceptar solicitud")
-                                    <th class="px-3 py-3 hidden lg:table-cell">Disponibilidad</th>
-                                @endcan
-
-                            @endif
-
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody class="divide-y divide-gray-200 flex-1 sm:flex-none ">
-
-                        @foreach($request_content as $item)
-
-                            <tr class="text-sm font-medium text-gray-500 bg-white flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
-
-                                <td class="px-3 py-3 w-full lg:w-auto p-3 text-gray-800 text-center lg:border-0 border border-b block lg:table-cell relative lg:static">
-
-                                    <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Cantidad</span>
-
-                                    <p class="text-sm font-medium text-gray-900">{{ $item['quantity'] }}</p>
-
-                                </td>
-
-                                <td class="px-3 py-3 w-full lg:w-auto p-3 text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
-
-                                    <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Nombre</span>
-
-                                    <p class="text-sm font-medium text-gray-900">{{ $item['article'] }} / {{ $item['brand'] }}</p>
-
-                                    @if ($item['serial'])
-
-                                        <p class="text-sm font-medium text-gray-900">#Serie: {{ $item['serial'] }}</p>
-
-                                    @endif
-
-                                </td>
-                                @if ($request_status != 'rechazada' && $request_status != 'entregada')
+                                @if ($request->status != 'rechazada' && $request->status != 'entregada')
 
                                     @can("Aceptar solicitud")
-
-                                        <td>
-
-                                            @livewire('request-available-article', ['article_id' => $item['id']], key($item['id']))
-
-                                        </td>
+                                        <th class="px-3 py-3 hidden lg:table-cell">Disponibilidad</th>
                                     @endcan
 
                                 @endif
 
                             </tr>
 
-                        @endforeach
+                        </thead>
 
-                    </tbody>
 
-                </table>
+                        <tbody class="divide-y divide-gray-200 flex-1 sm:flex-none ">
 
-            </div>
+                            @if(isset($request['content']))
 
-            @if (strlen($request_comment) > 1)
+                                @foreach($request_content as $detail)
 
-                <div class="text-sm">
+                                    <tr class="text-sm font-medium text-gray-500 bg-white flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
 
-                    <p>Comentario:</p>
+                                        <td class="px-3 py-3 w-full lg:w-auto p-3 text-gray-800 text-center lg:border-0 border border-b block lg:table-cell relative lg:static">
 
-                    <div class=" font-thin text-gray-600 mb-3">
+                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Cantidad</span>
 
-                        {{ $request_comment }}
+                                            <p class="text-sm font-medium text-gray-900">{{ $detail['quantity'] }}</p>
+
+                                        </td>
+
+                                        <td class="px-3 py-3 w-full lg:w-auto p-3 text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+
+                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Nombre</span>
+
+                                            <p class="text-sm font-medium text-gray-900">{{ $detail['article'] }} / {{ $detail['brand'] }}</p>
+
+                                            @if ($detail['serial'])
+
+                                                <p class="text-sm font-medium text-gray-900">#Serie: {{ $detail['serial'] }}</p>
+
+                                            @endif
+
+                                        </td>
+
+                                        @if ($request->status != 'rechazada' && $request->status != 'entregada')
+
+                                            @can("Aceptar solicitud")
+
+                                                <td>
+
+                                                    @livewire('request-available-article', ['article_id' => $detail['id']], key($detail['id']))
+
+                                                </td>
+                                            @endcan
+
+                                        @endif
+
+                                    </tr>
+
+                                @endforeach
+
+                            @else
+
+                                @foreach($request->requestDetails as $detail)
+
+                                    <tr class="text-sm font-medium text-gray-500 bg-white flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
+
+                                        <td class="px-3 py-3 w-full lg:w-auto p-3 text-gray-800 text-center lg:border-0 border border-b block lg:table-cell relative lg:static">
+
+                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Cantidad</span>
+
+                                            <p class="text-sm font-medium text-gray-900">{{ $detail->pivot->quantity }}</p>
+
+                                        </td>
+
+                                        <td class="px-3 py-3 w-full lg:w-auto p-3 text-gray-800 text-center lg:text-left lg:border-0 border border-b block lg:table-cell relative lg:static">
+
+                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Nombre</span>
+
+                                            <p class="text-sm font-medium text-gray-900">{{ $detail->name }} / {{ $detail->brand }}</p>
+
+                                            @if ($detail->serial)
+
+                                                <p class="text-sm font-medium text-gray-900">#Serie: {{ $detail->serial }}</p>
+
+                                            @endif
+
+                                        </td>
+
+                                        @if ($request->status != 'rechazada' && $request->status != 'entregada')
+
+                                            @can("Aceptar solicitud")
+
+                                                <td>
+
+                                                    @livewire('request-available-article', ['article_id' => $detail->id], key($detail->id))
+
+                                                </td>
+                                            @endcan
+
+                                        @endif
+
+                                    </tr>
+
+                                @endforeach
+
+                            @endif
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                @if (strlen($request->comment) > 1)
+
+                    <div class="text-sm">
+
+                        <p>Comentario:</p>
+
+                        <div class=" font-thin text-gray-600 mb-3">
+
+                            {{ $request->comment }}
+
+                        </div>
 
                     </div>
 
-                </div>
+                @endif
 
-            @endif
+            </x-slot>
 
-        </x-slot>
+            <x-slot name="footer">
 
-        <x-slot name="footer">
+                @if ((auth()->user()->roles[0]->id != 4 && auth()->user()->roles[0]->id != 6 ) && ($request->status === 'solicitada' || $request->status === 'aceptada'))
 
-            @if ((auth()->user()->roles[0]->id != 4 && auth()->user()->roles[0]->id != 6 ) && ($request_status === 'solicitada' || $request_status === 'aceptada'))
+                    <div class="float-righ">
 
-                <div class="float-righ">
+                        @can("Aceptar solicitud")
 
-                    @can("Aceptar solicitud")
+                            @if($request->status === 'solicitada' || !$request->status === 'aceptada')
+                                <button
+                                    wire:click="process('aceptar')"
+                                    wire:loading.attr="disabled"
+                                    wire:target="process('aceptar')"
+                                    class="bg-green-400 hover:shadow-lg text-white px-4 py-2 rounded-full text-sm mb-2 hover:bg-green-700 flaot-left mr-1 focus:outline-none">
+                                    <img wire:loading wire:target="process(1)" class="mx-auto h-4 mr-1" src="{{ asset('storage/img/loading3.svg') }}" alt="Loading">
+                                    Aceptar
+                                </button>
+                            @endif
 
-                        @if($request_status === 'solicitada' || !$request_status === 'aceptada')
-                            <button
-                                wire:click="process(1)"
-                                wire:loading.attr="disabled"
-                                wire:target="process(1)"
-                                class="bg-green-400 hover:shadow-lg text-white px-4 py-2 rounded-full text-sm mb-2 hover:bg-green-700 flaot-left mr-1 focus:outline-none">
-                                <img wire:loading wire:target="process(1)" class="mx-auto h-4 mr-1" src="{{ asset('storage/img/loading3.svg') }}" alt="Loading">
-                                Aceptar
-                            </button>
-                        @endif
+                        @endcan
 
-                    @endcan
+                        <button
+                            wire:click="process('entregar')"
+                            wire:loading.attr="disabled"
+                            wire:target="process('entregar')"
+                            class="bg-gray-400 hover:shadow-lg text-white px-4 py-2 rounded-full text-sm mb-2 hover:bg-gray-700 flaot-left mr-1 focus:outline-none">
+                            <img wire:loading wire:target="process(2)" class="mx-auto h-4 mr-1" src="{{ asset('storage/img/loading3.svg') }}" alt="Loading">
+                            Entregar
+                        </button>
 
-                    <button
-                        wire:click="process(2)"
-                        wire:loading.attr="disabled"
-                        wire:target="process(2)"
-                        class="bg-gray-400 hover:shadow-lg text-white px-4 py-2 rounded-full text-sm mb-2 hover:bg-gray-700 flaot-left mr-1 focus:outline-none">
-                        <img wire:loading wire:target="process(2)" class="mx-auto h-4 mr-1" src="{{ asset('storage/img/loading3.svg') }}" alt="Loading">
-                        Entregar
-                    </button>
+                        <button
+                            wire:click="process('rechazar')"
+                            wire:loading.attr="disabled"
+                            wire:target="process('rechazar')"
+                            type="button"
+                            class="bg-red-400 hover:shadow-lg text-white px-4 py-2 rounded-full text-sm mb-2 hover:bg-red-700 flaot-left focus:outline-none">
 
-                    <button
-                        wire:click="process(3)"
-                        wire:loading.attr="disabled"
-                        wire:target="process(3)"
-                        type="button"
-                        class="bg-red-400 hover:shadow-lg text-white px-4 py-2 rounded-full text-sm mb-2 hover:bg-red-700 flaot-left focus:outline-none">
-
-                        <img wire:loading wire:target="process(3)" class="mx-auto h-4 mr-1" src="{{ asset('storage/img/loading3.svg') }}" alt="Loading">
-                        Rechazar
-                    </button>
-
-                </div>
-
-                <div class="text-sm text-left">
-
-                    <p class="textr-sm">Comentarios:</p>
-
-                    <textarea  wire:model.defer="comment" class="bg-white rounded text-sm w-full"></textarea>
-
-                    <div>
-
-                        @error('comment') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
+                            <img wire:loading wire:target="process(3)" class="mx-auto h-4 mr-1" src="{{ asset('storage/img/loading3.svg') }}" alt="Loading">
+                            Rechazar
+                        </button>
 
                     </div>
 
-                </div>
+                    <div class="text-sm text-left">
 
-            @endif
+                        <p class="textr-sm">Comentarios:</p>
 
-            @if ($request_status == 'entregada' && (auth()->user()->roles[0]->id != 4 && auth()->user()->roles[0]->id != 6 ))
+                        <textarea  wire:model.defer="comment" class="bg-white rounded text-sm w-full"></textarea>
+
+                        <div>
+
+                            @error('comment') <span class="error text-sm text-red-500">{{ $message }}</span> @enderror
+
+                        </div>
+
+                    </div>
+
+                @endif
+
+                @if ($request->status == 'entregada' && (auth()->user()->roles[0]->id != 4 && auth()->user()->roles[0]->id != 6 ))
 
                     <a
                         href="{{ route('requests.receipt', $selected_id) }}"
@@ -635,9 +674,11 @@
 
                 @endif
 
-        </x-slot>
+            </x-slot>
 
-    </x-jet-dialog-modal>
+        </x-jet-dialog-modal>
+
+    @endif
 
     <x-jet-confirmation-modal wire:model="modalDelete">
 

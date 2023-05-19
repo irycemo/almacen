@@ -650,7 +650,7 @@
 
                             <div>
 
-                                <input type="number" min="1" class="bg-white rounded text-sm w-full" wire:model.defer="quantity">
+                                <input type="number" min="1" class="bg-white rounded text-sm w-full" wire:model.defer="quantity" @if($edit) readonly @endif>
 
                             </div>
 

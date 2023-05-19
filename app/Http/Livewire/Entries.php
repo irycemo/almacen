@@ -74,7 +74,7 @@ class Entries extends Component
         $this->articleDescription = true;
         $this->selected_id = $entrie['id'];
         $this->origin = $entrie['origin'];
-        $this->price = $entrie['price'];
+        $this->price =  $entrie['price'] / $entrie['quantity'];
         $this->description = $entrie['description'];
         $this->quantity = $entrie['quantity'];
 
@@ -112,7 +112,7 @@ class Entries extends Component
 
                 $article->update([
                     'stock' => $stock,
-                    'precio' => $this->quantity != 1 ? ($this->price / $this->quantity) : $this->price,
+                    'precio' => $this->price,
                     'updated_by' => auth()->user()->id
                 ]);
 
@@ -140,8 +140,21 @@ class Entries extends Component
 
                 $entrie = Entrie::findorFail($this->selected_id);
 
-                if($this->article_id != $entrie->article->id)
+                if($this->article_id != $entrie->article->id){
+
+                    if($entrie->article->requests->count()){
+
+                        $this->dispatchBrowserEvent('showMessage',['error', "El artículo " . $entrie->article->name . " se encuentra en al menos una solicitud no es posible actualizar la entrada."]);
+
+                        return;
+
+                    }
+
+
                     $entrie->article->update(['stock' => ($entrie->article->stock - $entrie->quantity)]);
+
+                }
+
 
                 $article = Article::findorFail($this->article_id);
 
@@ -157,7 +170,7 @@ class Entries extends Component
 
                 $article->update(
                     [
-                        'precio' => $this->quantity != 1 ? ($this->price / $this->quantity) : $this->price,
+                        'precio' => $this->price,
                         'updated_by' => auth()->user()->id
                     ]
                 );

@@ -56,7 +56,7 @@ Route::group(['middleware' => ['auth','is.active']], function(){
 
     Route::get('tracking', TrackingController::class)->middleware('can:Seguimiento')->name('tracking');
 
-    Route::get('entries', EntrieController::class)->middleware('can:Seguimiento')->name('entries');
+    Route::get('entries', EntrieController::class)->middleware('can:Lista de entradas')->name('entries');
 
     Route::get('reports', ReportController::class)->middleware('can:Reportes')->name('reports');
 

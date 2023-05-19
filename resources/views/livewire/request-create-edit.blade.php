@@ -119,7 +119,7 @@
 
             <p class="text-xl text-gray-500 my-3 ml-4">Artículos Solicitados</p>
 
-                @if(count($requestedArticles) > 0)
+                @if($request && $request->requestDetails->count())
 
                     <div class="relative overflow-x-auto rounded-lg ">
 
@@ -146,7 +146,7 @@
 
                             <tbody class="divide-y divide-gray-200 flex-1 sm:flex-none ">
 
-                                @foreach($requestedArticles as $article)
+                                @foreach($request->requestDetails as $detail)
 
                                     <tr class="text-sm font-medium text-gray-500 bg-white flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
 
@@ -154,7 +154,7 @@
 
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Nombre</span>
 
-                                            <p class="text-sm font-medium text-gray-900">{{ $article['quantity'] }}</p>
+                                            <p class="text-sm font-medium text-gray-900">{{ $detail->pivot->quantity }}</p>
 
                                         </td>
 
@@ -162,11 +162,11 @@
 
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Nombre</span>
 
-                                            <p class="text-sm font-medium text-gray-900">{{ $article['article'] }} / {{ $article['brand'] }}</p>
+                                            <p class="text-sm font-medium text-gray-900">{{ $detail->name }} / {{ $detail->brand }}</p>
 
-                                            @if ($article['serial'])
+                                            @if ($detail->serial)
 
-                                            <p class="text-sm font-medium text-gray-900">#Serie: {{ $article['serial'] }}</p>
+                                            <p class="text-sm font-medium text-gray-900">#Serie: {{ $detail->serial }}</p>
 
                                             @endif
 
@@ -179,9 +179,9 @@
                                             <div class="flex items-center space-x-2">
 
                                                 <button
-                                                    wire:click="deleteArticle('{{ json_encode($article, JSON_FORCE_OBJECT) }}' )"
+                                                    wire:click="deleteArticle('{{ $detail }}' )"
                                                     wire:loading.attr="disabled"
-                                                    wire:target="deleteArticle('{{ json_encode($article, JSON_FORCE_OBJECT) }}' )"
+                                                    wire:target="deleteArticle('{{ $detail }}' )"
                                                     class="bg-red-400 hover:shadow-lg text-white text-xs md:text-sm px-3 py-2 rounded-full hover:bg-red-700 flex focus:outline-none"
                                                 >
 

@@ -91,7 +91,7 @@ class ArticlesRpp extends Component
 
         } catch (\Throwable $th) {
 
-            Log::error("Error al actualizar artículo por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            Log::error("Error al actualizar artículo por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th);
             $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
             $this->closeModal();
         }
@@ -111,7 +111,7 @@ class ArticlesRpp extends Component
 
         } catch (\Throwable $th) {
 
-            Log::error("Error al borrar artículo por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            Log::error("Error al borrar artículo por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th);
             $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error. Asegurese de que el artículo no esta realcionado con una entrada o solicitud"]);
             $this->closeModal();
         }

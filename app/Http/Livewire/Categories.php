@@ -63,7 +63,7 @@ class Categories extends Component
 
         } catch (\Throwable $th) {
 
-            Log::error("Error al crear categoría por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            Log::error("Error al crear categoría por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th);
             $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
             $this->closeModal();
         }
@@ -88,7 +88,7 @@ class Categories extends Component
 
         } catch (\Throwable $th) {
 
-            Log::error("Error al actualizar categoría por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            Log::error("Error al actualizar categoría por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th);
             $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
             $this->closeModal();
         }
@@ -108,7 +108,7 @@ class Categories extends Component
 
         } catch (\Throwable $th) {
 
-            Log::error("Error al borrar categoría por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            Log::error("Error al borrar categoría por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th);
             $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
             $this->closeModal();
         }

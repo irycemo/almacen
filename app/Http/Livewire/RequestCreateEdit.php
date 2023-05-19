@@ -6,6 +6,8 @@ use App\Models\Article;
 use App\Models\Request;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Models\RequestDetail;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class RequestCreateEdit extends Component
@@ -33,60 +35,76 @@ class RequestCreateEdit extends Component
 
         if($this->request){
 
-            $this->addArticle($object);
+            try {
 
-            $this->request->price = $this->request->price + (float)$object['price'];
+                DB::transaction(function () use ($object) {
 
-            $this->request->save();
+
+                    $detail = RequestDetail::where('request_id',$this->request->id)
+                                ->where('article_id', $object['id'])
+                                ->first();
+
+                    if($detail){
+
+                        $detail->update(['quantity' => $detail->quantity + $object['quantity']]);
+
+                        Article::find($object['id'])->decrement('stock', (int)$object['quantity']);
+
+                        $this->dispatchBrowserEvent('showMessage',['success', "Artículo agregado con exito."]);
+
+                    }else{
+
+                        $this->request->requestDetails()->attach($object['id'], ['quantity' => $object['quantity']]);
+
+                        Article::find($object['id'])->decrement('stock', (int)$object['quantity']);
+
+                        $this->dispatchBrowserEvent('showMessage',['success', "Artículo agregado con exito."]);
+
+                    }
+
+                    $this->request->refresh();
+
+                });
+
+            } catch (\Throwable $th) {
+
+                Log::error("Error al agregar articulos a la solicitud por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th);
+                $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
+
+            }
+
 
         }else{
 
             try {
 
-                $this->addArticle($object);
+                DB::transaction(function () use ($object) {
 
-                $number = Request::orderBy('number', 'desc')->value('number');
+                    $number = Request::max('number') + 1;
 
-                $this->request = Request::create([
-                    'number' => $number ? $number + 1 : 1,
-                    'content' => json_encode($this->requestedArticles, JSON_FORCE_OBJECT),
-                    'location' => auth()->user()->location,
-                    'status' => 'solicitada',
-                    'price' => (float)$object['price'],
-                    'created_by' => auth()->user()->id,
-                ]);
+                    $this->request = Request::create([
+                        'number' => $number,
+                        'location' => auth()->user()->location,
+                        'status' => 'solicitada',
+                        'created_by' => auth()->user()->id,
+                    ]);
 
-                $this->dispatchBrowserEvent('showMessage',['success', "Artículo agregado con exito."]);
+                    $this->request->requestDetails()->attach($object['id'], ['quantity' => $object['quantity']]);
+
+                    Article::find($object['id'])->decrement('stock', (int)$object['quantity']);
+
+                    $this->dispatchBrowserEvent('showMessage',['success', "Artículo agregado con exito."]);
+
+                });
 
             } catch (\Throwable $th) {
-                Log::error("Error al agregar articulos a la solicitud por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+
+                Log::error("Error al agregar articulos a la solicitud por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th);
                 $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
+
             }
 
         }
-    }
-
-    public function addArticle($object){
-
-        if($object['serial']){
-
-            $this->requestedArticles[] = (array)$object;
-            return;
-
-        }
-
-        $i = $this->searchForId($object['id'], $this->requestedArticles);
-
-        if($i === null){
-
-            $this->requestedArticles[] = (array)$object;
-
-        }elseif($i >= 0){
-
-            $this->requestedArticles[$i]['quantity'] = (int)$object['quantity'] + (int)$this->requestedArticles[$i]['quantity'];
-
-        }
-
     }
 
     public function updateRequest(){
@@ -94,7 +112,6 @@ class RequestCreateEdit extends Component
         try {
 
             $this->request->update([
-                'content' => json_encode($this->requestedArticles, JSON_FORCE_OBJECT),
                 'comment' => $this->comment,
                 'updated_by' => auth()->user()->id,
                 'status' => 'solicitada'
@@ -105,60 +122,45 @@ class RequestCreateEdit extends Component
             redirect()->route('requests.index');
 
         } catch (\Throwable $th) {
-            Log::error("Error al actualizar solicitud id:" .$this->request->id . " por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+
+            Log::error("Error al actualizar solicitud id:" .$this->request->id . " por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th);
             $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo"]);
+
         }
 
     }
 
-    public function searchForId($id, $array) {
+    public function deleteArticle($detail){
 
-        foreach ($array as $key => $val) {
-            if ($val['id'] === $id) {
-                return $key;
-            }
-        }
-
-        return null;
-
-    }
-
-    public function deleteArticle($article){
-
-        $article = json_decode($article,true);
-
-        $i = $this->searchForId($article['id'], $this->requestedArticles);
-
-        $articleQuantity = $this->requestedArticles[$i]['quantity'];
-
-
-        unset($this->requestedArticles[$i]);
-
-        $this->requestedArticles = array_values($this->requestedArticles);
+        $detail = json_decode($detail, true);
 
         try {
 
-            $aux = Article::find($article['id']);
+            DB::transaction(function () use ($detail) {
 
-            $aux->stock = $aux->stock + (int)$article['quantity'];
+                $article = Article::find($detail['id']);
 
-            $this->request->price = $this->request->price - ($aux->precio * (float)$articleQuantity);
+                $article->stock = $article->stock + (int)$detail['pivot']['quantity'];
 
-            $this->request->save();
+                $article->save();
 
-            $aux->save();
+                $this->request->price = (float)$this->request->price - ($article->precio * (float)$detail['pivot']['quantity']);
 
-            $this->request->update([
-                'content' => $this->requestedArticles
-            ]);
+                $this->request->save();
 
-            $this->request->save();
+                $this->request->requestDetails()->detach($detail['id']);
 
-            $this->dispatchBrowserEvent('showMessage',['success', "Artículo eliminado con exito."]);
+                $this->request->refresh();
 
-        } catch (\Throwable $th) {
-            Log::error("Error al borrar artículo de solicitud id:" .$this->request->id . " por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
-            $this->dispatchBrowserEvent('showMessage',['warning', "No se pudo reestablecer el stock para " .  $article['article'] . "."]);
+                $this->dispatchBrowserEvent('showMessage',['success', "Artículo eliminado con exito."]);
+
+            });
+
+        } catch (\Throwable $th){
+
+            Log::error("Error al borrar artículo de solicitud id:" .$this->request->id . " por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th);
+            $this->dispatchBrowserEvent('showMessage',['error', "No se pudo reestablecer el stock."]);
+
         }
 
     }
@@ -167,15 +169,8 @@ class RequestCreateEdit extends Component
 
         if($this->request){
 
-            $this->request_id = $this->request->id;
-
-            $items = json_decode($this->request->content, true);
-
-            for ($i=0; $i < count($items); $i++) {
-                $this->requestedArticles [] = (array)$items[$i];
-            }
-
             $this->comment = $this->request->comment;
+
         }
 
     }

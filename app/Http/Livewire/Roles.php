@@ -71,7 +71,7 @@ class Roles extends Component
 
         } catch (\Throwable $th) {
 
-            Log::error("Error al borrar rol por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            Log::error("Error al borrar rol por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th);
             $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
             $this->closeModal();
         }
@@ -102,7 +102,7 @@ class Roles extends Component
 
         } catch (\Throwable $th) {
 
-            Log::error("Error al actualizar rol por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            Log::error("Error al actualizar rol por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th);
             $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
             $this->closeModal();
         }
@@ -123,7 +123,7 @@ class Roles extends Component
 
         } catch (\Throwable $th) {
 
-            Log::error("Error al borrar rol por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            Log::error("Error al borrar rol por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th);
             $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
             $this->closeModal();
         }

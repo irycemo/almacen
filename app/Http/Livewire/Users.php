@@ -6,6 +6,7 @@ use App\Models\User;
 use Livewire\Component;
 use App\Http\Constantes;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Log;
 use App\Http\Traits\ComponentsTrait;
@@ -67,24 +68,28 @@ class Users extends Component
 
         try {
 
-            $user = User::create([
-                'name' => $this->name,
-                'email' => $this->email,
-                'status' => $this->status,
-                'location' => $this->location,
-                'password' => 'sistema',
-                'created_by' => auth()->user()->id,
-            ]);
+            DB::transaction(function () {
 
-            $user->roles()->attach($this->role);
+                $user = User::create([
+                    'name' => $this->name,
+                    'email' => $this->email,
+                    'status' => $this->status,
+                    'location' => $this->location,
+                    'password' => 'sistema',
+                    'created_by' => auth()->user()->id,
+                ]);
 
-            $this->dispatchBrowserEvent('showMessage',['success', "El usuario ha sido creado con éxito."]);
+                $user->roles()->attach($this->role);
 
-            $this->closeModal();
+                $this->dispatchBrowserEvent('showMessage',['success', "El usuario ha sido creado con éxito."]);
+
+                $this->closeModal();
+
+            });
 
         } catch (\Throwable $th) {
 
-            Log::error("Error al crear usuario por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            Log::error("Error al crear usuario por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th);
             $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
             $this->closeModal();
         }
@@ -96,25 +101,30 @@ class Users extends Component
 
         try {
 
-            $user = User::findorFail($this->selected_id);
+            DB::transaction(function () {
 
-            $user->update([
-                'name' => $this->name,
-                'email' => $this->email,
-                'status' => $this->status,
-                'location' => $this->location,
-                'updated_by' => auth()->user()->id,
-            ]);
 
-            $user->roles()->sync($this->role);
+                $user = User::findorFail($this->selected_id);
 
-            $this->dispatchBrowserEvent('showMessage',['success', "El usuario ha sido actualizado con éxito."]);
+                $user->update([
+                    'name' => $this->name,
+                    'email' => $this->email,
+                    'status' => $this->status,
+                    'location' => $this->location,
+                    'updated_by' => auth()->user()->id,
+                ]);
 
-            $this->closeModal();
+                $user->roles()->sync($this->role);
+
+                $this->dispatchBrowserEvent('showMessage',['success', "El usuario ha sido actualizado con éxito."]);
+
+                $this->closeModal();
+
+            });
 
         } catch (\Throwable $th) {
 
-            Log::error("Error al actualizar usuario por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            Log::error("Error al actualizar usuario por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th);
             $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
             $this->closeModal();
         }
@@ -135,7 +145,7 @@ class Users extends Component
 
         } catch (\Throwable $th) {
 
-            Log::error("Error al borrar usuario por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th->getMessage());
+            Log::error("Error al borrar usuario por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th);
             $this->dispatchBrowserEvent('showMessage',['error', "Lo sentimos hubo un error inténtalo de nuevo."]);
             $this->closeModal();
         }
