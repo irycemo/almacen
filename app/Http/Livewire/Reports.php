@@ -52,18 +52,6 @@ class Reports extends Component
 
     }
 
-    public function mount(){
-
-        $this->area = request()->query('area');
-
-        $this->date1 = request()->query('date1');
-
-        $this->date2 = request()->query('date2');
-
-        $this->updatedArea();
-
-    }
-
     public function render()
     {
 

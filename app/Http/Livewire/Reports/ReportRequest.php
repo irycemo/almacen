@@ -43,7 +43,7 @@ class ReportRequest extends Component
 
         $users = User::select('id', 'name')->orderBy('name')->get();
 
-        $requests = Request::with('createdBy','updatedBy')
+        $requests = Request::with('createdBy','updatedBy', 'requestDetails')
                             ->when(isset($this->request_article_id) && $this->request_article_id != "", function($query){
                                 return $query->where('content', 'LIKE', '%' . $this->request_article_id . '%');
                             })
@@ -56,7 +56,8 @@ class ReportRequest extends Component
                             ->when(isset($this->request_user) && $this->request_user, function($query){
                                 return $query->where('created_by', $this->request_user);
                             })
-                            ->whereBetween('created_at', [$this->date1, $this->date2])->paginate($this->pagination);
+                            ->whereBetween('created_at', [$this->date1 . ' 00:00:00', $this->date2 . ' 23:59:59'])
+                            ->paginate($this->pagination);
 
         return view('livewire.reports.report-request', compact('requests', 'articles', 'locations', 'users'));
     }

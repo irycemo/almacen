@@ -161,6 +161,23 @@ class Requests extends Component
 
                 DB::transaction(function () use($request){
 
+                    $array = [];
+
+                    foreach($request->requestDetails as $article){
+
+                        $content =  (object)[];
+
+                        $content->article = $article->name;
+                        $content->quantity = $article->pivot->quantity;
+                        $content->serial = $article->serial;
+                        $content->brand = $article->brand;
+                        $content->id = $article->id;
+                        $content->price = (float)$article->precio * $article->pivot->quantity;
+
+                        $array[] = $content;
+
+                    }
+
                     foreach ($request->requestDetails as $article) {
 
                         try {
@@ -179,6 +196,7 @@ class Requests extends Component
 
                     $request->update([
                         'status' => 'rechazada',
+                        'content' => $array,
                         'comment' => $request->comment . ' ' . $this->comment,
                         'updated_by' => auth()->user()->id,
                     ]);

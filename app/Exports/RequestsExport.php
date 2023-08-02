@@ -19,6 +19,13 @@ use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 class RequestsExport implements FromCollection,  WithProperties, WithDrawings, ShouldAutoSize, WithEvents, WithCustomStartCell, WithColumnWidths, WithHeadings, WithMapping
 {
 
+    public $article_id;
+    public $location;
+    public $status;
+    public $user;
+    public $date1;
+    public $date2;
+
     public function __construct($article_id, $location, $status, $user, $date1, $date2)
     {
         $this->article_id = $article_id;
@@ -47,7 +54,7 @@ class RequestsExport implements FromCollection,  WithProperties, WithDrawings, S
     public function collection()
     {
 
-        $query = Request::query()->with('createdBy','updatedBy');
+        $query = Request::query()->with('createdBy','updatedBy', 'requestDetails');
 
         $query->when(isset($this->article_id) && $this->article_id != "", function($query){
             return $query->where('content', 'LIKE', '%' . $this->article_id . '%');
@@ -76,15 +83,31 @@ class RequestsExport implements FromCollection,  WithProperties, WithDrawings, S
 
     public function contentFormat($request){
 
-        $content = json_decode($request->content, true);
-
         $string = "";
 
-        foreach ($content as $item) {
-            $string .= " - Articulo: " . $item['article'] . "\n";
-            $string .= "\tMarca: " . $item['brand'] . "\n";
-            $string .= "\t#Serie: " . $item['serial'] . "\n";
-            $string .= "\tCantidad: " . $item['quantity'] . "\n";
+        if($request->content){
+
+            $content = json_decode($request->content, true);
+
+            foreach ($content as $item) {
+                $string .= " - Articulo: " . $item['article'] . "\n";
+                $string .= "\tMarca: " . $item['brand'] . "\n";
+                $string .= "\t#Serie: " . $item['serial'] . "\n";
+                $string .= "\tCantidad: " . $item['quantity'] . "\n";
+            }
+
+        }
+
+        if($request->requestDetails->count()){
+
+
+            foreach ($request->requestDetails as $item) {
+                $string .= " - Articulo: " . $item->name . "\n";
+                $string .= "\tMarca: " . $item->brand . "\n";
+                $string .= "\t#Serie: " . $item->serial . "\n";
+                $string .= "\tCantidad: " . $item->pivot->quantity . "\n";
+            }
+
         }
 
         return $string;

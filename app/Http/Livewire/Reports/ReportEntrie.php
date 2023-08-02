@@ -55,7 +55,7 @@ class ReportEntrie extends Component
                             ->when(isset($this->entrie_price1) && isset($this->entrie_price2) && $this->entrie_price1 != ""  && $this->entrie_price2 != "", function($query){
                                 return $query->whereBetween('price', [$this->entrie_price1, $this->entrie_price2]);
                             })
-                            ->whereBetween('created_at', [$this->date1, $this->date2])->paginate($this->pagination);
+                            ->whereBetween('created_at', [$this->date1 . ' 00:00:00', $this->date2 . ' 00:00:00'])->paginate($this->pagination);
 
         return view('livewire.reports.report-entrie', compact('entries', 'articles', 'locations'));
     }

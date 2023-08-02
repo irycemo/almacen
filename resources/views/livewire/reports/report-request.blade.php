@@ -256,20 +256,33 @@
 
                                     <span class="lg:hidden absolute top-0 left-0 bg-blue-300 px-2 py-1 text-xs text-white font-bold uppercase rounded-br-xl">Contenido</span>
 
-                                    @php
-                                        $content = json_decode($request->content, true);
-                                        $total=0;
-                                    @endphp
+                                    @if($request->requestDetails->count())
 
-                                    @foreach ($content as $article)
+                                        {{ $request->requestDetails->count() }}
+
+                                    @elseif(isset($request->content))
 
                                         @php
-                                            $total = $total + $article['quantity']
+
+                                            $content = json_decode($request->content, true);
+
+                                            $total=0;
+
                                         @endphp
 
-                                    @endforeach
+                                        @foreach ($content as $article)
 
-                                    {{ $total }} Artículos
+                                            @php
+
+                                                $total = $total + $article['quantity']
+
+                                            @endphp
+
+                                        @endforeach
+
+                                        {{ $total }}
+
+                                    @endif
 
                                 </td>
 
