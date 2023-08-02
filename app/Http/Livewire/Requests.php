@@ -60,22 +60,28 @@ class Requests extends Component
 
                 if($request->status != 'rechazada'){
 
-                    $content = json_decode($request->content,true);
+                    if($request->content){
 
-                    foreach ($content as $article) {
+                        $content = json_decode($request->content,true);
 
-                        try {
+                        foreach ($content as $article) {
 
-                            $aux = Article::find($article['id']);
-                            $aux->stock = $aux->stock + $article['quantity'];
-                            $aux->save();
+                            try {
 
-                        } catch (\Throwable $th) {
-                            Log::error("Error al reestablecer el stock de artículos de la solicitud id:" . $this->selected_id . " por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th);
-                            $this->dispatchBrowserEvent('showMessage',['warning', "No se pudo reestablecer el stock para " .  $article['article'] . "."]);
+                                $aux = Article::find($article['id']);
+                                $aux->stock = $aux->stock + $article['quantity'];
+                                $aux->save();
+
+                            } catch (\Throwable $th) {
+                                Log::error("Error al reestablecer el stock de artículos de la solicitud id:" . $this->selected_id . " por el usuario: " . "(id: " . auth()->user()->id . ") " . auth()->user()->name . ". " . $th);
+                                $this->dispatchBrowserEvent('showMessage',['warning', "No se pudo reestablecer el stock para " .  $article['article'] . "."]);
+                            }
+
                         }
 
                     }
+
+                    $request->requestDetails()->detach();
                 }
 
                 $request->delete();
