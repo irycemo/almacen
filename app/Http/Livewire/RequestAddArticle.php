@@ -34,6 +34,7 @@ class RequestAddArticle extends Component
 
         $object['id'] = $this->article['id'];
         $object['quantity'] = (int)$this->quantity;
+        $object['precio'] = (int)$this->precio;
 
         $this->emit('addOrCreateArticle', $object);
 

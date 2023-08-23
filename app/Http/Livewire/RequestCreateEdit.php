@@ -56,7 +56,11 @@ class RequestCreateEdit extends Component
 
                         $this->request->requestDetails()->attach($object['id'], ['quantity' => $object['quantity']]);
 
-                        Article::find($object['id'])->decrement('stock', (int)$object['quantity']);
+                        $article = Article::find($object['id'])->decrement('stock', (int)$object['quantity']);
+
+                        $this->request->price = $article->precio * (float)$object['quantity'];
+
+                        $this->request->save();
 
                         $this->dispatchBrowserEvent('showMessage',['success', "Artículo agregado con exito."]);
 
@@ -91,7 +95,11 @@ class RequestCreateEdit extends Component
 
                     $this->request->requestDetails()->attach($object['id'], ['quantity' => $object['quantity']]);
 
-                    Article::find($object['id'])->decrement('stock', (int)$object['quantity']);
+                    $article = Article::find($object['id'])->decrement('stock', (int)$object['quantity']);
+
+                    $this->request->price = $article->precio * (float)$object['quantity'];
+
+                    $this->request->save();
 
                     $this->dispatchBrowserEvent('showMessage',['success', "Artículo agregado con exito."]);
 
@@ -144,7 +152,9 @@ class RequestCreateEdit extends Component
 
                 $article->save();
 
-                $this->request->price = (float)$this->request->price - ($article->precio * (float)$detail['pivot']['quantity']);
+                $resta = (float)$this->request->price - ($article->precio * (float)$detail['pivot']['quantity']);
+
+                $this->request->price = $resta < 0 ? 0 : $resta;
 
                 $this->request->save();
 
