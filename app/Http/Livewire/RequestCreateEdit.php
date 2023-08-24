@@ -56,7 +56,9 @@ class RequestCreateEdit extends Component
 
                         $this->request->requestDetails()->attach($object['id'], ['quantity' => $object['quantity']]);
 
-                        $article = Article::find($object['id'])->decrement('stock', (int)$object['quantity']);
+                        Article::find($object['id'])->decrement('stock', (int)$object['quantity']);
+
+                        $article = Article::find($object['id']);
 
                         $this->request->price = $article->precio * (float)$object['quantity'];
 
@@ -95,7 +97,9 @@ class RequestCreateEdit extends Component
 
                     $this->request->requestDetails()->attach($object['id'], ['quantity' => $object['quantity']]);
 
-                    $article = Article::find($object['id'])->decrement('stock', (int)$object['quantity']);
+                    Article::find($object['id'])->decrement('stock', (int)$object['quantity']);
+
+                    $article = Article::find($object['id']);
 
                     $this->request->price = $article->precio * (float)$object['quantity'];
 
